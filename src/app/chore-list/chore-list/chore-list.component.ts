@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HouseMember } from "./house-member.model";
 
 @Component({
   selector: 'app-chore-list',
@@ -8,19 +9,31 @@ import { Component, OnInit } from '@angular/core';
 export class ChoreListComponent implements OnInit {
 
 
-  houseMembers: string[] = [
-    "HouseMember 1",
-    "HouseMember 2",
-    "HouseMember 3"
+  houseMembers: HouseMember[] = [
+    new HouseMember("Moje", ["clean kitchen", "clean bathroom"]),
+    new HouseMember("Wali", ["mow lawn", "garbage"]),
+    new HouseMember("Suf", ["clean living room", "walk dog"])
   ]
+
+  selectedHouseMember: HouseMember;
 
   constructor() { }
 
   ngOnInit(): void {
+    if (this.houseMembers.length) {
+      this.selectedHouseMember = this.houseMembers[0];
+    }
   }
 
   onClickHouseMember(index: number) {
+    //console.log(index);
+    this.selectedHouseMember = this.houseMembers[index];
+  }
+
+  onDone(index: number) {
     console.log(index);
   }
+
+
 
 }

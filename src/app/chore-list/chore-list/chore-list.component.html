@@ -1,13 +1,27 @@
-<ul class="nav nav-tabs">
-    <li *ngFor="let houseMember of houseMembers; let i = index">
-        <a (click)="onClickHouseMember(i)">{{houseMember}}</a>
-    </li>
-</ul>
-
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li *ngFor="let houseMember of houseMembers; let i = index">
+            <a (click)="onClickHouseMember(i)">
+                {{houseMember.getName()}}
+            </a>
+        </li>
+    </ul>    
+</div>
 <div class="contianer">
     <div class="row">
         <div class="col">
-
+            <ul style="list-style: none;">
+                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index" >
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
+                        <li>{{chores}}</li>
+                    </div>
+                    <div class="col">
+                        <button type="button" (click)="onDone(i)">
+                            Done
+                        </button>
+                    </div>
+                </div>
+            </ul>
         </div>
     </div>
 </div>
