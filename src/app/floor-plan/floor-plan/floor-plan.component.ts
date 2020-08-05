@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { FloorPlan } from './floor-plan.model';
+import { Room } from './room.model';
 
 @Component({
   selector: 'app-floor-plan',
@@ -7,24 +9,26 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 })
 export class FloorPlanComponent implements OnInit, AfterViewInit {
 
-  private imagePath: string = "https://cdngeneral.rentcafe.com/dmslivecafe/3/626505/Valencia%20Combined.jpg?quality=85?quality=70&width=1024";
+  private _floorPlan: FloorPlan;
 
   @ViewChild('fpCanvas', {static: false}) fpCanvas : ElementRef<HTMLCanvasElement>;
 
-  private image = new Image();
-  private context: CanvasRenderingContext2D;
-  private canvas: HTMLCanvasElement;
-  private width = 450;
-  private height = 450;
+  private _image = new Image();
+  private _context: CanvasRenderingContext2D;
+  private _canvas: HTMLCanvasElement;
+  private _width = 450;
+  private _height = 450;
 
-  private fillStyles: {[name: string]:string} = 
+  private _fillStyles: {[name: string]:string} = 
   {
     'lightGreen' : '#89eb34',
     'red' : '#fc0303',
     'orange': '#fcca03'
   }
 
-  constructor() { }
+  constructor() {
+    this._floorPlan = new FloorPlan();
+  }
 
   ngOnInit(): void {
 
@@ -32,16 +36,17 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
 
-    this.canvas = this.fpCanvas.nativeElement;
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+    this._canvas = this.fpCanvas.nativeElement;
+    this._canvas.width = this._width;
+    this._canvas.height = this._height;
 
-    this.context = this.fpCanvas.nativeElement.getContext('2d');
+    this._context = this.fpCanvas.nativeElement.getContext('2d');
 
-    this.image.onload = () => {
-      this.context.drawImage(this.image, 0, 0, this.width, this.height);
+    this._image.onload = () => {
+      this._context.drawImage(this._image, 0, 0, this._width, this._height);
     }
-    this.image.src = this.imagePath;
+
+    this._image.src = this._floorPlan.getImagePath();
 
     setTimeout(() => {
       this.colorArea()
@@ -49,11 +54,23 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
   }
 
   colorArea() {
-    this.context.globalAlpha = 0.5;
-    this.context.fillStyle = this.fillStyles.orange;
-    this.context.beginPath();
-    this.context.fillRect(20,20,150,100);
-    this.context.stroke();
+
+    for (let room of this._floorPlan.getRooms()) {
+
+      let rxI = room.getRoom().xInit;
+      let ryI = room.getRoom().yInit;
+      let wid = room.getRoom().width;
+      let hit = room.getRoom().height;
+
+      this._context.globalAlpha = 0.4;
+      this._context.fillStyle = this._fillStyles.lightGreen;
+  
+      this._context.beginPath();
+      this._context.fillRect(rxI,ryI,wid,hit);
+      this._context.rect(rxI, ryI, wid, hit);
+      this._context.stroke();
+      
+    }
   }
 
 }
