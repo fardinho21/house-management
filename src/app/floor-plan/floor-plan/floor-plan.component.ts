@@ -11,20 +11,21 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
   private _floorPlan: FloorPlan;
 
-  @ViewChild('fpCanvas', {static: false}) fpCanvas : ElementRef<HTMLCanvasElement>;
+  @ViewChild('fpCanvas', { static: false }) fpCanvas: ElementRef<HTMLCanvasElement>;
 
   private _image = new Image();
   private _context: CanvasRenderingContext2D;
   private _canvas: HTMLCanvasElement;
   private _width = 450;
   private _height = 450;
+  over = false;
 
-  private _fillStyles: {[name: string]:string} = 
-  {
-    'lightGreen' : '#89eb34',
-    'red' : '#fc0303',
-    'orange': '#fcca03'
-  }
+  private _fillStyles: { [name: string]: string } =
+    {
+      'lightGreen': '#89eb34',
+      'red': '#fc0303',
+      'orange': '#fcca03'
+    }
 
   constructor() {
     this._floorPlan = new FloorPlan();
@@ -46,12 +47,30 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
       this._context.drawImage(this._image, 0, 0, this._width, this._height);
     }
 
+    this._canvas.onmousemove = (movement) => {
+
+      let rect = this._canvas.getBoundingClientRect();
+      let xLoc = (movement.clientX - rect.left)|0;
+      let yLoc = (movement.clientY - rect.top)|0;
+      let roomName = this.checkClickInsideRoom(xLoc, yLoc);
+      console.log(roomName);
+      if (roomName != 'no-room') {
+        this.over = true;
+      } else {
+        this.over = false;
+      }
+
+    }
+
     this._image.src = this._floorPlan.getImagePath();
 
     setTimeout(() => {
-      this.colorArea()
-    }, 3000);
+      this.colorArea();
+    },1000)
+
   }
+
+
 
   colorArea() {
 
@@ -64,13 +83,35 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
       this._context.globalAlpha = 0.4;
       this._context.fillStyle = this._fillStyles.lightGreen;
-  
+
       this._context.beginPath();
-      this._context.fillRect(rxI,ryI,wid,hit);
+      this._context.fillRect(rxI, ryI, wid, hit);
       this._context.rect(rxI, ryI, wid, hit);
       this._context.stroke();
-      
+
     }
+  }
+
+  onCanvasClick(mouseclick) {
+
+    let rect = this._canvas.getBoundingClientRect();
+    let xLoc = (mouseclick.clientX - rect.left)|0;
+    let yLoc = (mouseclick.clientY - rect.top)|0;
+    let roomName = this.checkClickInsideRoom(xLoc, yLoc);
+    
+  }
+
+  private checkClickInsideRoom(xMouse : number, yMouse: number) : string{
+
+    let rooms = this._floorPlan.getRooms();
+
+    for (let room of rooms) {
+      let check = room.isInside(xMouse, yMouse);
+      if (check) {
+        return room.getRoom().name;
+      }
+    }
+    return "no-room";
   }
 
 }
