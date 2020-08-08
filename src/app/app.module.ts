@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { FloorPlanComponent } from './floor-plan/floor-plan/floor-plan.component';
 import { ChoreListComponent } from './chore-list/chore-list/chore-list.component';
 import { HeaderComponent } from './header/header/header.component';
+import { ManagerService } from './shared/manager.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { HeaderComponent } from './header/header/header.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -12,15 +12,20 @@
         <div class="col">
             <ul style="list-style: none;">
                 <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index" >
-                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                        <li>{{chores}}</li>
-                    </div>
 
-                    <div class="col">
-                        <button type="button" (click)="onDone(i)">
-                            Done
-                        </button>
-                    </div>
+                    <li> 
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            {{chores.getInfo().choreName}}
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            {{chores.getInfo().parentRoom}}
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            <button type="button" (click)="onDone(i)">
+                                Done
+                            </button>
+                        </div>
+                    </li>
                     <hr>
                 </div>
             </ul>

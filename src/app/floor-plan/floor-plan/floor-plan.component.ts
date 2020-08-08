@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
+import { ManagerService } from 'src/app/shared/manager.service';
 
 @Component({
   selector: 'app-floor-plan',
@@ -25,10 +26,10 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
       'lightGreen': '#89eb34',
       'red': '#fc0303',
       'orange': '#fcca03'
-    }
+  }
 
-  constructor() {
-    this._floorPlan = new FloorPlan();
+  constructor(private manager: ManagerService) {
+    this._floorPlan = new FloorPlan(this.manager);
   }
 
   ngOnInit(): void {
@@ -66,23 +67,35 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
     setTimeout(() => {
       this.colorArea();
-    },1000)
+    },1000);
+
+    this.manager.assignChores();
 
   }
-
-
 
   colorArea() {
 
     for (let room of this._floorPlan.getRooms()) {
 
-      let rxI = room.getRoom().xInit;
-      let ryI = room.getRoom().yInit;
-      let wid = room.getRoom().width;
-      let hit = room.getRoom().height;
+      let roomRef = room.getRoom();
+
+      let rxI = roomRef.xInit;
+      let ryI = roomRef.yInit;
+      let wid = roomRef.width;
+      let hit = roomRef.height;
+      let status = roomRef.status;
 
       this._context.globalAlpha = 0.4;
-      this._context.fillStyle = this._fillStyles.lightGreen;
+
+      if (status == 100) {
+        this._context.fillStyle = this._fillStyles.lightGreen;
+      } else if (status < 70) {
+        this._context.fillStyle = this._fillStyles.orange;
+      } else if (status < 50) {
+        this._context.fillStyle = this._fillStyles.red;
+      }
+
+      
 
       this._context.beginPath();
       this._context.fillRect(rxI, ryI, wid, hit);
@@ -108,7 +121,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
     for (let room of rooms) {
       let check = room.isInside(xMouse, yMouse);
       if (check) {
-        return room.getRoom().name;
+        return room.getName();
       }
     }
     return "no-room";

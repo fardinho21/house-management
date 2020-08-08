@@ -1,23 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HouseMember } from "./house-member.model";
+import { ManagerService } from "../../shared/manager.service";
 
 @Component({
   selector: 'app-chore-list',
   templateUrl: './chore-list.component.html',
   styleUrls: ['./chore-list.component.css']
 })
-export class ChoreListComponent implements OnInit {
+export class ChoreListComponent implements OnInit, AfterViewInit {
 
 
   houseMembers: HouseMember[] = [
-    new HouseMember("Moje", ["clean kitchen", "clean bathroom"]),
-    new HouseMember("Wali", ["mow lawn", "garbage"]),
-    new HouseMember("Suf", ["clean living room", "walk dog"])
+    new HouseMember("Moje", []),
+    new HouseMember("Wali", []),
+    new HouseMember("Suf", [])
   ]
 
   selectedHouseMember: HouseMember;
 
-  constructor() { }
+  constructor(private manager: ManagerService) { 
+    this.manager.setHouseMembers(this.houseMembers);
+  }
 
   ngOnInit(): void {
     if (this.houseMembers.length) {
@@ -25,8 +28,13 @@ export class ChoreListComponent implements OnInit {
     }
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      console.log(this.houseMembers);
+    }, 4000) 
+  }
+
   onClickHouseMember(index: number) {
-    //console.log(index);
     this.selectedHouseMember = this.houseMembers[index];
   }
 

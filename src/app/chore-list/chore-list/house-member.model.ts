@@ -1,9 +1,12 @@
+import { Room } from 'src/app/floor-plan/floor-plan/room.model';
+import { Chore } from '../../shared/chore.model';
+
 export class HouseMember {
 
-    private choresList: string[] = []
+    private choresList: Chore[] = [];
     private name: string = 'no-name';
 
-    constructor(name:string, chores: string[]) {
+    constructor(name:string, chores: Chore[]) {
         this.name = name;
         this.choresList = chores;
     }
@@ -17,11 +20,11 @@ export class HouseMember {
         this.name = name;
     }
 
-    public addChore(chore: string) {
+    public addChore(chore: Chore) {
         this.choresList.push(chore);
     }
 
-    public removeChore(chore: string) {
+    public removeChore(chore: Chore) {
         if (this.choresList.includes(chore)) {
             let idx = this.choresList.indexOf(chore);
             this.choresList.splice(idx,1);
@@ -30,7 +33,7 @@ export class HouseMember {
         }
     }
 
-    public getChores(): string[] {
+    public getChores(): Chore[] {
         return this.choresList.slice();
     }
 }
