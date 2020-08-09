@@ -1,3 +1,7 @@
 .over {
     cursor: pointer;
 }
+
+.modal {
+    text-align: left;
+}

@@ -1,6 +1,6 @@
 import { HouseMember } from 'src/app/chore-list/chore-list/house-member.model';
 import { Chore } from 'src/app/shared/chore.model';
-import { not } from '@angular/compiler/src/output/output_ast';
+
 
 export class Room {
 

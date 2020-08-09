@@ -1,4 +1,40 @@
 
-<canvas #fpCanvas (click)="onCanvasClick($event)" style="border: 1px solid red;" [ngClass]="{over: over}">
 
-</canvas>
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{display: floorPlanDialogShow ? 'block' : 'none'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Room : {{this.selectedRoom.getName() | camelToSpace | uppercase}}
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <div class="container">
+                    <div class="row">
+                        <h6>Members with unfinished chores</h6>
+                    </div>
+                    <div class="col">
+                        <ul>
+                            <li *ngFor="let member of membersWithUnfinishedChores">
+                                {{member.getName()}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="toggleDialog()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<canvas #fpCanvas (click)="onCanvasClick($event)" style="border: 1px solid lightgray;" [ngClass]="{over: over}">
+
+</canvas> 

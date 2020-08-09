@@ -1,3 +1,51 @@
+<!-- header start -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
+            <button type="button" (click)="onAddHouseMember()">Add House Member</button>
+        </div>
+        <div class="col-lg-8 col-md-10 col-sm-6 col-xs-6" style="justify-content: right;">
+            <button type="button">Assign Chores</button>
+        </div>
+    </div>
+</div>
+<!-- header end -->
+
+<!-- modal dialog start -->
+<div #addHouseMem class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addHouseMemberShowDialog ? 'block' : 'none'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add House Member
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" (click)="onAddHouseMember()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form >
+                    <label for="name">Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        class="form-control"
+                        ngModel
+                        name="name">
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"> Add</button>
+                <button type="button" class="btn btn-secondary" (click)="onAddHouseMember()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal dialog end -->
+
+<!-- house member list start -->
 <div class="container">
     <ul class="nav nav-tabs">
         <li *ngFor="let houseMember of houseMembers; let i = index">
@@ -5,7 +53,7 @@
                 {{houseMember.getName()}}
             </a>
         </li>
-    </ul>    
+    </ul>
 </div>
 <div class="contianer">
     <div class="row">
@@ -19,9 +67,9 @@
                         <h4>Room</h4>
                     </div>
                 </div>
-                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index" >
+                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
 
-                    <li> 
+                    <li>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                             {{chores.getInfo().choreName}}
                         </div>
@@ -40,3 +88,4 @@
         </div>
     </div>
 </div>
+<!-- house member list end -->

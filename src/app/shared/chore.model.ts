@@ -39,4 +39,8 @@ export class Chore {
     setParentRoom (room: Room) {
         this.parentRoom = room;
     }
+
+    getAssignedTo () : HouseMember{
+        return this.assignedTo;
+    }
 }
