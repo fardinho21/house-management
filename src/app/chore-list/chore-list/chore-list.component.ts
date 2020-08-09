@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../../shared/manager.service";
+import { Chore } from 'src/app/shared/chore.model';
 
 @Component({
   selector: 'app-chore-list',
@@ -18,7 +19,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   selectedHouseMember: HouseMember;
 
-  constructor(private manager: ManagerService) { 
+  constructor(private manager: ManagerService) {
     this.manager.setHouseMembers(this.houseMembers);
   }
 
@@ -29,17 +30,15 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      console.log(this.houseMembers);
-    }, 4000) 
+
   }
 
   onClickHouseMember(index: number) {
     this.selectedHouseMember = this.houseMembers[index];
   }
 
-  onDone(index: number) {
-    console.log(index);
+  onDone(chore: Chore) {
+    chore.setDone();
   }
 
 

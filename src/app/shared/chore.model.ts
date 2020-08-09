@@ -3,7 +3,7 @@ import { Room } from '../floor-plan/floor-plan/room.model';
 
 export class Chore {
     
-    private parentRoom: string;
+    private parentRoom: Room;
 
     constructor(private choreName: string, private done: boolean, private assignedTo : HouseMember = null) {
 
@@ -19,6 +19,8 @@ export class Chore {
 
     setDone() {
         this.done = true;
+        this.parentRoom.choreCompleted();
+        this.assignedTo.removeChore(this);
     }
 
     reset(){
@@ -34,7 +36,7 @@ export class Chore {
         return this.assignedTo != null ? true : false;
     }
 
-    setParentRoom (roomName: string) {
-        this.parentRoom = roomName;
+    setParentRoom (room: Room) {
+        this.parentRoom = room;
     }
 }

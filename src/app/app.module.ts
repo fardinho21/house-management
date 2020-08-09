@@ -7,13 +7,15 @@ import { FloorPlanComponent } from './floor-plan/floor-plan/floor-plan.component
 import { ChoreListComponent } from './chore-list/chore-list/chore-list.component';
 import { HeaderComponent } from './header/header/header.component';
 import { ManagerService } from './shared/manager.service';
+import { CamelToSpacePipe } from './shared/camel-to-space.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     FloorPlanComponent,
     ChoreListComponent,
-    HeaderComponent
+    HeaderComponent,
+    CamelToSpacePipe
   ],
   imports: [
     BrowserModule,

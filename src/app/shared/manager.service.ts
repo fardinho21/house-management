@@ -71,6 +71,7 @@ export class ManagerService {
     if (leftover != 0) {
       for (let i = numberOfChores - leftover; i <= numberOfChores - 1; i ++) {
         this.houseMembers[incrementer].addChore(listOfChores[i]);
+        listOfChores[i].assignToHouseMember(this.houseMembers[incrementer]);
         incrementer++
       }
     }

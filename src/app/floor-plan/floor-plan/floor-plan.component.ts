@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck } from '@angular/core';
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
 import { ManagerService } from 'src/app/shared/manager.service';
@@ -8,7 +8,7 @@ import { ManagerService } from 'src/app/shared/manager.service';
   templateUrl: './floor-plan.component.html',
   styleUrls: ['./floor-plan.component.css']
 })
-export class FloorPlanComponent implements OnInit, AfterViewInit {
+export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   private _floorPlan: FloorPlan;
 
@@ -19,6 +19,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
   private _canvas: HTMLCanvasElement;
   private _width = 450;
   private _height = 450;
+  private _firstDraw : boolean = false;
   over = false;
 
   private _fillStyles: { [name: string]: string } =
@@ -32,9 +33,14 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
     this._floorPlan = new FloorPlan(this.manager);
   }
 
+  ngAfterViewChecked() {
+    this.colorArea();
+  }
+
   ngOnInit(): void {
 
   }
+
 
   ngAfterViewInit() {
 
@@ -63,17 +69,19 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
     }
 
-    this._image.src = this._floorPlan.getImagePath();
-
     setTimeout(() => {
       this.colorArea();
-    },1000);
+    }, 500)
+
+    this._image.src = this._floorPlan.getImagePath();
 
     this.manager.assignChores();
 
   }
 
   colorArea() {
+
+    this.clearFloorPlan();
 
     for (let room of this._floorPlan.getRooms()) {
 
@@ -87,16 +95,14 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
 
       this._context.globalAlpha = 0.4;
 
-      if (status == 100) {
+      if (status == 1) {
         this._context.fillStyle = this._fillStyles.lightGreen;
-      } else if (status < 70) {
+      } else if (status < 0.7 && status >= 0.5) {
         this._context.fillStyle = this._fillStyles.orange;
-      } else if (status < 50) {
+      } else if (status < 0.5) {
         this._context.fillStyle = this._fillStyles.red;
       }
-
-      
-
+   
       this._context.beginPath();
       this._context.fillRect(rxI, ryI, wid, hit);
       this._context.rect(rxI, ryI, wid, hit);
@@ -125,6 +131,14 @@ export class FloorPlanComponent implements OnInit, AfterViewInit {
       }
     }
     return "no-room";
+  }
+
+  private clearFloorPlan() {
+    this._context.clearRect(0, 0, this._width, this._height);
+
+    this._context.globalAlpha = 1;
+    this._context.drawImage(this._image, 0, 0, this._width, this._height);
+    this._context.globalAlpha = 0.4;
   }
 
 }

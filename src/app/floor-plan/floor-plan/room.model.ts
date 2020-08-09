@@ -1,5 +1,6 @@
 import { HouseMember } from 'src/app/chore-list/chore-list/house-member.model';
 import { Chore } from 'src/app/shared/chore.model';
+import { not } from '@angular/compiler/src/output/output_ast';
 
 export class Room {
 
@@ -21,17 +22,17 @@ export class Room {
         yI: number, 
         w: number, 
         h: number,
-        s: number,
         chores: Chore[],) {
 
-        let r = {xInit: xI, yInit: yI, width: w, height: h, status: s};
-        this._room = r;
         this._chores = chores;
         this._name = name;
-
+        //set the parent room for each chore and set the status 
         for (let chore of this._chores) {
-            chore.setParentRoom(this._name);
+            chore.setParentRoom(this);
         }
+
+        let r = {xInit: xI, yInit: yI, width: w, height: h, status: 0};
+        this._room = r;
     }
     
     getRoom() {
@@ -50,7 +51,18 @@ export class Room {
         
     }
 
-    getChores() {
+    getChores() {   let s;
         return this._chores;
+    }
+    
+    choreCompleted() {
+
+        let finishedChores = 0;
+        for (let chore of this._chores) {
+            if (chore.isDone()) {
+                finishedChores++;
+            }
+        }
+        this._room.status = finishedChores/this._chores.length;
     }
 }
