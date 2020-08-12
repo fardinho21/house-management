@@ -3,8 +3,7 @@ import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
-import { ThrowStmt } from '@angular/compiler';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+
 
 @Component({
   selector: 'app-chore-list',
@@ -36,6 +35,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   }
 
+  //subscribes to the managers hoseMembersSubject
   ngOnInit(): void {
     if (this.houseMembers.length) {
       this.selectedHouseMember = this.houseMembers[0];

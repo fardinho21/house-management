@@ -108,7 +108,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
       if (status == 1) {
         this._context.fillStyle = this._fillStyles.lightGreen;
-      } else if (status < 0.7 && status >= 0.5) {
+      } else if (status < 1 && status >= 0.5) {
         this._context.fillStyle = this._fillStyles.orange;
       } else if (status < 0.5) {
         this._context.fillStyle = this._fillStyles.red;

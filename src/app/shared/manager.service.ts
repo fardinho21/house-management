@@ -14,8 +14,6 @@ export class ManagerService {
 
   houseMembers : HouseMember[];
 
-
-
   constructor() { }
 
   setRooms(rooms: Room[]){
@@ -46,31 +44,29 @@ export class ManagerService {
 
   }
 
+  /*
+  copies the chores from each room and evenly assigns them
+  */
   assignChores() {
 
     this.clearChores();
 
     let numberOfChores = 0;
     let numberOfHouseMembers = this.houseMembers.length;
-
-    console.log(numberOfHouseMembers);
-
     let listOfChores : Chore[] = [];
 
+    //copies the list of chores from each room
     for (let room of this.rooms) {
       let chores = room.getChores();
       Array.prototype.push.apply(listOfChores, chores);
     }
 
-    
-    console.log(listOfChores);
     numberOfChores = listOfChores.length;
 
     //asign chores
 
     /*
-    if there is an even amount of chores between all
-    members, evenly assign them all
+    evenly assign all the chores to each house member
     */
     let maxInit = numberOfChores/numberOfHouseMembers|0;
     let max = maxInit - 1;

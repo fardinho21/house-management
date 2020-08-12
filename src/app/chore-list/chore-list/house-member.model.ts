@@ -37,6 +37,7 @@ export class HouseMember {
         return this.choresList.slice();
     }
 
+    //resets and clears all the chores
     public clearChores() {
         for (let chore of this.choresList) {
             chore.reset();

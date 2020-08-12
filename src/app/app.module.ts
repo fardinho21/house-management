@@ -9,6 +9,10 @@ import { HeaderComponent } from './header/header/header.component';
 import { CamelToSpacePipe } from './shared/camel-to-space.pipe';
 import { ManagerService } from './shared/manager.service';
 import { FormsModule } from "@angular/forms";
+import { ShoppingListComponent } from './shopping-list/shopping-list/shopping-list.component';
+import { CalendarComponent } from './calendar/calendar/calendar.component';
+import { ChoresAndFplanComponent } from './chores-and-fplan/chores-and-fplan.component';
+import { ShoplistAndCalComponent } from './shoplist-and-cal/shoplist-and-cal.component';
 
 
 @NgModule({
@@ -17,7 +21,11 @@ import { FormsModule } from "@angular/forms";
     FloorPlanComponent,
     ChoreListComponent,
     HeaderComponent,
-    CamelToSpacePipe
+    CamelToSpacePipe,
+    ShoppingListComponent,
+    CalendarComponent,
+    ChoresAndFplanComponent,
+    ShoplistAndCalComponent
   ],
   imports: [
     BrowserModule,
