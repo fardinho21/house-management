@@ -2,10 +2,10 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
-            <button type="button" (click)="onAddHouseMember()">Add House Member</button>
+            <button type="button" (click)="toggleHouseMemberDialog()">Add House Member</button>
         </div>
         <div class="col-lg-8 col-md-10 col-sm-6 col-xs-6" style="justify-content: right;">
-            <button type="button">Assign Chores</button>
+            <button type="button" (click)="onAssignChores()">Assign Chores</button>
         </div>
     </div>
 </div>
@@ -19,27 +19,32 @@
                 <h5 class="modal-title">
                     Add House Member
                 </h5>
-                <button type="button" class="close" data-dismiss="modal" (click)="onAddHouseMember()">
+                <button type="button" class="close" data-dismiss="modal" (click)="toggleHouseMemberDialog()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form >
-                    <label for="name">Name</label>
-                    <input 
-                        type="text" 
-                        id="name" 
-                        class="form-control"
-                        ngModel
-                        name="name">
-                </form>
+            <!-- create hosue member form start -->
+            <form (ngSubmit)="onCreateHouseMember(f)" #f="ngForm">
+                <div class="modal-body">
+                    
+                        <label for="name">Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            class="form-control"
+                            ngModel
+                            name="name">
 
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary"> Add</button>
-                <button type="button" class="btn btn-secondary" (click)="onAddHouseMember()">Cancel</button>
-            </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary"> Add</button>
+                    <button type="button" class="btn btn-secondary" (click)="toggleHouseMemberDialog()">Cancel</button>
+                </div>
+            </form>
+            <!-- create house member form end-->
+
         </div>
     </div>
 </div>

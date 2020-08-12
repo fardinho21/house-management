@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Room } from '../floor-plan/floor-plan/room.model';
 import { HouseMember } from '../chore-list/chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
+import { Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,11 @@ import { Chore } from "../shared/chore.model";
 export class ManagerService {
 
   rooms: Room[];
-  houseMembers: HouseMember[];
+  houseMembersSubject = new Subject<HouseMember[]>();
+
+  houseMembers : HouseMember[];
+
+
 
   constructor() { }
 
@@ -21,10 +26,34 @@ export class ManagerService {
     this.houseMembers = houseMembers;
   }
 
+  createHouseMember(name: string) {
+    if (name != "") {
+
+      let newHouseMember = new HouseMember(name, []);
+
+      let found = this.houseMembers.find((element) => {
+        return (element.getName() == newHouseMember.getName());
+      })
+
+      if (typeof (found) == "undefined") {
+        this.houseMembers.push(newHouseMember);
+        this.houseMembersSubject.next(this.houseMembers.slice());
+      } else {
+        alert("House member " + newHouseMember.getName() + " is already on the list!");
+      }
+
+    }
+
+  }
+
   assignChores() {
-    
+
+    this.clearChores();
+
     let numberOfChores = 0;
     let numberOfHouseMembers = this.houseMembers.length;
+
+    console.log(numberOfHouseMembers);
 
     let listOfChores : Chore[] = [];
 
@@ -33,6 +62,8 @@ export class ManagerService {
       Array.prototype.push.apply(listOfChores, chores);
     }
 
+    
+    console.log(listOfChores);
     numberOfChores = listOfChores.length;
 
     //asign chores
@@ -76,9 +107,16 @@ export class ManagerService {
       }
     }
 
-    
+
+    this.houseMembersSubject.next(this.houseMembers.slice());
   }
     
+
+  private clearChores () {
+    for (let member of this.houseMembers) {
+      member.clearChores();
+    }
+  }
 
 }
 

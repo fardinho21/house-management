@@ -2,6 +2,9 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
+import { NgForm } from '@angular/forms';
+import { ThrowStmt } from '@angular/compiler';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-chore-list',
@@ -15,9 +18,9 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   the selected house member.
   */
 
-  addHouseMemberShowDialog : boolean = false;
+  addHouseMemberShowDialog: boolean = false;
 
-  @ViewChild('addHouseMem', {static: false}) houseMemDialog : ElementRef<any>;
+  @ViewChild('addHouseMem', { static: false }) houseMemDialog: ElementRef<any>;
 
   houseMembers: HouseMember[] = [
     new HouseMember("Moje", []),
@@ -29,12 +32,18 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   constructor(private manager: ManagerService) {
     this.manager.setHouseMembers(this.houseMembers);
+
+
   }
 
   ngOnInit(): void {
     if (this.houseMembers.length) {
       this.selectedHouseMember = this.houseMembers[0];
     }
+
+    this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
+      this.houseMembers = newHouseMembers;
+    });
   }
 
   ngAfterViewInit() {
@@ -49,9 +58,25 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     chore.setDone();
   }
 
-  onAddHouseMember() {
+  toggleHouseMemberDialog() {
     this.addHouseMemberShowDialog = !this.addHouseMemberShowDialog;
   }
 
+  /*
+    adds new house member if they arent on the list
+  */
+  onCreateHouseMember(form: NgForm) {
+
+    let name = form.controls['name'].value;
+    this.manager.createHouseMember(name);
+    this.toggleHouseMemberDialog();
+
+ }
+
+  onAssignChores() {
+
+    this.manager.assignChores();
+
+  }
 
 }

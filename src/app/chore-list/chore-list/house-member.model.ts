@@ -36,4 +36,11 @@ export class HouseMember {
     public getChores(): Chore[] {
         return this.choresList.slice();
     }
+
+    public clearChores() {
+        for (let chore of this.choresList) {
+            chore.reset();
+        }
+        this.choresList = [];
+    }
 }
