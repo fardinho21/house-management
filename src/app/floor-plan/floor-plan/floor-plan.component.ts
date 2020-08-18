@@ -85,9 +85,6 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     }, 500)
 
     this._image.src = this._floorPlan.getImagePath();
-
-    this.manager.assignChores();
-
   }
 
   colorArea() {

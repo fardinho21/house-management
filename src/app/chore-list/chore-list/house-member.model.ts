@@ -1,4 +1,3 @@
-import { Room } from 'src/app/floor-plan/floor-plan/room.model';
 import { Chore } from '../../shared/chore.model';
 
 export class HouseMember {

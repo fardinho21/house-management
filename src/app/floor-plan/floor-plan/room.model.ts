@@ -1,10 +1,10 @@
-import { HouseMember } from 'src/app/chore-list/chore-list/house-member.model';
-import { Chore } from 'src/app/shared/chore.model';
+import { Chore } from '../../shared/chore.model';
 
 
 export class Room {
 
     private _name: string;
+    private _finishedChores: number;
 
     private _room : {
         xInit: number,
@@ -57,12 +57,17 @@ export class Room {
     
     choreCompleted() {
 
-        let finishedChores = 0;
+        this._finishedChores = 0;
         for (let chore of this._chores) {
             if (chore.isDone()) {
-                finishedChores++;
+                this._finishedChores++;
             }
         }
-        this._room.status = finishedChores/this._chores.length;
+        this._room.status = this._finishedChores/this._chores.length;
+    }
+
+    resetStatus() {
+        this._finishedChores = 0;
+        this._room.status = this._finishedChores/this._chores.length;
     }
 }

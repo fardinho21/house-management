@@ -79,6 +79,8 @@ export class ManagerService {
       let chores = room.getChores();
       Array.prototype.push.apply(this.listOfChores, chores);
     }
+
+    this.assignChores();
   }
 
   setRooms(rooms: Room[]){
@@ -116,7 +118,9 @@ export class ManagerService {
 
     //unassign and reset all chores for each house member and 
     //set their chores list to an empty array
+    
     this.clearChores();
+    this.resetRoomStatuses();
 
     let numberOfChores = this.listOfChores.length;
     let numberOfHouseMembers = this.houseMembers.length;
@@ -177,6 +181,12 @@ export class ManagerService {
 
   getRooms() {
     return this.rooms.slice();
+  }
+
+  resetRoomStatuses() {
+    for (let room of this.rooms) {
+      room.resetStatus();
+    }
   }
 
   getSelected() {

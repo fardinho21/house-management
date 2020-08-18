@@ -43,7 +43,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
   }
 
   onClickHouseMember(index: number) {
