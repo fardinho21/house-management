@@ -3,6 +3,7 @@ import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -20,19 +21,13 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   addHouseMemberShowDialog: boolean = false;
 
   @ViewChild('addHouseMem', { static: false }) houseMemDialog: ElementRef<any>;
-
-  houseMembers: HouseMember[] = [
-    new HouseMember("Moje", []),
-    new HouseMember("Wali", []),
-    new HouseMember("Suf", [])
-  ]
-
+  
+  houseMembers : HouseMember[];  
   selectedHouseMember: HouseMember;
 
   constructor(private manager: ManagerService) {
-    this.manager.setHouseMembers(this.houseMembers);
-
-
+    this.houseMembers = this.manager.getHouseMemebers();
+    this.selectedHouseMember = this.manager.getSelected();
   }
 
   //subscribes to the managers hoseMembersSubject
@@ -43,6 +38,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
       this.houseMembers = newHouseMembers;
+      console.log(this.houseMembers);
     });
   }
 
@@ -55,7 +51,9 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   onDone(chore: Chore) {
-    chore.setDone();
+    
+    this.manager.onDone(chore);
+    
   }
 
   toggleHouseMemberDialog() {

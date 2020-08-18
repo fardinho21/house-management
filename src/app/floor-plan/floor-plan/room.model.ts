@@ -51,7 +51,7 @@ export class Room {
         
     }
 
-    getChores() {   let s;
+    getChores(){    
         return this._chores;
     }
     
