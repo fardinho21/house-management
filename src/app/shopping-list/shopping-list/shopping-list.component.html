@@ -15,52 +15,50 @@
 </div>
 
 <!-- body -->
-<div class="container">
 
-    <div class="row" style="max-width: 50%;">
 
-        <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                <h5>Item</h5>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                <h5>
-                    Amount
-                </h5>
-            </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                <h5>
-                    Requested By
-                </h5>
-            </div>
-        </div>
- 
+    
 
-        <ul style="list-style: none; ">
-            
-            <div class="row" *ngFor="let item of shoppingItems; let i = index;">
-                <li>
-                    <div class="row">
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            {{item.name}}
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            {{item.amount}}
-                        </div>
-                        <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            {{item.requestedBy}}
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
-                            <button type="button" class="btn btn-danger"(click)="deleteItem(i)">
-                                X
-                            </button>
-                        </div>
-                    </div>
-                </li>
-            </div>
-        </ul>   
+<div class="row">
+    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        <h5>Item</h5>
+    </div>
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <h5>
+            Amount
+        </h5>
+    </div>
+    <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+        <h5>
+            Requested By
+        </h5>
     </div>
 </div>
+
+
+<ul style="list-style: none; ">
+    
+    <div class="row" *ngFor="let item of shoppingItems; let i = index;">
+        <li>
+            <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    {{item.name}}
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    {{item.amount}}
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    {{item.requestedBy}}
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                    <button type="button" class="btn btn-danger"(click)="deleteItem(i)">
+                        X
+                    </button>
+                </div>
+            </div>
+        </li>
+    </div>
+</ul>   
 <!-- body -->
 
 <!-- modal dialog start -->

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarOptions } from "@fullcalendar/angular";
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-calendar',
@@ -12,9 +13,21 @@ export class CalendarComponent implements OnInit {
     initialView: 'dayGridMonth'
   }
 
+  addEventDialogShow: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  onToggleAddEventDialog() {
+    this.addEventDialogShow = !this.addEventDialogShow;
+  }
+
+  onAddEvent(form: NgForm){
+
+    console.log(form);
+    this.onToggleAddEventDialog();
   }
 
 }

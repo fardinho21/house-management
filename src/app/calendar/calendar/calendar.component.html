@@ -1,7 +1,58 @@
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <full-calendar [options]="calendarOptions"></full-calendar>
+<button class="btn btn-primary" type="button" (click)="onToggleAddEventDialog()">
+    Add Event
+</button>
+
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+
+<div class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addEventDialogShow ? 'block':'none'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Add Event
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" (click)="onToggleAddEventDialog()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form (ngSubmit)="onAddEvent(f)" #f="ngForm">
+                <div class="modal-body">
+                    <label for="name">Event Name</label>
+                    <input 
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        ngModel
+                        name="name">
+                    <label for="time">Time</label>
+                    <input 
+                        type="time"
+                        class="form-control"
+                        id="time"
+                        ngModel
+                        name="time">
+                    <label for="location">Location</label>
+                    <input 
+                        type="text"
+                        class="form-control"
+                        id="location"
+                        ngModel
+                        name="location">
+                </div>
+    
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">
+                        Add Event
+                    </button>
+                </div>
+
+            </form>
+
         </div>
+
+        
     </div>
+
 </div>
