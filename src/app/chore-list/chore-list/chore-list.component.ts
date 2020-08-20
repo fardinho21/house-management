@@ -20,8 +20,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   addHouseMemberShowDialog: boolean = false;
 
-  @ViewChild('addHouseMem', { static: false }) houseMemDialog: ElementRef<any>;
-  
   houseMembers : HouseMember[];  
   selectedHouseMember: HouseMember;
 

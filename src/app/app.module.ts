@@ -13,7 +13,12 @@ import { ShoppingListComponent } from './shopping-list/shopping-list/shopping-li
 import { CalendarComponent } from './calendar/calendar/calendar.component';
 import { ChoresAndFplanComponent } from './chores-and-fplan/chores-and-fplan.component';
 import { ShoplistAndCalComponent } from './shoplist-and-cal/shoplist-and-cal.component';
+import { FullCalendarModule } from "@fullcalendar/angular";
+import dayGridPlugin from '@fullcalendar/daygrid'
 
+FullCalendarModule.registerPlugins([
+  dayGridPlugin
+])
 
 @NgModule({
   declarations: [
@@ -31,7 +36,8 @@ import { ShoplistAndCalComponent } from './shoplist-and-cal/shoplist-and-cal.com
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    FullCalendarModule
   ],
   providers: [ManagerService],
   bootstrap: [AppComponent]

@@ -1,6 +1,11 @@
 <!-- header start -->
 <div class="container">
     <div class="row">
+        <h4>
+            Chores
+        </h4>
+    </div>
+    <div class="row">
         <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
             <button type="button" (click)="toggleHouseMemberDialog()">Add House Member</button>
         </div>
@@ -10,6 +15,50 @@
     </div>
 </div>
 <!-- header end -->
+
+<!-- house member list start -->
+<div class="container">
+    <ul class="nav nav-tabs">
+        <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}">
+            <a (click)="onClickHouseMember(i)" >
+                {{houseMember.getName()}}
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="contianer">
+    <div class="row">
+        <div class="col">
+            <ul style="list-style: none;">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <h4>Chore</h4>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <h4>Room</h4>
+                    </div>
+                </div>
+                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
+                    <li>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            {{chores.getInfo().choreName}}
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
+                            {{chores.getInfo().parentRoom.getName() | camelToSpace | lowercase}}
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
+                            <button type="button" (click)="onDone(chores)">
+                                Done
+                            </button>
+                        </div>
+                    </li>
+                    <hr>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- house member list end -->
 
 <!-- modal dialog start -->
 <div #addHouseMem class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addHouseMemberShowDialog ? 'block' : 'none'}">
@@ -49,50 +98,3 @@
     </div>
 </div>
 <!-- modal dialog end -->
-
-<!-- house member list start -->
-<div class="container">
-    <ul class="nav nav-tabs">
-        <li *ngFor="let houseMember of houseMembers; let i = index">
-            <a (click)="onClickHouseMember(i)">
-                {{houseMember.getName()}}
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="contianer">
-    <div class="row">
-        <div class="col">
-            <ul style="list-style: none;">
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                        <h4>Chore</h4>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                        <h4>Room</h4>
-                    </div>
-                </div>
-                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
-
-                    
-
-                    <li>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            {{chores.getInfo().choreName}}
-                        </div>
-                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                            {{chores.getInfo().parentRoom.getName() | camelToSpace | lowercase}}
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
-                            <button type="button" (click)="onDone(chores)">
-                                Done
-                            </button>
-                        </div>
-                    </li>
-                    <hr>
-                </div>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- house member list end -->

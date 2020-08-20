@@ -4,11 +4,15 @@ import { HouseMember } from '../chore-list/chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
 
+
+
+
 @Injectable({
   providedIn: 'root'
 })
 export class ManagerService {
 
+  //data
   rooms: Room[] = [
     new Room('livingRoom', 60, 30, 150, 150, [
         new Chore("clean windows",false,null),
@@ -59,18 +63,25 @@ export class ManagerService {
     ])
 
   ];
-
-  roomSubject = new Subject<Room[]>();
-  listOfChores : Chore[] = [];
-  houseMembersSubject = new Subject<HouseMember[]>();
-
   houseMembers: HouseMember[] = [
     new HouseMember("Moje", []),
     new HouseMember("Wali", []),
     new HouseMember("Suf", [])
   ]
-
+  shoppingItems: {name: string, amount:number, requestedBy: string}[] = [
+    {name:"Bread",amount:3,requestedBy: 'dummy'},
+    {name:"Apple",amount:5,requestedBy: 'dummy'},
+    {name:"Paper Towel",amount:1,requestedBy: 'dummy'},
+  ]
+  listOfChores : Chore[] = [];
+  events: any[] = [];
   selectedHouseMember: HouseMember = this.houseMembers[0];
+
+  //subjects
+  roomSubject = new Subject<Room[]>();
+  houseMembersSubject = new Subject<HouseMember[]>();
+  shoppingItemsSubject = new Subject<{name:string,amount:number,requestedBy:string}[]>();
+  eventsSubject = new Subject<[]>();
 
   constructor() { 
     console.log(this.houseMembers);
@@ -81,6 +92,13 @@ export class ManagerService {
     }
 
     this.assignChores();
+  }
+
+  //services for chores list and floor plan component -- start
+  private clearChores () {
+    for (let member of this.houseMembers) {
+      member.clearChores();
+    }
   }
 
   setRooms(rooms: Room[]){
@@ -111,9 +129,9 @@ export class ManagerService {
 
   }
 
-  /*
-  copies the chores from each room and evenly assigns them
-  */
+    /*
+    copies the chores from each room and evenly assigns them
+    */
   assignChores() {
 
     //unassign and reset all chores for each house member and 
@@ -168,13 +186,6 @@ export class ManagerService {
     this.roomSubject.next(this.rooms.slice());
   }
     
-
-  private clearChores () {
-    for (let member of this.houseMembers) {
-      member.clearChores();
-    }
-  }
-
   getHouseMemebers() {
     return this.houseMembers.slice();
   }
@@ -207,6 +218,49 @@ export class ManagerService {
     this.houseMembersSubject.next(this.houseMembers);
     this.roomSubject.next(this.rooms);
   }
+  //services for chores list and floor plan component -- end
+
+
+  // services for shopping list component -- start
+  getShoppingItems() {
+    return this.shoppingItems.slice();
+  }
+
+  addShoppingItem(item : {name:string,amount:number,requestedBy:string}) {
+    this.shoppingItems.push(item);
+    this.shoppingItemsSubject.next(this.shoppingItems.slice());
+  }
+
+  deleteItem(index: number){
+    this.shoppingItems.splice(index,1);
+    this.shoppingItemsSubject.next(this.shoppingItems.slice());
+  }
+
+  clearShoppingList(){
+    this.shoppingItems = [];
+    this.shoppingItemsSubject.next(this.shoppingItems);
+  }
+  //services for shoppig list component -- end
+
+
+  //services for calendar component -- start
+
+  addEvent(event) {
+
+    this.events.push(event);
+    this.eventsSubject.next()
+  }
+
+  getEvents() {
+    return this.events.slice();
+  }
+
+  deleteEvent(){
+
+  }
+
+
+  //services for calendar component -- end
 }
 
 
