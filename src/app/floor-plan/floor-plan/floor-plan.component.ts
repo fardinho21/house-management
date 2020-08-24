@@ -71,7 +71,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       let xLoc = (movement.clientX - rect.left)|0;
       let yLoc = (movement.clientY - rect.top)|0;
       let roomName = this.checkHoverInsideRoom(xLoc, yLoc);
-      console.log(roomName);
+      //console.log(roomName);
       if (roomName !==  null) {
         this.over = true;
       } else {

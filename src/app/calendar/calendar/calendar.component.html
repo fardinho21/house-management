@@ -1,8 +1,10 @@
-<button class="btn btn-primary" type="button" (click)="onToggleAddEventDialog()">
-    Add Event
-</button>
+<full-calendar 
+    #calendar  
+    [options]="calendarOptions"
+    deepChangeDetection="true"
+>
 
-<full-calendar [options]="calendarOptions"></full-calendar>
+</full-calendar>
 
 
 <div class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addEventDialogShow ? 'block':'none'}">
@@ -10,7 +12,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    Add Event
+                    Add Event to {{clickedDate.toDateString()}}
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" (click)="onToggleAddEventDialog()">
                     <span aria-hidden="true">&times;</span>
@@ -33,13 +35,14 @@
                         id="time"
                         ngModel
                         name="time">
-                    <label for="location">Location</label>
-                    <input 
-                        type="text"
+                    <label for="color">Color</label>
+                    <input
+                        type="color"
                         class="form-control"
-                        id="location"
+                        id="color"
                         ngModel
-                        name="location">
+                        name="color"
+                    >
                 </div>
     
                 <div class="modal-footer">

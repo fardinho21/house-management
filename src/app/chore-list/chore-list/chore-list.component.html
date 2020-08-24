@@ -44,7 +44,7 @@
                             {{chores.getInfo().choreName}}
                         </div>
                         <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5">
-                            {{chores.getInfo().parentRoom.getName() | camelToSpace | lowercase}}
+                            {{chores.getInfo().parentRoom | camelToSpace | lowercase}}
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3">
                             <button type="button" (click)="onDone(chores)">
@@ -55,6 +55,14 @@
                     <hr>
                 </div>
             </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <button class="btn btn-success" type="button" (click)="onSaveRoomsToDataBase()">
+                Save Chores
+            </button> | 
+            <button type="button" class="btn btn-primary" (click)="onFetchRoomsFromDataBase()">Load Chores</button>
         </div>
     </div>
 </div>

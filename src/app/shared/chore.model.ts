@@ -5,12 +5,20 @@ export class Chore {
     
     private parentRoom: Room;
 
-    constructor(private choreName: string, private done: boolean, private assignedTo : HouseMember = null) {
-
-    }
+    constructor(
+        private choreName: string, 
+        private done: boolean, 
+        private assignedTo : HouseMember = null) {}
 
     getInfo() {
-        return {choreName: this.choreName, done: this.done, assignedTo: this.assignedTo, parentRoom: this.parentRoom};
+
+
+        return {
+            choreName: this.choreName, 
+            done: this.done, 
+            assignedTo: this.assignedTo ? this.assignedTo.getName() : "", 
+            parentRoom: this.parentRoom.getName()
+        };
     }
 
     assignToHouseMember(member: HouseMember){

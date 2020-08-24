@@ -14,10 +14,14 @@ import { CalendarComponent } from './calendar/calendar/calendar.component';
 import { ChoresAndFplanComponent } from './chores-and-fplan/chores-and-fplan.component';
 import { ShoplistAndCalComponent } from './shoplist-and-cal/shoplist-and-cal.component';
 import { FullCalendarModule } from "@fullcalendar/angular";
-import dayGridPlugin from '@fullcalendar/daygrid'
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from "@fullcalendar/interaction";
+import { DatabaseManagerService } from './shared/database-manager.service';
+import { HttpClientModule } from "@angular/common/http";
 
 FullCalendarModule.registerPlugins([
-  dayGridPlugin
+  dayGridPlugin,
+  interactionPlugin
 ])
 
 @NgModule({
@@ -30,14 +34,15 @@ FullCalendarModule.registerPlugins([
     ShoppingListComponent,
     CalendarComponent,
     ChoresAndFplanComponent,
-    ShoplistAndCalComponent
+    ShoplistAndCalComponent    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    HttpClientModule
   ],
   providers: [ManagerService],
   bootstrap: [AppComponent]

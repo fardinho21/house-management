@@ -3,6 +3,7 @@ import { Room } from '../floor-plan/floor-plan/room.model';
 import { HouseMember } from '../chore-list/chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
+import { DatabaseManagerService } from './database-manager.service';
 
 
 
@@ -74,24 +75,45 @@ export class ManagerService {
     {name:"Paper Towel",amount:1,requestedBy: 'dummy'},
   ]
   listOfChores : Chore[] = [];
-  events: any[] = [];
+  events: {title:string,start:string}[] = [
+    {title:"event1",start:"2020-08-04"},
+    {title:"event2",start:"2020-08-03"}
+  ];
   selectedHouseMember: HouseMember = this.houseMembers[0];
 
   //subjects
   roomSubject = new Subject<Room[]>();
   houseMembersSubject = new Subject<HouseMember[]>();
   shoppingItemsSubject = new Subject<{name:string,amount:number,requestedBy:string}[]>();
-  eventsSubject = new Subject<[]>();
 
-  constructor() { 
-    console.log(this.houseMembers);
+  eventsSubject = new Subject<{title:string,start:string}[]>();
+
+  constructor(private dataBaseManager : DatabaseManagerService) { 
+    // console.log(this.houseMembers);
+
+    // for (let room of this.rooms) {
+    //   let chores = room.getChores();
+    //   Array.prototype.push.apply(this.listOfChores, chores);
+    // }
+
+    
+
+    //dataBaseManager.fetchChores();
+
+    dataBaseManager.loadedChoresSubject.subscribe(loaded => {
+      let runningList = []
+      for (let key in loaded){
+        let chore  = new Chore(loaded[key].choreName,loaded[key].done, null)
+        runningList.push(chore);
+      }
+      this.listOfChores = runningList.slice();
+      console.log(this.listOfChores);
+    })
 
     for (let room of this.rooms) {
-      let chores = room.getChores();
-      Array.prototype.push.apply(this.listOfChores, chores);
+      console.log(room.getJSONObject());
     }
 
-    this.assignChores();
   }
 
   //services for chores list and floor plan component -- start
@@ -129,6 +151,11 @@ export class ManagerService {
 
   }
 
+
+
+  getChores () {
+    return this.listOfChores.slice();
+  }
     /*
     copies the chores from each room and evenly assigns them
     */
@@ -200,6 +227,7 @@ export class ManagerService {
     }
   }
 
+
   getSelected() {
     return this.selectedHouseMember;
   }
@@ -248,7 +276,8 @@ export class ManagerService {
   addEvent(event) {
 
     this.events.push(event);
-    this.eventsSubject.next()
+    console.log(this.events);
+    this.eventsSubject.next(this.events);
   }
 
   getEvents() {
@@ -258,7 +287,6 @@ export class ManagerService {
   deleteEvent(){
 
   }
-
 
   //services for calendar component -- end
 }

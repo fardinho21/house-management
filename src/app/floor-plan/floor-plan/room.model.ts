@@ -1,4 +1,5 @@
 import { Chore } from '../../shared/chore.model';
+import { RoomObject } from 'src/app/shared/database-manager.service';
 
 
 export class Room {
@@ -22,7 +23,7 @@ export class Room {
         yI: number, 
         w: number, 
         h: number,
-        chores: Chore[],) {
+        chores: Chore[]) {
 
         this._chores = chores;
         this._name = name;
@@ -69,5 +70,27 @@ export class Room {
     resetStatus() {
         this._finishedChores = 0;
         this._room.status = this._finishedChores/this._chores.length;
+    }
+
+    getJSONObject() : RoomObject {
+
+        let chores : { 
+            choreName: string;
+            done: boolean; 
+            assignedTo: string;
+            parentRoom: string; }[] = [];
+
+        for (let chore of this._chores){
+            chores.push(chore.getInfo())
+        }
+
+        let jO : RoomObject = {
+            name: this._name,
+            finishedChores: this._finishedChores,
+            room: this._room,
+            chores: chores
+        }
+
+        return jO;
     }
 }

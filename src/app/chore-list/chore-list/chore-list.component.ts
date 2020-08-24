@@ -4,6 +4,7 @@ import { ManagerService } from "../../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
+import { DatabaseManagerService } from 'src/app/shared/database-manager.service';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   houseMembers : HouseMember[];  
   selectedHouseMember: HouseMember;
 
-  constructor(private manager: ManagerService) {
+  constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService) {
     this.houseMembers = this.manager.getHouseMemebers();
     this.selectedHouseMember = this.manager.getSelected();
   }
@@ -66,12 +67,36 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.manager.createHouseMember(name);
     this.toggleHouseMemberDialog();
 
- }
+  }
 
   onAssignChores() {
 
     this.manager.assignChores();
 
+  }
+
+
+  //database methods
+  onSaveChoresToDataBase() {
+    let chores  = this.manager.getChores().map((chore) => {
+      return chore.getInfo();
+    });
+    this.dataBaseManager.saveChores(chores);
+  }
+
+  onFetchChoresFromDataBase() {
+    this.dataBaseManager.fetchChores();
+  }
+
+  onSaveRoomsToDataBase(){
+    let rooms = this.manager.getRooms().map((room) => {
+      return room.getJSONObject();
+    });
+    this.dataBaseManager.saveRooms(rooms);
+  }
+
+  onFetchRoomsFromDataBase() {
+    
   }
 
 }
