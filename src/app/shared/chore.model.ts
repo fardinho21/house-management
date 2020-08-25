@@ -1,5 +1,6 @@
 import { HouseMember } from "../chore-list/chore-list/house-member.model";
 import { Room } from '../floor-plan/floor-plan/room.model';
+import { ChoresObject } from './database-manager.service';
 
 export class Chore {
     
@@ -10,9 +11,7 @@ export class Chore {
         private done: boolean, 
         private assignedTo : HouseMember = null) {}
 
-    getInfo() {
-
-
+    getInfo() : ChoresObject {
         return {
             choreName: this.choreName, 
             done: this.done, 
@@ -29,6 +28,7 @@ export class Chore {
         this.done = true;
         this.assignedTo = null;
         this.parentRoom.choreCompleted(); //update room status
+        this.parentRoom.updateRoomStatus();
     }
 
     reset(){

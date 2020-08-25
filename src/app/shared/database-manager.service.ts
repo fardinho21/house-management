@@ -4,8 +4,12 @@ import { ManagerService } from "./manager.service";
 import { Chore } from "./chore.model";
 import { map } from "rxjs/operators";
 import { Subject } from 'rxjs';
+import { HouseMember } from '../chore-list/chore-list/house-member.model';
 
-
+export interface HouseMemberObject {
+  name: string;
+  choresList: ChoresObject[];
+}
 
 export interface RoomObject {
   name: string;
@@ -41,9 +45,13 @@ export class DatabaseManagerService {
 
   loadedRooms: RoomObject[] = [];
 
+  loadedHouseMembers: HouseMemberObject[] = [];
+
   loadedRoomsSubject = new Subject<RoomObject[]>();
 
   loadedChoresSubject = new Subject<ChoresObject[]>();
+
+  loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
 
   fetchChores() {
     this.httpClient.get<ChoresObject[]>(this.DATA_BASE_URL + 'chores.json')
@@ -75,11 +83,28 @@ export class DatabaseManagerService {
   }
 
   fetchHouseMembers() {
-
+    this.httpClient.get<HouseMemberObject[]>(this.DATA_BASE_URL + "house-members.json")
+    .pipe(map(data => {
+      let hosueMemberArray = [];
+      for (const key in data) {
+        hosueMemberArray.push({...data[key],id:key})
+      }
+      return hosueMemberArray;
+    }))
+    .subscribe(houseMembers => {
+      this.loadedHouseMembers = houseMembers.slice();
+      this.loadedHouseMembersSubject.next(this.loadedHouseMembers)
+    })
   }
+  
 
-  saveHouseMembers() {
-
+  saveHouseMembers(houseMembers: HouseMemberObject[]) {
+    this.httpClient.put<HouseMemberObject[]>(
+      this.DATA_BASE_URL + "house-members.json",
+      houseMembers
+    ).subscribe(response => {
+      console.log(response)
+    }) 
   }
 
   fetchRooms() {

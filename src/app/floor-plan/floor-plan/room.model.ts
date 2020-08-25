@@ -5,7 +5,7 @@ import { RoomObject } from 'src/app/shared/database-manager.service';
 export class Room {
 
     private _name: string;
-    private _finishedChores: number;
+    private _finishedChores: number = 0;
 
     private _room : {
         xInit: number,
@@ -27,13 +27,25 @@ export class Room {
 
         this._chores = chores;
         this._name = name;
-        //set the parent room for each chore and set the status 
+        //set the parent room for each chore and set the status       
+
+        for (let chore of chores) {
+            if (chore.isDone()) {
+                this._finishedChores++;
+            }
+        }
+
+        let r = { xInit: xI, yInit: yI, width: w, height: h, status: 0 };
+
+        r.status = this._finishedChores / this._chores.length
+
+        this._room = r;
+
+
         for (let chore of this._chores) {
             chore.setParentRoom(this);
         }
 
-        let r = {xInit: xI, yInit: yI, width: w, height: h, status: 0};
-        this._room = r;
     }
     
     getRoom() {
@@ -57,13 +69,10 @@ export class Room {
     }
     
     choreCompleted() {
+        this._finishedChores++;
+    }
 
-        this._finishedChores = 0;
-        for (let chore of this._chores) {
-            if (chore.isDone()) {
-                this._finishedChores++;
-            }
-        }
+    updateRoomStatus() {
         this._room.status = this._finishedChores/this._chores.length;
     }
 

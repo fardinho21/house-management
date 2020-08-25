@@ -7,10 +7,14 @@
     </div>
     <div class="row">
         <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
-            <button type="button" (click)="toggleHouseMemberDialog()">Add House Member</button>
+            <button type="button" (click)="toggleHouseMemberDialog()">Add House Member</button> |
+            <button type="button" (click)="onAssignChores()">Assign Chores</button> |
+            <button type="button" class="btn btn-success" (click)="onSaveHouseMembersToDataBase()">Save House Members</button> |
+            <button type="button" class="btn btn-primary" (click)="onFetchHouseMembersFromDataBase()">Load House Members</button> 
+
         </div>
         <div class="col-lg-8 col-md-10 col-sm-6 col-xs-6" style="justify-content: right;">
-            <button type="button" (click)="onAssignChores()">Assign Chores</button>
+
         </div>
     </div>
 </div>

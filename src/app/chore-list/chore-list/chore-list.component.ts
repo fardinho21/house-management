@@ -27,6 +27,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService) {
     this.houseMembers = this.manager.getHouseMemebers();
     this.selectedHouseMember = this.manager.getSelected();
+
   }
 
   //subscribes to the managers hoseMembersSubject
@@ -39,9 +40,15 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
       this.houseMembers = newHouseMembers;
       console.log(this.houseMembers);
     });
+
+    this.manager.selectedHouseMemberSubject.subscribe(selected => {
+      this.selectedHouseMember = selected;
+      this.manager.selectedHouseMemberSubject.unsubscribe();
+    });
   }
 
   ngAfterViewInit() {
+
   }
 
   onClickHouseMember(index: number) {
@@ -77,16 +84,16 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
 
   //database methods
-  onSaveChoresToDataBase() {
-    let chores  = this.manager.getChores().map((chore) => {
-      return chore.getInfo();
-    });
-    this.dataBaseManager.saveChores(chores);
-  }
+  // onSaveChoresToDataBase() {
+  //   let chores  = this.manager.getChores().map((chore) => {
+  //     return chore.getInfo();
+  //   });
+  //   this.dataBaseManager.saveChores(chores);
+  // }
 
-  onFetchChoresFromDataBase() {
-    this.dataBaseManager.fetchChores();
-  }
+  // onFetchChoresFromDataBase() {
+  //   this.dataBaseManager.fetchChores();
+  // }
 
   onSaveRoomsToDataBase(){
     let rooms = this.manager.getRooms().map((room) => {
@@ -96,7 +103,18 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   onFetchRoomsFromDataBase() {
-    
+    this.dataBaseManager.fetchRooms();
+  }
+
+  onSaveHouseMembersToDataBase() {
+    let hm = this.manager.getHouseMemebers().map((houseMem) => {
+      return houseMem.getJSONObject();
+    });
+    this.dataBaseManager.saveHouseMembers(hm);
+  }
+
+  onFetchHouseMembersFromDataBase(){
+    this.dataBaseManager.fetchHouseMembers();
   }
 
 }

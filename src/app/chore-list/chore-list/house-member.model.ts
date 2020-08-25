@@ -1,4 +1,5 @@
 import { Chore } from '../../shared/chore.model';
+import { HouseMemberObject, ChoresObject } from 'src/app/shared/database-manager.service';
 
 export class HouseMember {
 
@@ -7,6 +8,9 @@ export class HouseMember {
 
     constructor(name:string, chores: Chore[]) {
         this.name = name;
+        chores.map(chore => {
+           return chore.assignToHouseMember(this)
+        })
         this.choresList = chores;
     }
 
@@ -17,6 +21,10 @@ export class HouseMember {
 
     public setName(name: string){
         this.name = name;
+    }
+
+    public setChores(chores: Chore[]) {
+        this.choresList = chores.slice();
     }
 
     public addChore(chore: Chore) {
@@ -42,5 +50,19 @@ export class HouseMember {
             chore.reset();
         }
         this.choresList = [];
+    }
+
+    getJSONObject() : HouseMemberObject {
+
+        let cList : ChoresObject[] = this.choresList.map(chore => {
+            return chore.getInfo();
+        })
+
+        let jO : HouseMemberObject = {
+            name: this.name,
+            choresList: cList
+        }
+        
+        return jO;
     }
 }

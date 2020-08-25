@@ -14,61 +14,9 @@ import { DatabaseManagerService } from './database-manager.service';
 export class ManagerService {
 
   //data
-  rooms: Room[] = [
-    new Room('livingRoom', 60, 30, 150, 150, [
-        new Chore("clean windows",false,null),
-        new Chore("vaccum floor",false,null),
-        new Chore("clean couches",false,null),
-        new Chore("dust lamps",false,null),
+  rooms: Room[] = [];
+  houseMembers: HouseMember[] = []
 
-    ]),
-    new Room('dinningRoom', 60, 180, 150, 50, [
-        new Chore("mop floor",false,null),
-    ]),
-    new Room('kitchenArea', 60, 230, 100, 125, [
-        new Chore("clean sink",false,null),
-        new Chore("clean counter top",false,null),
-        new Chore("clean stove top",false,null),
-        new Chore("clean fridge",false,null),
-        new Chore("clean cabinets",false,null),
-        new Chore("mop floor",false,null),         
-    ]),
-    new Room('firstFloorBathArea', 60, 355, 100, 60, [
-        new Chore("clean sink",false,null),
-        new Chore("clean mirror",false,null),
-        new Chore("clean toilet",false,null),
-        new Chore("mop floor",false,null),
-    ]),
-    new Room('stairWell', 160, 230, 50, 90, [
-        new Chore("vaccum stairs",false,null)
-    ]),
-    new Room('laundryRoom', 160, 320, 50, 95, [
-        new Chore("mop floor",false,null) 
-    ]),
-    new Room('hallWayArea', 325, 175, 75, 140, [
-        new Chore("mop floor",false,null) 
-    ]),
-    new Room('upStairsBath', 290, 210, 35, 105, [
-        new Chore("clean sink",false,null),
-        new Chore("clean toilet",false,null),
-        new Chore("clean mirror",false,null),
-        new Chore("clean shower",false,null),
-        new Chore("mop floor",false,null),
-    ]),
-    new Room('masterBath', 245, 210, 45, 140, [
-        new Chore("clean sink",false,null),
-        new Chore("clean toilet",false,null),
-        new Chore("clean mirror",false,null),
-        new Chore("clean shower",false,null),
-        new Chore("mop floor",false,null)
-    ])
-
-  ];
-  houseMembers: HouseMember[] = [
-    new HouseMember("Moje", []),
-    new HouseMember("Wali", []),
-    new HouseMember("Suf", [])
-  ]
   shoppingItems: {name: string, amount:number, requestedBy: string}[] = [
     {name:"Bread",amount:3,requestedBy: 'dummy'},
     {name:"Apple",amount:5,requestedBy: 'dummy'},
@@ -79,24 +27,21 @@ export class ManagerService {
     {title:"event1",start:"2020-08-04"},
     {title:"event2",start:"2020-08-03"}
   ];
-  selectedHouseMember: HouseMember = this.houseMembers[0];
+  selectedHouseMember: HouseMember = new HouseMember("",[]);
+
 
   //subjects
   roomSubject = new Subject<Room[]>();
   houseMembersSubject = new Subject<HouseMember[]>();
   shoppingItemsSubject = new Subject<{name:string,amount:number,requestedBy:string}[]>();
+  selectedHouseMemberSubject = new Subject<HouseMember>();
 
   eventsSubject = new Subject<{title:string,start:string}[]>();
 
   constructor(private dataBaseManager : DatabaseManagerService) { 
-    // console.log(this.houseMembers);
 
-    // for (let room of this.rooms) {
-    //   let chores = room.getChores();
-    //   Array.prototype.push.apply(this.listOfChores, chores);
-    // }
-
-    
+    console.log(this.houseMembers);
+    console.log(this.rooms);
 
     //dataBaseManager.fetchChores();
 
@@ -110,9 +55,57 @@ export class ManagerService {
       console.log(this.listOfChores);
     })
 
-    for (let room of this.rooms) {
-      console.log(room.getJSONObject());
-    }
+    dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
+      let runningList = []
+      for (let key in loaded){
+
+        //create a new room for each found in the database
+        let roomObject = loaded[key];
+        let roomGeo = roomObject.room;
+
+        let choreList = roomObject.chores.map((chore) => {
+          return new Chore(chore.choreName, chore.done)
+        });
+
+
+        runningList.push(
+          new Room(
+            roomObject.name,
+            roomGeo.xInit,
+            roomGeo.yInit,
+            roomGeo.width,
+            roomGeo.height,
+            choreList
+            )
+        )
+      }
+      this.rooms = runningList.slice();
+
+      for (let room of this.rooms) {
+        this.listOfChores = this.listOfChores.concat(room.getChores());
+      }
+
+      console.log(this.rooms);
+    })
+
+    dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
+      let runningList = []
+
+      for (const key in loaded) {
+        let houseMemberObject = loaded[key];
+        let hm = new HouseMember(houseMemberObject.name,[]);
+        let choresList = loaded[key].choresList ? loaded[key].choresList.map(chore => {
+          return new Chore(chore.choreName, chore.done, hm);
+        }) : [];
+
+        hm.setChores(choresList);
+        runningList.push(hm);
+      }
+      this.houseMembers = runningList.slice();
+      this.houseMembersSubject.next(this.houseMembers.slice())
+      this.selectedHouseMemberSubject.next(this.houseMembers[0]);
+      console.log(this.houseMembers);
+    })
 
   }
 
@@ -151,8 +144,6 @@ export class ManagerService {
 
   }
 
-
-
   getChores () {
     return this.listOfChores.slice();
   }
@@ -164,8 +155,8 @@ export class ManagerService {
     //unassign and reset all chores for each house member and 
     //set their chores list to an empty array
     
-    this.clearChores();
-    this.resetRoomStatuses();
+    //this.clearChores();
+    //this.resetRoomStatuses();
 
     let numberOfChores = this.listOfChores.length;
     let numberOfHouseMembers = this.houseMembers.length;
@@ -181,7 +172,7 @@ export class ManagerService {
 
       for (let i = start; i <= max; i++) {
 
-        if (!this.listOfChores[i].isAssigned()) {
+        if (!this.listOfChores[i].isAssigned() && !this.listOfChores[i].isDone()) {
           hm.addChore(this.listOfChores[i]);
           this.listOfChores[i].assignToHouseMember(hm);
         }
@@ -211,7 +202,10 @@ export class ManagerService {
 
     this.houseMembersSubject.next(this.houseMembers.slice());
     this.roomSubject.next(this.rooms.slice());
+    this.selectedHouseMember = this.houseMembers[0];
+    this.selectedHouseMemberSubject.next(this.selectedHouseMember);
   }
+
     
   getHouseMemebers() {
     return this.houseMembers.slice();
