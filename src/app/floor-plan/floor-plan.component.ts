@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewCheck
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
 import { ManagerService } from 'src/app/shared/manager.service';
-import { HouseMember } from 'src/app/chore-list/chore-list/house-member.model';
+import { HouseMember } from '../chore-list/house-member.model';
 
 @Component({
   selector: 'app-floor-plan',

@@ -1,5 +1,5 @@
-import { HouseMember } from "../chore-list/chore-list/house-member.model";
-import { Room } from '../floor-plan/floor-plan/room.model';
+import { HouseMember } from "../chore-list/house-member.model";
+import { Room } from '../floor-plan/room.model';
 import { ChoresObject } from './database-manager.service';
 
 export class Chore {

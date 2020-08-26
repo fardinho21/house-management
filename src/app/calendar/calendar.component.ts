@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CalendarOptions, FullCalendarComponent, Calendar, CalendarApi } from "@fullcalendar/angular";
 import { NgForm } from '@angular/forms';
-import { ManagerService } from 'src/app/shared/manager.service';
+import { ManagerService } from '../shared/manager.service';
 import { EventInput, EventSourceInput } from "@fullcalendar/core";
 
 @Component({

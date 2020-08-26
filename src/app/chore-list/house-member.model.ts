@@ -1,4 +1,4 @@
-import { Chore } from '../../shared/chore.model';
+import { Chore } from '../shared/chore.model';
 import { HouseMemberObject, ChoresObject } from 'src/app/shared/database-manager.service';
 
 export class HouseMember {

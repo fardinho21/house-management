@@ -4,7 +4,7 @@ import { ManagerService } from "./manager.service";
 import { Chore } from "./chore.model";
 import { map } from "rxjs/operators";
 import { Subject } from 'rxjs';
-import { HouseMember } from '../chore-list/chore-list/house-member.model';
+import { HouseMember } from '../chore-list/house-member.model';
 
 export interface HouseMemberObject {
   name: string;

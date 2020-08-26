@@ -1,5 +1,5 @@
 import { Room } from "./room.model";
-import { Chore } from "../../shared/chore.model";
+import { Chore } from "../shared/chore.model";
 import { ManagerService } from 'src/app/shared/manager.service';
 
 export class FloorPlan {

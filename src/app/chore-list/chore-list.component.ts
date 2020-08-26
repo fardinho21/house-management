@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { HouseMember } from "./house-member.model";
-import { ManagerService } from "../../shared/manager.service";
+import { ManagerService } from "../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';

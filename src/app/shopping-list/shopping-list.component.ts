@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HouseMember } from "../../chore-list/chore-list/house-member.model";
+import { HouseMember } from "../chore-list/house-member.model";
 import { NgForm } from '@angular/forms';
 import { ManagerService } from 'src/app/shared/manager.service';
 

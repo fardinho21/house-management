@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Room } from '../floor-plan/floor-plan/room.model';
-import { HouseMember } from '../chore-list/chore-list/house-member.model';
+import { Room } from '../floor-plan/room.model';
+import { HouseMember } from '../chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
