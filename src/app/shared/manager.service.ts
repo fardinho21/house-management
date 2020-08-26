@@ -117,25 +117,10 @@ export class ManagerService {
   }
 
 
-  setRooms(rooms: Room[]){
-    this.rooms = rooms;
-  }
-
-  setHouseMembers(houseMembers: HouseMember[]) {
-    this.houseMembers = houseMembers;
-  }
-
   createHouseMember(name: string) {
     this.houseMembers.push(new HouseMember(name, []));
     return this.houseMembers.length - 1;
   }
-
-  getChores () {
-    return this.listOfChores.slice();
-  }
-    /*
-    copies the chores from each room and evenly assigns them
-    */
 
 
   findHouseMemberByName(name: string) : number{
@@ -175,17 +160,6 @@ export class ManagerService {
     }
     return -1;
   }
-
-  resetRoomStatuses() {
-    for (let room of this.rooms) {
-      room.resetStatus();
-    }
-  }
-
-
-  getSelected() {
-    return this.selectedHouseMember;
-  }
   
   onDone(chore: Chore) {
     
@@ -197,7 +171,7 @@ export class ManagerService {
   //services for chores list and floor plan component -- end
 
 
-  // services for shopping list component -- start
+  // shopping list component methods -- start
   getShoppingItems() {
     return this.shoppingItems.slice();
   }
@@ -216,7 +190,7 @@ export class ManagerService {
     this.shoppingItems = [];
     this.shoppingItemsSubject.next(this.shoppingItems);
   }
-  //services for shoppig list component -- end
+  //shopping list component methods-- end
 
 
   //services for calendar component -- start

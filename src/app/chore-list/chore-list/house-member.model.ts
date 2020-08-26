@@ -19,10 +19,6 @@ export class HouseMember {
         return this.name
     }
 
-    public setName(name: string){
-        this.name = name;
-    }
-
     public findChore(roomName: string, choreName: string) : number {
 
         if (this.choresList.length == 0) {

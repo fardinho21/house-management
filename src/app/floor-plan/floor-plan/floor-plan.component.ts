@@ -119,13 +119,6 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
   }
 
-  /*
-  Mouse click event handler that checks if the click is inside
-  a room. 
-
-  TODO: Needs to indicate how many chores are left that
-  room for each house member.
-  */
   onCanvasClick(mouseclick) {
 
     let rect = this._canvas.getBoundingClientRect();
@@ -139,10 +132,6 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     
   }
 
-  /*
-  Loops through each room to see if the mouse 
-  click is inside.
-  */
   private checkClickInsideRoom(xMouse : number, yMouse: number) : Room{
 
     let rooms = this._floorPlan.getRooms();
@@ -171,9 +160,6 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     return null;
   }
 
-  /*
-  Clears the floor plan of all rectangles
-  */
   private clearFloorPlan() {
     this._context.clearRect(0, 0, this._width, this._height);
 

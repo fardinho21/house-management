@@ -62,9 +62,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.addHouseMemberShowDialog = !this.addHouseMemberShowDialog;
   }
 
-  /*
-    adds new house member if they arent on the list
-  */
+
   onCreateHouseMember(form: NgForm) {
 
     let name = form.controls['name'].value;
@@ -73,11 +71,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   }
 
-  onDisplayChores() {
-
-    //this.manager.assignChores();
-
-  }
+  //database methods start 
 
   onSaveRoomsToDataBase(){
     let rooms = this.manager.getRooms().map((room) => {
@@ -101,4 +95,5 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.dataBaseManager.fetchHouseMembers();
   }
 
+  //database methods end
 }
