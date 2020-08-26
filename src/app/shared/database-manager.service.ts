@@ -39,6 +39,8 @@ export class DatabaseManagerService {
 
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/"
 
+  private TEST_DB_URL : string = "https://test1-cf6d9.firebaseio.com/";
+
   constructor(private httpClient : HttpClient) { }
 
   loadedChores: ChoresObject[] = [];
@@ -54,7 +56,7 @@ export class DatabaseManagerService {
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
 
   fetchChores() {
-    this.httpClient.get<ChoresObject[]>(this.DATA_BASE_URL + 'chores.json')
+    this.httpClient.get<ChoresObject[]>(this.TEST_DB_URL + 'chores.json')
       .pipe(map((data)=> {
         let choreArray = []
         for (const key in data){
@@ -74,7 +76,7 @@ export class DatabaseManagerService {
 
 
     this.httpClient.put<ChoresObject[]>(
-      this.DATA_BASE_URL + "chores.json",
+      this.TEST_DB_URL + "chores.json",
       chores
     )
     .subscribe(response => {
@@ -83,7 +85,7 @@ export class DatabaseManagerService {
   }
 
   fetchHouseMembers() {
-    this.httpClient.get<HouseMemberObject[]>(this.DATA_BASE_URL + "house-members.json")
+    this.httpClient.get<HouseMemberObject[]>(this.TEST_DB_URL + "house-members.json")
     .pipe(map(data => {
       let hosueMemberArray = [];
       for (const key in data) {
@@ -100,7 +102,7 @@ export class DatabaseManagerService {
 
   saveHouseMembers(houseMembers: HouseMemberObject[]) {
     this.httpClient.put<HouseMemberObject[]>(
-      this.DATA_BASE_URL + "house-members.json",
+      this.TEST_DB_URL + "house-members.json",
       houseMembers
     ).subscribe(response => {
       console.log(response)
@@ -108,7 +110,7 @@ export class DatabaseManagerService {
   }
 
   fetchRooms() {
-    this.httpClient.get<RoomObject[]>(this.DATA_BASE_URL + 'rooms.json')
+    this.httpClient.get<RoomObject[]>(this.TEST_DB_URL + 'rooms.json')
       .pipe(map((data)=> {
         let roomArray = []
         for (const key in data){
@@ -124,7 +126,7 @@ export class DatabaseManagerService {
 
   saveRooms(rooms : RoomObject[]) {
     this.httpClient.put<RoomObject>(
-      this.DATA_BASE_URL + "rooms.json",
+      this.TEST_DB_URL + "rooms.json",
       rooms
     )
     .subscribe(response => {

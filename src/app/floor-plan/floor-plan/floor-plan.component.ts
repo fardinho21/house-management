@@ -49,7 +49,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   ngOnInit(): void {
-    this.selectedRoom = new Room("no-room",0,0,0,0,[]);
+    this.selectedRoom = new Room("no-room",0,0,0,0,0,[]);
   }
 
 

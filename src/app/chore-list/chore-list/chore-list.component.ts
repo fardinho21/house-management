@@ -21,13 +21,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   addHouseMemberShowDialog: boolean = false;
 
-  houseMembers : HouseMember[];  
-  selectedHouseMember: HouseMember;
+  houseMembers : HouseMember[] = [];  
+  selectedHouseMember: HouseMember = new HouseMember("",[]);
 
   constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService) {
-    this.houseMembers = this.manager.getHouseMemebers();
-    this.selectedHouseMember = this.manager.getSelected();
-
+    dataBaseManager.fetchRooms();
   }
 
   //subscribes to the managers hoseMembersSubject
@@ -38,7 +36,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
       this.houseMembers = newHouseMembers;
-      console.log(this.houseMembers);
     });
 
     this.manager.selectedHouseMemberSubject.subscribe(selected => {
@@ -76,24 +73,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   }
 
-  onAssignChores() {
+  onDisplayChores() {
 
-    this.manager.assignChores();
+    //this.manager.assignChores();
 
   }
-
-
-  //database methods
-  // onSaveChoresToDataBase() {
-  //   let chores  = this.manager.getChores().map((chore) => {
-  //     return chore.getInfo();
-  //   });
-  //   this.dataBaseManager.saveChores(chores);
-  // }
-
-  // onFetchChoresFromDataBase() {
-  //   this.dataBaseManager.fetchChores();
-  // }
 
   onSaveRoomsToDataBase(){
     let rooms = this.manager.getRooms().map((room) => {

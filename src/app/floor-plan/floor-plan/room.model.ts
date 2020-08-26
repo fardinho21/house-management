@@ -23,17 +23,13 @@ export class Room {
         yI: number, 
         w: number, 
         h: number,
+        finChores: number,
         chores: Chore[]) {
+        //sets the status and parent room for each chore
 
         this._chores = chores;
         this._name = name;
-        //set the parent room for each chore and set the status       
-
-        for (let chore of chores) {
-            if (chore.isDone()) {
-                this._finishedChores++;
-            }
-        }
+        this._finishedChores = finChores;
 
         let r = { xInit: xI, yInit: yI, width: w, height: h, status: 0 };
 
