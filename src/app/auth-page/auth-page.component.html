@@ -1,1 +1,48 @@
-<p>auth-page works!</p>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-lg-6 col-md-offset-3">
+
+            <div class="alert alert-danger" *ngIf="errorMessage">
+                <p>{{errorMessage}}</p>
+            </div>
+
+            <app-loading-spinner *ngIf="isLoading" style="text-align: center;">
+
+            </app-loading-spinner>
+
+            <form #f="ngForm" *ngIf='!isLoading'>
+
+                <label for="username">UserName: </label>
+                <input 
+                    class="form-control"
+                    type="text"
+                    id="username"
+                    ngModel
+                    name="username"
+                    required
+                    >
+
+                    <label for="password">Password: </label>
+                    <input 
+                        class="form-control"
+                        type="password"
+                        id="password"
+                        ngModel
+                        name="password"
+                        required
+                        >
+                <hr>
+
+                <button class="btn btn-primary" (click)="onSubmit(f)" [disabled]="f.invalid">
+                    {{ mode == 'login' ? 'Login ': 'Sign Up' }}
+                </button> |
+                <button class="btn btn-secondary" (click)="switchMode()">
+                    {{ mode == 'login' ? 'Sign Up instead' : 'Back to Log In' }}
+                </button>
+
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -19,6 +19,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DatabaseManagerService } from './shared/database-manager.service';
 import { HttpClientModule } from "@angular/common/http";
 import { AuthPageComponent } from './auth-page/auth-page.component';
+import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -36,7 +37,8 @@ FullCalendarModule.registerPlugins([
     CalendarComponent,
     ChoresAndFplanComponent,
     ShoplistAndCalComponent,
-    AuthPageComponent    
+    AuthPageComponent,
+    LoadingSpinnerComponent    
   ],
   imports: [
     BrowserModule,

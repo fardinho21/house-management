@@ -35,9 +35,9 @@ export interface ChoresObject {
 })
 export class DatabaseManagerService {
 
-  private API_KEY : string = "AIzaSyA0pQaKfDFU2GxbCVXBsyHS9kKASZX188w ";
+  private API_KEY : string = "AIzaSyA0pQaKfDFU2GxbCVXBsyHS9kKASZX188w";
 
-  private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/"
+  private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
 
   private TEST_DB_URL : string = "https://test1-cf6d9.firebaseio.com/";
 
@@ -99,7 +99,6 @@ export class DatabaseManagerService {
     })
   }
   
-
   saveHouseMembers(houseMembers: HouseMemberObject[]) {
     this.httpClient.put<HouseMemberObject[]>(
       this.TEST_DB_URL + "house-members.json",
@@ -120,6 +119,7 @@ export class DatabaseManagerService {
       }))
       .subscribe(rooms => {
         this.loadedRooms = rooms.slice();
+        console.log(rooms);
         this.loadedRoomsSubject.next(this.loadedRooms);
       });  
   }
