@@ -9,8 +9,6 @@
         <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
             <button type="button" (click)="toggleHouseMemberDialog()">Add House Member</button> |
             <button type="button" class="btn btn-success" (click)="onSaveHouseMembersToDataBase()">Save House Members</button> |
-            <button type="button" class="btn btn-primary" (click)="onFetchHouseMembersFromDataBase()">Load House Members</button> 
-
         </div>
         <div class="col-lg-8 col-md-10 col-sm-6 col-xs-6" style="justify-content: right;">
 
@@ -41,8 +39,8 @@
                         <h4>Room</h4>
                     </div>
                 </div>
-                <div class="row" *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
-                    <li>
+                <div class="row">
+                    <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                             {{chores.getInfo().choreName}}
                         </div>

@@ -68,7 +68,11 @@ export class ManagerService {
           }
 
           c.assignToHouseMember(this.houseMembers[indexOfhm]);
-          this.houseMembers[indexOfhm].addChore(c);
+
+          if (!c.isDone()) {
+            this.houseMembers[indexOfhm].addChore(c);
+          }
+          
 
           return c;
         });
@@ -101,15 +105,9 @@ export class ManagerService {
       let runningList = []
 
       for (const key in loaded) {
-        let houseMemberObject = loaded[key];
-        let hm = new HouseMember(houseMemberObject.name,[]);
-        let choresList = loaded[key].choresList ? loaded[key].choresList.map(chore => {
-          return new Chore(chore.choreName, chore.done, hm);
-        }) : [];
 
-        hm.setChores(choresList);
-        runningList.push(hm);
       }
+
       this.houseMembers = runningList.slice();
       this.houseMembersSubject.next(this.houseMembers.slice())
       this.selectedHouseMemberSubject.next(this.houseMembers[0]);
@@ -118,12 +116,6 @@ export class ManagerService {
 
   }
 
-  //services for chores list and floor plan component -- start
-  private clearChores () {
-    for (let member of this.houseMembers) {
-      member.clearChores();
-    }
-  }
 
   setRooms(rooms: Room[]){
     this.rooms = rooms;
@@ -169,6 +161,21 @@ export class ManagerService {
     return this.rooms.slice();
   }
 
+  findRoomByName(name : string) : number {
+
+    if (this.rooms.length == 0) {
+      return -1;
+    }
+
+    for (let i = 0; i <= this.rooms.length - 1; i++) {
+      let rmName = this.rooms[i].getName();
+      if (rmName == name) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   resetRoomStatuses() {
     for (let room of this.rooms) {
       room.resetStatus();
@@ -181,16 +188,9 @@ export class ManagerService {
   }
   
   onDone(chore: Chore) {
-
+    
     chore.setDone();
-
-    for (let hm of this.houseMembers) {
-      if (hm.getChores().indexOf(chore) != -1) {
-        hm.removeChore(chore);
-        break;
-      }
-    }
-    console.log(this.houseMembers);
+    chore.getAssignedTo().removeChore(chore);
     this.houseMembersSubject.next(this.houseMembers);
     this.roomSubject.next(this.rooms);
   }

@@ -26,7 +26,6 @@ export class Chore {
 
     setDone() {
         this.done = true;
-        this.assignedTo = null;
         this.parentRoom.choreCompleted(); //update room status
         this.parentRoom.updateRoomStatus();
     }

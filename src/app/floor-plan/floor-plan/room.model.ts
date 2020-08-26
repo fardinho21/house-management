@@ -1,5 +1,5 @@
 import { Chore } from '../../shared/chore.model';
-import { RoomObject } from 'src/app/shared/database-manager.service';
+import { RoomObject, ChoresObject } from 'src/app/shared/database-manager.service';
 
 
 export class Room {
@@ -79,14 +79,10 @@ export class Room {
 
     getJSONObject() : RoomObject {
 
-        let chores : { 
-            choreName: string;
-            done: boolean; 
-            assignedTo: string;
-            parentRoom: string; }[] = [];
+        let chores : ChoresObject[] = [];
 
         for (let chore of this._chores){
-            chores.push(chore.getInfo())
+            chores.push(chore.getInfo());
         }
 
         let jO : RoomObject = {
