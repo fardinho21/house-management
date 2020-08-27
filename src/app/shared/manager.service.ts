@@ -4,6 +4,8 @@ import { HouseMember } from '../chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
+import { AuthService } from './auth.service';
+import { User } from '../auth-page/user.model';
 
 
 
@@ -18,6 +20,7 @@ export class ManagerService {
   houseMembers: HouseMember[] = []
   listOfChores : Chore[] = [];
   selectedHouseMember: HouseMember = new HouseMember("",[]);
+  user : User = null;
 
   shoppingItems: {name: string, amount:number, requestedBy: string}[] = [
     {name:"Bread",amount:3,requestedBy: 'dummy'},
@@ -36,7 +39,7 @@ export class ManagerService {
   selectedHouseMemberSubject = new Subject<HouseMember>();
   eventsSubject = new Subject<{title:string,start:string}[]>();
 
-  constructor(private dataBaseManager : DatabaseManagerService) { 
+  constructor(private dataBaseManager : DatabaseManagerService, private authService : AuthService) { 
 
     console.log(this.houseMembers);
     console.log(this.rooms);
@@ -113,6 +116,10 @@ export class ManagerService {
       this.selectedHouseMemberSubject.next(this.houseMembers[0]);
       console.log(this.houseMembers);
     })
+
+    this.authService.userSubject.subscribe(user => {
+      
+    }) 
 
   }
 

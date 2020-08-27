@@ -5,13 +5,22 @@
         </div>
 
         <ul class="nav nav-pills" >
-            <li >
+            <li *ngIf="isAuthed">
                 <a routerLink="/choresAndFloorPlan"><h5>Chores</h5></a>
             </li>
-            <li >
+            <li *ngIf="isAuthed">
                 <a routerLink="/shoppingListAndCalendar"><h5>Shopping and Calendar</h5></a>
             </li>
+
+            <li class="nav navbar-right" *ngIf="isAuthed">
+                <a>
+                    <h5>Logout</h5>
+                </a>
+            </li>
+            
         </ul>
+
+
 </nav>
 
 

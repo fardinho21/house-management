@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { ManagerService } from "./manager.service";
 import { Chore } from "./chore.model";
-import { map } from "rxjs/operators";
+import { map, take, exhaustMap } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
+import { AuthService } from './auth.service';
 
 export interface HouseMemberObject {
   name: string;
@@ -36,24 +37,17 @@ export interface ChoresObject {
 export class DatabaseManagerService {
 
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
-
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
-
   private TEST_DB_URL : string = "https://test1-cf6d9.firebaseio.com/";
 
-  constructor(private httpClient : HttpClient) { }
-
   loadedChores: ChoresObject[] = [];
-
   loadedRooms: RoomObject[] = [];
-
   loadedHouseMembers: HouseMemberObject[] = [];
-
   loadedRoomsSubject = new Subject<RoomObject[]>();
-
   loadedChoresSubject = new Subject<ChoresObject[]>();
-
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
+
+  constructor(private httpClient : HttpClient, private authService : AuthService) { }
 
   fetchChores() {
     this.httpClient.get<ChoresObject[]>(this.TEST_DB_URL + 'chores.json')
@@ -109,6 +103,11 @@ export class DatabaseManagerService {
   }
 
   fetchRooms() {
+
+    this.authService.userSubject.pipe(take(1), exhaustMap(user => {
+      
+    }))
+
     this.httpClient.get<RoomObject[]>(this.TEST_DB_URL + 'rooms.json')
       .pipe(map((data)=> {
         let roomArray = []
