@@ -6,7 +6,7 @@ import { AuthPageComponent } from './auth-page/auth-page.component';
 
 
 const routes: Routes = [
-  {path: "", redirectTo: "choresAndFloorPlan", pathMatch: "full"},
+  {path: "", redirectTo: "authPage", pathMatch: "full"},
   {path: "choresAndFloorPlan", component: ChoresAndFplanComponent} ,
   {path: "shoppingListAndCalendar", component: ShoplistAndCalComponent} ,
   {path: "authPage", component: AuthPageComponent}

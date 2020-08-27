@@ -41,7 +41,7 @@ export class ManagerService {
     console.log(this.houseMembers);
     console.log(this.rooms);
 
-    dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
+    this.dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
       let runningListOfRooms = []
 
       /**
@@ -101,7 +101,7 @@ export class ManagerService {
       //console.log(this.rooms);
     })
 
-    dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
+    this.dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
       let runningList = []
 
       for (const key in loaded) {

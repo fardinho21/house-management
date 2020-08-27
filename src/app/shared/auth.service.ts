@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from "rxjs/operators";
+import { catchError, tap } from "rxjs/operators";
 import { throwError } from "rxjs";
 import { Subject } from "rxjs";
 import { User } from "../auth-page/user.model";
@@ -25,9 +25,9 @@ export interface ResponseObject {
 })
 export class AuthService {
 
-  user = new Subject<User>();
+  userSubject = new Subject<User>();
 
-  private API_KEY : string = "AIzaSyA0pQaKfDFU2GxbCVXBsyHS9kKASZX188w";
+  private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private SIGN_UP_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
   private LOG_IN_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
 
@@ -37,14 +37,18 @@ export class AuthService {
     return this.httpClient.post<ResponseObject>(
       this.SIGN_UP_URL + this.API_KEY,
       user
-    ).pipe(catchError(this.handleError));
+    ).pipe(catchError(this.handleError), tap(response => {
+      this.handleAuthentication(response);
+    }));
   }
 
   logIn(user: UserObject){
     return this.httpClient.post<ResponseObject>(
       this.LOG_IN_URL + this.API_KEY,
       user
-    ).pipe(catchError(this.handleError))
+    ).pipe(catchError(this.handleError), tap(response => {
+      this.handleAuthentication(response);
+    }));
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -69,6 +73,17 @@ export class AuthService {
 
     return throwError(errorMessage);
 
+  }
+
+  private handleAuthentication(response: ResponseObject ) {
+    const expirationDate = new Date(new Date().getTime() + +response.expiresIn);
+    const user = new User(
+      response.email, 
+      response.localId, 
+      response.idToken, 
+      expirationDate);
+
+    this.userSubject.next(user);
   }
 
 }

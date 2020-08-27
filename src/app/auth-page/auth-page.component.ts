@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService, UserObject, ResponseObject } from '../shared/auth-service.service'
+import { AuthService, UserObject, ResponseObject } from '../shared/auth.service'
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth-page',
@@ -11,13 +12,11 @@ import { Observable } from 'rxjs';
 })
 export class AuthPageComponent implements OnInit {
 
-
-
   mode : string = "login";
   isLoading : boolean = false;
   errorMessage : string;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -51,6 +50,7 @@ export class AuthPageComponent implements OnInit {
 
     authObservable.subscribe(response => {
       console.log(response);
+      this.router.navigate(['/choresAndFloorPlan'])
       this.isLoading = false;
     }, errorMsg => {
       this.errorMessage = errorMsg;

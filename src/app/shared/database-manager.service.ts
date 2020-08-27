@@ -35,7 +35,7 @@ export interface ChoresObject {
 })
 export class DatabaseManagerService {
 
-  private API_KEY : string = "AIzaSyA0pQaKfDFU2GxbCVXBsyHS9kKASZX188w";
+  private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
 
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
 
