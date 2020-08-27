@@ -35,10 +35,10 @@
 
 
 <div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
-    <div class="col-xl-12 col-lg-2 col-md-6 col-sm-4 col-xs-4">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
         <h4>Chore</h4>
     </div>
-    <div class="col-xl-12 col-lg-4 col-md-6 col-sm-4 col-xs-4">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
         <h4>Room</h4>
     </div>
 </div>
@@ -47,33 +47,34 @@
 
 
 
-    <div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
-        <ul style="list-style: none;">
-            <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
-                <div class="col-xl-4 col-lg-2 col-md-6 col-sm-4 col-xs-4">
-                    {{chores.getInfo().choreName}}
-                </div>
-                <div class="col-xl-4 col-lg-2 col-md-4 col-sm-4 col-xs-4">
-                    {{chores.getInfo().parentRoom | camelToSpace | lowercase}}
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
-                    <button type="button" (click)="onDone(chores)">
-                        Done
-                    </button>
-                </div>
-            </li>       
-        </ul>
+<div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
+    <ul style="list-style: none;">
+        <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
+            <div class=" col-lg-4 col-md-6 col-sm-4 col-xs-4">
+                {{chores.getInfo().choreName}}
+            </div>
+            <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                {{chores.getInfo().parentRoom | camelToSpace | lowercase}}
+            </div>
+            <div class=" col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
+                <button type="button" (click)="onDone(chores)">
+                    Done
+                </button>
+            </div>
+        </li>       
+    </ul>
 
-        <hr>
-    </div>
-    <div class="row" *ngIf="selectedHouseMember.getChores().length == 0">
-        <div class="col" style="text-align: center;">
-            <h4>
-                Chores Completed!
-            </h4>
-        </div>
+    <hr>
+</div>
 
+<div class="row" *ngIf="selectedHouseMember.getChores().length == 0">
+    <div class="col" style="text-align: center;">
+        <h4>
+            Chores Completed!
+        </h4>
     </div>
+
+</div>
 
 
 <div class="container">
