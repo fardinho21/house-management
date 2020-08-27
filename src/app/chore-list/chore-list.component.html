@@ -1,83 +1,94 @@
-<!-- header start -->
+
 <div class="container">
     <div class="row">
-        <h4>
-            Chores
-        </h4>
+        <div class="col">
+            <h4>
+                Chores
+            </h4>
+        </div>
     </div>
+</div>
+
+
+<div class="container">
     <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+        <div class="col">
             <button type="button" class="btn btn-secondary" style="border: 1px solid rgb(119, 115, 115)" (click)="toggleHouseMemberDialog()">Add House Member</button> |
             <button type="button" class="btn btn-success" (click)="onSaveHouseMembersToDataBase()">Save House Members</button> 
         </div>
+    </div>    
+</div>
+
+
+<hr>
+
+
+<ul class="nav nav-tabs">
+    <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}">
+        <a (click)="onClickHouseMember(i)" >
+            {{houseMember.getName()}}
+        </a>
+    </li>
+</ul>
+
+
+
+
+<div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
+    <div class="col-xl-12 col-lg-2 col-md-6 col-sm-4 col-xs-4">
+        <h4>Chore</h4>
+    </div>
+    <div class="col-xl-12 col-lg-4 col-md-6 col-sm-4 col-xs-4">
+        <h4>Room</h4>
     </div>
 </div>
-<!-- header end -->
-<hr>
-<!-- house member list start -->
+
+
+
+
+
+    <div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
+        <ul style="list-style: none;">
+            <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
+                <div class="col-xl-4 col-lg-2 col-md-6 col-sm-4 col-xs-4">
+                    {{chores.getInfo().choreName}}
+                </div>
+                <div class="col-xl-4 col-lg-2 col-md-4 col-sm-4 col-xs-4">
+                    {{chores.getInfo().parentRoom | camelToSpace | lowercase}}
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
+                    <button type="button" (click)="onDone(chores)">
+                        Done
+                    </button>
+                </div>
+            </li>       
+        </ul>
+
+        <hr>
+    </div>
+    <div class="row" *ngIf="selectedHouseMember.getChores().length == 0">
+        <div class="col" style="text-align: center;">
+            <h4>
+                Chores Completed!
+            </h4>
+        </div>
+
+    </div>
+
+
 <div class="container">
     <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <ul class="nav nav-tabs">
-                <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}">
-                    <a (click)="onClickHouseMember(i)" >
-                        {{houseMember.getName()}}
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<div class="contianer">
-    <div class="row">
         <div class="col">
-            <ul style="list-style: none;">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-3 col-md-6 col-sm-4 col-xs-4">
-                        <h4>Chore</h4>
-                    </div>
-                    <div class="col-xl-12 col-lg-3 col-md-6 col-sm-4 col-xs-4">
-                        <h4>Room</h4>
-                    </div>
-                </div>
-                <div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
-                    <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
-                        <div class="col-xl-12 col-lg-3 col-md-6 col-sm-4 col-xs-4">
-                            {{chores.getInfo().choreName}}
-                        </div>
-                        <div class="col-xl-12 col-lg-2 col-md-4 col-sm-4 col-xs-4">
-                            {{chores.getInfo().parentRoom | camelToSpace | lowercase}}
-                        </div>
-                        <div class="col-xl-12 col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: center;">
-                            <button type="button" (click)="onDone(chores)">
-                                Done
-                            </button>
-                        </div>
-                    </li>
-                    <hr>
-                </div>
-                <div class="row" *ngIf="selectedHouseMember.getChores().length == 0">
-                    <div class="col" style="text-align: center;">
-                        <h4>
-                            Chores Completed!
-                        </h4>
-                    </div>
-
-                </div>
-            </ul>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
             <button class="btn btn-success" type="button" (click)="onSaveRoomsToDataBase()">Save Chores</button> |
             <button type="button" class="btn btn-primary" (click)="onFetchRoomsFromDataBase()">Load Rooms</button>
         </div>
     </div>
 </div>
-<!-- house member list end -->
+
+
+
 <hr>
-<!-- modal dialog start -->
+
 <div #addHouseMem class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addHouseMemberShowDialog ? 'block' : 'none'}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -89,7 +100,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <!-- create hosue member form start -->
+            
             <form (ngSubmit)="onCreateHouseMember(f)" #f="ngForm">
                 <div class="modal-body">
                     
@@ -109,9 +120,8 @@
                     <button type="button" class="btn btn-secondary" (click)="toggleHouseMemberDialog()">Cancel</button>
                 </div>
             </form>
-            <!-- create house member form end-->
+            
 
         </div>
     </div>
 </div>
-<!-- modal dialog end -->
