@@ -2,3 +2,27 @@
 .modal {
     text-align: left;
 }
+#pickFp {
+    display: flex;
+    justify-content: center;
+    border: solid 1px lightgrey;
+}
+#pickFp:hover {
+    background-color: rgba(31, 207, 223, 0.335)
+}
+
+#pickFp #button{
+    width: 450px;
+    height: 450px;
+}
+
+#pickFp #button h3 {
+    margin-bottom: 50%;
+    margin-bottom: 50%;
+}
+
+#fpImages .row  #fpimg img {
+    width: 200px;
+    height: auto;
+    border: 1px solid lightgray;
+}

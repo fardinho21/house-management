@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { throwError, BehaviorSubject } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "../auth-page/user.model";
+import { DatabaseManagerService } from './database-manager.service';
 
 export interface UserObject{
   email: string;
@@ -31,9 +32,10 @@ export class AuthService {
   private SIGN_UP_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
   private LOG_IN_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
 
-  constructor(private httpClient : HttpClient ) { }
+  constructor(private httpClient : HttpClient) { }
 
   signUp(user: UserObject) {
+
     return this.httpClient.post<ResponseObject>(
       this.SIGN_UP_URL + this.API_KEY,
       user
@@ -76,6 +78,7 @@ export class AuthService {
   }
 
   private handleAuthentication(response: ResponseObject ) {
+    let regi = response.registered;
     const expirationDate = new Date(new Date().getTime() + +response.expiresIn);
     const user = new User(
       response.email, 
@@ -83,6 +86,7 @@ export class AuthService {
       response.idToken, 
       expirationDate);
 
+    user.registered = regi ? true : false;
     this.userSubject.next(user);
   }
 

@@ -6,6 +6,8 @@ export class FloorPlan {
 
     private _imagePath: string = "https://cdngeneral.rentcafe.com/dmslivecafe/3/626505/Valencia%20Combined.jpg?quality=85?quality=70&width=1024";
 
+    private _testImagePath : string = "../";
+
     private _rooms: Room[] = [];
 
     constructor (private manager: ManagerService) {

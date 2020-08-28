@@ -7,9 +7,6 @@ import { DatabaseManagerService } from './database-manager.service';
 import { AuthService } from './auth.service';
 import { User } from '../auth-page/user.model';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -39,7 +36,7 @@ export class ManagerService {
   selectedHouseMemberSubject = new Subject<HouseMember>();
   eventsSubject = new Subject<{title:string,start:string}[]>();
 
-  constructor(private dataBaseManager : DatabaseManagerService, private authService : AuthService) { 
+  constructor(private dataBaseManager : DatabaseManagerService) { 
 
     console.log(this.houseMembers);
     console.log(this.rooms);
@@ -47,11 +44,6 @@ export class ManagerService {
     this.dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
       let runningListOfRooms = []
 
-      /**
-       * this loops through all rooms from the database,
-       * creates a room, creates house members (if not found),
-       * and creates the chore list of the room
-       */
       for (let key in loaded){
 
         let roomObject = loaded[key];
@@ -117,9 +109,7 @@ export class ManagerService {
       console.log(this.houseMembers);
     })
 
-    this.authService.userSubject.subscribe(user => {
-      
-    }) 
+    this.user = this.dataBaseManager.user;
 
   }
 

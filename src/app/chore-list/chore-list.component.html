@@ -67,15 +67,21 @@
     <hr>
 </div>
 
-<div class="row" *ngIf="selectedHouseMember.getChores().length == 0">
+<div class="row" *ngIf="houseMembers.length > 0 && selectedHouseMember.getChores().length == 0">
     <div class="col" style="text-align: center;">
         <h4>
             Chores Completed!
         </h4>
     </div>
-
 </div>
 
+<div class="row" *ngIf="houseMembers.length == 0">
+    <div class="col" style="text-align: center;">
+        <h4>
+            No House Members.
+        </h4>
+    </div>
+</div>
 
 <div class="container">
     <div class="row">

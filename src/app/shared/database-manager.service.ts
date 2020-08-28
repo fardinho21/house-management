@@ -5,7 +5,8 @@ import { Chore } from "./chore.model";
 import { map, take, exhaustMap } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
-import { AuthService } from './auth.service';
+import { AuthService, ResponseObject, UserObject } from './auth.service';
+import { User } from '../auth-page/user.model';
 
 export interface HouseMemberObject {
   name: string;
@@ -36,6 +37,20 @@ export interface ChoresObject {
 })
 export class DatabaseManagerService {
 
+  private testRooms : RoomObject[] = 
+  [
+    {
+      name: "room0", 
+      finishedChores: 0,
+      room: {xInit: 0, yInit: 0, width: 0, height: 0, status: 0},
+      chores: [
+        {
+          choreName: "chore0", done: false, assignedTo: "", parentRoom: "room0"
+        }
+      ]
+    }
+  ]
+
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
   private TEST_DB_URL : string = "https://test1-cf6d9.firebaseio.com/";
@@ -47,7 +62,18 @@ export class DatabaseManagerService {
   loadedChoresSubject = new Subject<ChoresObject[]>();
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
 
-  constructor(private httpClient : HttpClient, private authService : AuthService) { }
+  user : User;
+
+  constructor(private httpClient : HttpClient, private authService : AuthService) {
+    this.authService.userSubject.subscribe(user => {
+      this.user = user;
+      let reg = this.user.registered ? true : false;
+      if (!reg){
+        this.createUser(user.username);
+      }
+
+    })
+  }
 
   fetchChores() {
     this.httpClient.get<ChoresObject[]>(this.TEST_DB_URL + 'chores.json')
@@ -104,11 +130,7 @@ export class DatabaseManagerService {
 
   fetchRooms() {
 
-    this.authService.userSubject.pipe(take(1), exhaustMap(user => {
-      
-    }))
-
-    this.httpClient.get<RoomObject[]>(this.TEST_DB_URL + 'rooms.json')
+    this.httpClient.get<RoomObject[]>(this.TEST_DB_URL + this.user.username + ".json")
       .pipe(map((data)=> {
         let roomArray = []
         for (const key in data){
@@ -125,10 +147,19 @@ export class DatabaseManagerService {
 
   saveRooms(rooms : RoomObject[]) {
     this.httpClient.put<RoomObject>(
-      this.TEST_DB_URL + "rooms.json",
+      this.TEST_DB_URL + this.user.username +".json",
       rooms
     )
     .subscribe(response => {
+      console.log(response);
+    })
+  }
+
+  createUser(username: string) {
+    this.httpClient.put<ResponseObject>(
+      this.TEST_DB_URL + username + ".json",
+      this.testRooms
+    ).subscribe(response => {
       console.log(response);
     })
   }

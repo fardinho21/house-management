@@ -11,14 +11,7 @@ import { HouseMember } from '../chore-list/house-member.model';
 })
 export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
-  /*
-  This component is responsible for drawing the floor plan and updating the
-  status (color) of each room.
-
-  TODO: add a upload floor plan feature
-  */
-
-  private _floorPlan: FloorPlan;
+  floorPlan: FloorPlan = null;
 
   @ViewChild('fpCanvas', { static: false }) fpCanvas: ElementRef<HTMLCanvasElement>;
 
@@ -27,24 +20,28 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   private _canvas: HTMLCanvasElement;
   private _width = 450;
   private _height = 450;
-  floorPlanDialogShow :boolean=false;
+  floorPlanChoresDialogShow :boolean=false;
+  floorPlanChooseDialogShow :boolean=false;
+  selectedFloorPlanImage: string = "";
   selectedRoom : Room;
   membersWithUnfinishedChores : HouseMember[] = [];
   over = false;
 
-
   private _fillStyles: { [name: string]: string } =
-    {
+  {
       'lightGreen': '#89eb34',
       'red': '#fc0303',
       'orange': '#fcca03'
-    }
+  }
 
   constructor(private manager: ManagerService) {
-    this._floorPlan = new FloorPlan(this.manager);
+    //this.floorPlan = new FloorPlan(this.manager);
   }
 
   ngAfterViewChecked() {
+    if (!this.floorPlan) {
+      return;
+    }
     this.colorArea();
   }
 
@@ -54,7 +51,9 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
 
   ngAfterViewInit() {
-
+    if (!this.floorPlan) {
+      return;
+    }
     this._canvas = this.fpCanvas.nativeElement;
     this._canvas.width = this._width;
     this._canvas.height = this._height;
@@ -84,14 +83,14 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.colorArea();
     }, 500)
 
-    this._image.src = this._floorPlan.getImagePath();
+    this._image.src = this.floorPlan.getImagePath();
   }
 
   colorArea() {
 
     this.clearFloorPlan();
 
-    for (let room of this._floorPlan.getRooms()) {
+    for (let room of this.floorPlan.getRooms()) {
 
       let roomRef = room.getRoom();
 
@@ -134,14 +133,14 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   private checkClickInsideRoom(xMouse : number, yMouse: number) : Room{
 
-    let rooms = this._floorPlan.getRooms();
+    let rooms = this.floorPlan.getRooms();
     
 
     for (let room of rooms) {
       let check = room.isInside(xMouse, yMouse);
       if (check) {
         this.selectedRoom = room;
-        this.toggleDialog();
+        this.onToggleChoresDialog();
         return room;
       }
     }
@@ -149,7 +148,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   private checkHoverInsideRoom (xMouse : number, yMouse: number) {
-    let rooms = this._floorPlan.getRooms();
+    let rooms = this.floorPlan.getRooms();
 
     for (let room of rooms) {
       let check = room.isInside(xMouse, yMouse);
@@ -168,13 +167,13 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this._context.globalAlpha = 0.4;
   }
 
-  toggleDialog () {
+  onToggleChoresDialog () {
     console.log(this.selectedRoom);
-    this.floorPlanDialogShow = !this.floorPlanDialogShow;
+    this.floorPlanChoresDialogShow = !this.floorPlanChoresDialogShow;
     
     let chores = this.selectedRoom.getChores();
 
-    if(this.floorPlanDialogShow) {
+    if(this.floorPlanChoresDialogShow) {
       for (let chore of chores) {
         if (!chore.isDone()) {
           let member = chore.getAssignedTo();
@@ -187,6 +186,21 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.membersWithUnfinishedChores = [];
     }
 
+  }
+
+  onToggleChooseFloorPlanDialog() {
+    this.floorPlanChooseDialogShow = !this.floorPlanChooseDialogShow;
+  }
+
+  chooseFloorPlan() {
+    console.log("choose floor plan")
+  }
+
+  selectedFloorPlan(selectedFpImage) {
+    console.log(selectedFpImage.explicitOriginalTarget.name);
+
+
+    this.onToggleChooseFloorPlanDialog()
   }
 
 }

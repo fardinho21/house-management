@@ -14,18 +14,13 @@ import { DatabaseManagerService } from 'src/app/shared/database-manager.service'
 })
 export class ChoreListComponent implements OnInit, AfterViewInit {
 
-  /*
-  This component is responsible for displaying the chores of 
-  the selected house member.
-  */
-
   addHouseMemberShowDialog: boolean = false;
 
   houseMembers : HouseMember[] = [];  
   selectedHouseMember: HouseMember = new HouseMember("",[]);
 
   constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService) {
-    dataBaseManager.fetchRooms();
+    //dataBaseManager.fetchRooms();
   }
 
   //subscribes to the managers hoseMembersSubject

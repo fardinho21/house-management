@@ -1,7 +1,26 @@
 
 
+<div class="row" style="padding-left: 3rem;" *ngIf="floorPlan != null">
+    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12" style="text-align: center;">
+        <canvas #fpCanvas (click)="onCanvasClick($event)" style="border: 1px solid lightgray;" [ngClass]="{over: over}">
 
-<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{display: floorPlanDialogShow ? 'block' : 'none'}">
+        </canvas> 
+    </div>
+</div>
+
+<div class="row btn" (click)="onToggleChooseFloorPlanDialog()" style="padding-left: 3rem;" *ngIf="floorPlan == null" id="pickFp">
+    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12 btn" id="button">
+        <h3 style="margin-top: 50%; margin-bottom: 50%;">
+            <img src="../../assets/img/fp.png" style="width: 50px; height: 50px;">
+            pick a floor plan
+        </h3>
+    </div>
+</div>
+
+
+<!-- chores dialog -->
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{display: floorPlanChoresDialogShow ? 'block' : 'none'}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,7 +45,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="toggleDialog()">
+                <button type="button" class="btn btn-secondary" (click)="onToggleChoresDialog()">
                     Cancel
                 </button>
             </div>
@@ -34,10 +53,93 @@
     </div>
 </div>
 
-<div class="row" style="padding-left: 3rem;">
-    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12" style="text-align: center;">
-        <canvas #fpCanvas (click)="onCanvasClick($event)" style="border: 1px solid lightgray;" [ngClass]="{over: over}">
 
-        </canvas> 
+<!-- pick floor plan dialog -->
+
+
+<div class="modal modal-backdrop" tabindex="-1" [ngStyle]="{display: floorPlanChooseDialogShow ? 'block' : 'none'}">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h5>
+                        Choose your floor plan.
+                    </h5>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+
+
+                    <div class="container" style="width: 700px;" id="fpImages">
+
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                                id="fpimg" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Versailles"
+                                >
+                                <img src="../../assets/img/Versailles 3D FP.jpg" 
+                                 name="versailles"
+                                 (click)="selectedFloorPlan($event)"
+                                 >
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                                id="fpimg" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Lourdes"
+                                >
+                                <img src="../../assets/img/Lourdes 1 3D fP.jpg" 
+                                 name="lourdes"
+                                 (click)="selectedFloorPlan($event)"
+                                 >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                                id="fpimg" data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Barcelona"
+                                >
+                                <img src="../../assets/img/Barcelona Combined.jpg" 
+                                 name="barcelona"
+                                 (click)="selectedFloorPlan($event)"
+                                 >
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                                id="fpimg" 
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Bourdeaux"
+                                >
+                                <img src="../../assets/img/Bourdeaux.jpg" 
+                                 name="bourdeaux"
+                                 (click)="selectedFloorPlan($event)"
+                                 >
+                            </div>
+                        </div>
+                    </div>
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="onToggleChooseFloorPlanDialog()">
+                    Submit
+                </button> |
+                <button type="button" class="btn btn-warning" (click)="onToggleChooseFloorPlanDialog()">
+                    Cancel
+                </button>
+            </div>
+
+        </div>
     </div>
+
 </div>
