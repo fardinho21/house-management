@@ -21,8 +21,25 @@
     margin-bottom: 50%;
 }
 
-#fpImages .row  #fpimg img {
+.modal-body .row {
+    text-align: center;
+    padding-left: 12%;
+}
+
+ .row  #fpimg img {
     width: 200px;
-    height: auto;
-    border: 1px solid lightgray;
+    height: 150px ;
+}
+
+
+
+#fpimg {
+    width: auto;
+    border-radius: 5%;
+}
+
+#fpimg:hover {
+    border: 2px solid rgba(31, 207, 223, 0.335);
+    border-radius: 5%;
+    cursor: pointer;
 }

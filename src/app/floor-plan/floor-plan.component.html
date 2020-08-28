@@ -72,61 +72,58 @@
 
             <div class="modal-body">
 
-
-
-                    <div class="container" style="width: 700px;" id="fpImages">
-
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
-                                id="fpimg" 
-                                data-toggle="tooltip" 
-                                data-placement="top" 
-                                title="Versailles"
-                                >
-                                <img src="../../assets/img/Versailles 3D FP.jpg" 
-                                 name="versailles"
-                                 (click)="selectedFloorPlan($event)"
-                                 >
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
-                                id="fpimg" 
-                                data-toggle="tooltip" 
-                                data-placement="top" 
-                                title="Lourdes"
-                                >
-                                <img src="../../assets/img/Lourdes 1 3D fP.jpg" 
-                                 name="lourdes"
-                                 (click)="selectedFloorPlan($event)"
-                                 >
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
-                                id="fpimg" data-toggle="tooltip" 
-                                data-placement="top" 
-                                title="Barcelona"
-                                >
-                                <img src="../../assets/img/Barcelona Combined.jpg" 
-                                 name="barcelona"
-                                 (click)="selectedFloorPlan($event)"
-                                 >
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
-                                id="fpimg" 
-                                data-toggle="tooltip" 
-                                data-placement="top" 
-                                title="Bourdeaux"
-                                >
-                                <img src="../../assets/img/Bourdeaux.jpg" 
-                                 name="bourdeaux"
-                                 (click)="selectedFloorPlan($event)"
-                                 >
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                        id="fpimg" 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="Versailles"
+                        [ngStyle]="{backgroundColor: selectedFloorPlanImage == 'versailles' ? 'rgba(31, 207, 223, 0.335)' : 'transparent' }"
+                        >
+                        <img class="img-responsive" src="../../assets/img/Versailles 3D FP.jpg" 
+                            name="versailles"
+                            (click)="selectedFloorPlan($event)"
+                        >
                     </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                        id="fpimg" 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="Lourdes"
+                        [ngStyle]="{backgroundColor: selectedFloorPlanImage == 'lourdes' ? 'rgba(31, 207, 223, 0.335)' : 'transparent' }"
+                        >
+                        <img class="img-responsive" src="../../assets/img/Lourdes 1 3D fP.jpg" 
+                            name="lourdes"
+                            (click)="selectedFloorPlan($event)"
+                        >
+                    </div>
+                </div>
 
-
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                        id="fpimg" data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="Barcelona"
+                        [ngStyle]="{backgroundColor: selectedFloorPlanImage == 'barcelona' ? 'rgba(31, 207, 223, 0.335)' : 'transparent' }"
+                        >
+                        <img class="img-responsive" src="../../assets/img/Barcelona Combined.jpg" 
+                            name="barcelona"
+                            (click)="selectedFloorPlan($event)"
+                        >
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" 
+                        id="fpimg" 
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="Bourdeaux"
+                        [ngStyle]="{backgroundColor: selectedFloorPlanImage == 'bourdeaux' ? 'rgba(31, 207, 223, 0.335)' : 'transparent' }"
+                        >
+                        <img class="img-responsive" src="../../assets/img/Bourdeaux.jpg" 
+                            name="bourdeaux"
+                            (click)="selectedFloorPlan($event)"
+                        >
+                    </div>
+                </div>
 
             </div>
 

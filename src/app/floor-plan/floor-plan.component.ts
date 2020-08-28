@@ -193,14 +193,13 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   chooseFloorPlan() {
+    this.onToggleChooseFloorPlanDialog();
     console.log("choose floor plan")
   }
 
   selectedFloorPlan(selectedFpImage) {
-    console.log(selectedFpImage.explicitOriginalTarget.name);
-
-
-    this.onToggleChooseFloorPlanDialog()
+    this.selectedFloorPlanImage = selectedFpImage.explicitOriginalTarget.name;
+    //this.onToggleChooseFloorPlanDialog()
   }
 
 }
