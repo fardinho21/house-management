@@ -1,15 +1,18 @@
 import { HouseMember } from "../chore-list/house-member.model";
 import { Room } from '../floor-plan/room.model';
-import { ChoresObject } from './database-manager.service';
+import { ChoresObject } from './interfaces';
 
 export class Chore {
     
     private parentRoom: Room;
+    private choreName: string;
+    private done: boolean;
+    private assignedTo: HouseMember = null;
 
-    constructor(
-        private choreName: string, 
-        private done: boolean, 
-        private assignedTo : HouseMember = null) {}
+    constructor(chore : ChoresObject){
+        this.choreName = chore.choreName;
+        this.done = chore.done;
+    }
 
     getInfo() : ChoresObject {
         return {

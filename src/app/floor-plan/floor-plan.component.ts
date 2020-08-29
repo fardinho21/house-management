@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck } from '@angular/core';
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
-import { ManagerService } from 'src/app/shared/manager.service';
+import { ManagerService } from '../shared/manager.service';
+import { DatabaseManagerService } from "../shared/database-manager.service";
 import { HouseMember } from '../chore-list/house-member.model';
 
 @Component({
@@ -12,17 +13,18 @@ import { HouseMember } from '../chore-list/house-member.model';
 export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   floorPlan: FloorPlan = null;
+  imagePath : string = "";
 
   @ViewChild('fpCanvas', { static: false }) fpCanvas: ElementRef<HTMLCanvasElement>;
 
   private _image = new Image();
-  private _context: CanvasRenderingContext2D;
+  private _context: CanvasRenderingContext2D = null;
   private _canvas: HTMLCanvasElement;
   private _width = 450;
   private _height = 450;
   floorPlanChoresDialogShow :boolean=false;
   floorPlanChooseDialogShow :boolean=false;
-  selectedFloorPlanImage: string = "";
+  selectedFloorPlanIndex: string = "";
   selectedRoom : Room;
   membersWithUnfinishedChores : HouseMember[] = [];
   over = false;
@@ -34,12 +36,15 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       'orange': '#fcca03'
   }
 
-  constructor(private manager: ManagerService) {
-    //this.floorPlan = new FloorPlan(this.manager);
+  constructor(private dataBaseManager: DatabaseManagerService) {
+    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
+      this.floorPlan = new FloorPlan(loaded);
+      this._image.src = this.floorPlan.getImagePath();
+    })
   }
 
   ngAfterViewChecked() {
-    if (!this.floorPlan) {
+    if (!this.floorPlan || !this._context) {
       return;
     }
     this.colorArea();
@@ -83,7 +88,6 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.colorArea();
     }, 500)
 
-    this._image.src = this.floorPlan.getImagePath();
   }
 
   colorArea() {
@@ -194,12 +198,23 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   chooseFloorPlan() {
     this.onToggleChooseFloorPlanDialog();
-    console.log("choose floor plan")
+    this.dataBaseManager.fetchFloorPlan(this.selectedFloorPlanIndex)
+    //this.floorPlan = new FloorPlan(this.manager)
+
   }
 
   selectedFloorPlan(selectedFpImage) {
-    this.selectedFloorPlanImage = selectedFpImage.explicitOriginalTarget.name;
+    this.selectedFloorPlanIndex = selectedFpImage.explicitOriginalTarget.name;
     //this.onToggleChooseFloorPlanDialog()
+  }
+
+  private parseSrcTag(src : string) : string {
+
+    let words = src.split('/');
+    let idx = words.indexOf['assets'];
+    let newary = words.slice(idx,words.length);
+    let parsedpath =  newary.join('/');
+    return parsedpath;
   }
 
 }

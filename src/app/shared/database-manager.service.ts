@@ -1,36 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ManagerService } from "./manager.service";
 import { Chore } from "./chore.model";
 import { map, take, exhaustMap } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
 import { AuthService, ResponseObject, UserObject } from './auth.service';
 import { User } from '../auth-page/user.model';
+import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject } from './interfaces';
 
-export interface HouseMemberObject {
-  name: string;
-  choresList: ChoresObject[];
-}
 
-export interface RoomObject {
-  name: string;
-  finishedChores: number;
-  room: {xInit: number ; yInit: number; width: number; height: number; status: number};
-  chores: {
-    choreName: string; 
-    done: boolean; 
-    assignedTo: string;
-    parentRoom: string
-  }[]
-}
-
-export interface ChoresObject {
-  choreName: string;
-  done: boolean; 
-  assignedTo: string;
-  parentRoom: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +20,7 @@ export class DatabaseManagerService {
     {
       name: "room0", 
       finishedChores: 0,
-      room: {xInit: 0, yInit: 0, width: 0, height: 0, status: 0},
+      roomGeo: {xInit: 0, yInit: 0, width: 0, height: 0, status: 0},
       chores: [
         {
           choreName: "chore0", done: false, assignedTo: "", parentRoom: "room0"
@@ -57,10 +35,12 @@ export class DatabaseManagerService {
 
   loadedChores: ChoresObject[] = [];
   loadedRooms: RoomObject[] = [];
+  
   loadedHouseMembers: HouseMemberObject[] = [];
   loadedRoomsSubject = new Subject<RoomObject[]>();
   loadedChoresSubject = new Subject<ChoresObject[]>();
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
+  loadedFloorPlanSubject = new Subject<FloorPlanObject>();
 
   user : User;
 
@@ -161,6 +141,14 @@ export class DatabaseManagerService {
       this.testRooms
     ).subscribe(response => {
       console.log(response);
+    })
+  }
+
+  fetchFloorPlan(floorPlanIndex: string) {
+    this.httpClient.get<FloorPlanObject[]>(
+      this.TEST_DB_URL + "floorplans.json"
+    ).subscribe(floorPlans => {
+      this.loadedFloorPlanSubject.next(floorPlans[+floorPlanIndex]);
     })
   }
 

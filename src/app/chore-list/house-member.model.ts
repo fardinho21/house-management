@@ -1,5 +1,5 @@
 import { Chore } from '../shared/chore.model';
-import { HouseMemberObject, ChoresObject } from 'src/app/shared/database-manager.service';
+import { HouseMemberObject, ChoresObject } from '../shared/interfaces';
 
 export class HouseMember {
 

@@ -47,10 +47,10 @@ export class ManagerService {
       for (let key in loaded){
 
         let roomObject = loaded[key];
-        let roomGeo = roomObject.room;
+        let roomGeo = roomObject.roomGeo;
 
         let choreList = roomObject.chores.map((chore) => {
-          let c = new Chore(chore.choreName, chore.done);
+          let c = new Chore(chore);
           let indexOfhm = this.findHouseMemberByName(chore.assignedTo);
 
           if (indexOfhm < 0) {

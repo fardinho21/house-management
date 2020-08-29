@@ -1,5 +1,5 @@
 import { Chore } from '../shared/chore.model';
-import { RoomObject, ChoresObject } from 'src/app/shared/database-manager.service';
+import { RoomObject, ChoresObject, RoomGeometry } from '../shared/interfaces';
 
 
 export class Room {
@@ -7,13 +7,7 @@ export class Room {
     private _name: string;
     private _finishedChores: number = 0;
 
-    private _room : {
-        xInit: number,
-        yInit: number,
-        width: number,
-        height: number
-        status: number
-    }
+    private _room : RoomGeometry;
 
     private _chores : Chore[];
 
@@ -25,8 +19,6 @@ export class Room {
         h: number,
         finChores: number,
         chores: Chore[]) {
-        //sets the status and parent room for each chore
-
         this._chores = chores;
         this._name = name;
         this._finishedChores = finChores;
@@ -63,6 +55,10 @@ export class Room {
     getChores(){    
         return this._chores;
     }
+
+    setChores(chores: Chore[]) {
+        this._chores = chores;
+    }
     
     choreCompleted() {
         this._finishedChores++;
@@ -88,7 +84,7 @@ export class Room {
         let jO : RoomObject = {
             name: this._name,
             finishedChores: this._finishedChores,
-            room: this._room,
+            roomGeo: this._room,
             chores: chores
         }
 
