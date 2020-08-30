@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
 import { ManagerService } from '../shared/manager.service';
@@ -15,7 +15,16 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   floorPlan: FloorPlan = null;
   imagePath : string = "";
 
-  @ViewChild('fpCanvas', { static: false }) fpCanvas: ElementRef<HTMLCanvasElement>;
+  private fpCanvasRef : ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('fpCanvas', { static: false }) set fpCanvas(canvas: ElementRef) {
+
+    if (canvas){
+      console.log(canvas)
+      this.fpCanvasRef = canvas;
+    }
+    
+  };
 
   private _image = new Image();
   private _context: CanvasRenderingContext2D = null;
@@ -36,57 +45,29 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       'orange': '#fcca03'
   }
 
-  constructor(private dataBaseManager: DatabaseManagerService) {
-    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
-      this.floorPlan = new FloorPlan(loaded);
-      this._image.src = this.floorPlan.getImagePath();
-    })
+  constructor(private dataBaseManager: DatabaseManagerService, private changeDetectorRef : ChangeDetectorRef) {
+
   }
 
   ngAfterViewChecked() {
-    if (!this.floorPlan || !this._context) {
-      return;
-    }
-    this.colorArea();
+
   }
 
   ngOnInit(): void {
     this.selectedRoom = new Room("no-room",0,0,0,0,0,[]);
+
+    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
+      this.floorPlan = new FloorPlan(loaded);
+      this.changeDetectorRef.detectChanges();
+      this._image.src = this.floorPlan.getImagePath();
+
+      setTimeout(this.initCanvasAndContext.bind(this), 1000);
+
+    })
   }
 
 
   ngAfterViewInit() {
-    if (!this.floorPlan) {
-      return;
-    }
-    this._canvas = this.fpCanvas.nativeElement;
-    this._canvas.width = this._width;
-    this._canvas.height = this._height;
-
-    this._context = this.fpCanvas.nativeElement.getContext('2d');
-
-    this._image.onload = () => {
-      this._context.drawImage(this._image, 0, 0, this._width, this._height);
-    }
-
-    this._canvas.onmousemove = (movement) => {
-
-      let rect = this._canvas.getBoundingClientRect();
-      let xLoc = (movement.clientX - rect.left)|0;
-      let yLoc = (movement.clientY - rect.top)|0;
-      let roomName = this.checkHoverInsideRoom(xLoc, yLoc);
-      //console.log(roomName);
-      if (roomName !==  null) {
-        this.over = true;
-      } else {
-        this.over = false;
-      }
-
-    }
-
-    setTimeout(() => {
-      this.colorArea();
-    }, 500)
 
   }
 
@@ -133,6 +114,35 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this.selectedRoom = room;
     }
     
+  }
+
+  private initCanvasAndContext() {
+
+    this._canvas = this.fpCanvasRef.nativeElement;
+    this._canvas.width = this._width;
+    this._canvas.height = this._height;
+    this._context = this.fpCanvasRef.nativeElement.getContext('2d');
+
+    // this._image.onload = () => {
+    //   this._context.drawImage(this._image, 0, 0, this._width, this._height);
+    // }
+
+    this._canvas.onmousemove = (movement) => {
+
+      let rect = this._canvas.getBoundingClientRect();
+      let xLoc = (movement.clientX - rect.left)|0;
+      let yLoc = (movement.clientY - rect.top)|0;
+      let roomName = this.checkHoverInsideRoom(xLoc, yLoc);
+      if (roomName !==  null) {
+        this.over = true;
+      } else {
+        this.over = false;
+      }
+
+    }
+
+    this._context.drawImage(this._image, 0, 0, this._width, this._height);
+
   }
 
   private checkClickInsideRoom(xMouse : number, yMouse: number) : Room{
@@ -197,9 +207,9 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   chooseFloorPlan() {
+
     this.onToggleChooseFloorPlanDialog();
     this.dataBaseManager.fetchFloorPlan(this.selectedFloorPlanIndex)
-    //this.floorPlan = new FloorPlan(this.manager)
 
   }
 
