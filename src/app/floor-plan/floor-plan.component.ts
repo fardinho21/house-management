@@ -69,7 +69,12 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
 
   ngAfterViewInit() {
-
+    if (!this.floorPlan) {
+      this.floorPlan = this.manager.floorPlan;
+      this.changeDetectorRef.detectChanges();
+      this._image.src = this.floorPlan.getImagePath();
+      this.initCanvasAndContext();
+    }
   }
 
   colorArea() {

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
@@ -19,8 +19,8 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   houseMembers : HouseMember[] = [];  
   selectedHouseMember: HouseMember = new HouseMember("",[]);
 
-  constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService) {
-    //dataBaseManager.fetchRooms();
+  constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService, private changeDetectorRef: ChangeDetectorRef) {
+
   }
 
   //subscribes to the managers hoseMembersSubject
@@ -39,7 +39,10 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-
+    if (!this.houseMembers && !this.selectedHouseMember) {
+      this.houseMembers = this.manager.houseMembers;
+      this.selectedHouseMember = this.manager.selectedHouseMember;
+    }
   }
 
   onClickHouseMember(index: number) {

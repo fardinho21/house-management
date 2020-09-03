@@ -51,17 +51,21 @@
 <div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
     <ul style="list-style: none;">
         <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
-            <div class=" col-lg-4 col-md-6 col-sm-4 col-xs-4">
-                {{chores.getJSONObject().choreName}}
+
+            <div class="row" style="width: 600px;">
+                <div class=" col-lg-4 col-md-6 col-sm-4 col-xs-4">
+                    {{chores.getJSONObject().choreName}}
+                </div>
+                <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    {{chores.getJSONObject().parentRoom | camelToSpace | lowercase}}
+                </div>
+                <div class=" col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
+                    <button type="button" (click)="onDone(chores)">
+                        Done
+                    </button>
+                </div>
             </div>
-            <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                {{chores.getJSONObject().parentRoom | camelToSpace | lowercase}}
-            </div>
-            <div class=" col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
-                <button type="button" (click)="onDone(chores)">
-                    Done
-                </button>
-            </div>
+
         </li>       
     </ul>
 
