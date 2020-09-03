@@ -12,6 +12,8 @@ export class Chore {
     constructor(chore : ChoresObject){
         this.choreName = chore.choreName;
         this.done = chore.done;
+
+
     }
 
     getInfo() : ChoresObject {
@@ -43,7 +45,7 @@ export class Chore {
     }
 
     isAssigned() {
-        return this.assignedTo != null ? true : false;
+        return this.assignedTo === null ? false : true;
     }
 
     setParentRoom (room: Room) {

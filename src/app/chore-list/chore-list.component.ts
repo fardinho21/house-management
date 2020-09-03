@@ -35,7 +35,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.manager.selectedHouseMemberSubject.subscribe(selected => {
       this.selectedHouseMember = selected;
-      this.manager.selectedHouseMemberSubject.unsubscribe();
     });
   }
 
@@ -57,6 +56,10 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.addHouseMemberShowDialog = !this.addHouseMemberShowDialog;
   }
 
+  onAssignChores() {
+    this.manager.assignChores();
+  }
+
 
   onCreateHouseMember(form: NgForm) {
 
@@ -67,7 +70,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   //database methods start 
-
   onSaveRoomsToDataBase(){
     let rooms = this.manager.getRooms().map((room) => {
       return room.getJSONObject();
@@ -89,6 +91,5 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   onFetchHouseMembersFromDataBase(){
     this.dataBaseManager.fetchHouseMembers();
   }
-
   //database methods end
 }

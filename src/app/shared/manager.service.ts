@@ -6,6 +6,7 @@ import { Subject } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
 import { AuthService } from './auth.service';
 import { User } from '../auth-page/user.model';
+import { FloorPlan } from '../floor-plan/floor-plan.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,6 +82,7 @@ export class ManagerService {
             roomGeo.yInit,
             roomGeo.width,
             roomGeo.height,
+            roomGeo.status,
             roomObject.finishedChores,
             choreList
             ))
@@ -109,6 +111,7 @@ export class ManagerService {
       console.log(this.houseMembers);
     })
 
+
     this.user = this.dataBaseManager.user;
 
   }
@@ -116,9 +119,19 @@ export class ManagerService {
 
   createHouseMember(name: string) {
     this.houseMembers.push(new HouseMember(name, []));
+    this.selectedHouseMember =this.houseMembers[this.houseMembers.length - 1];
+    this.selectedHouseMemberSubject.next(this.selectedHouseMember);
+    this.houseMembersSubject.next(this.houseMembers);
     return this.houseMembers.length - 1;
   }
 
+  setChoresFromFloorPlan(fp : FloorPlan) {
+    this.listOfChores = fp.getChores();
+  }
+
+  setRoomsFromFloorPlan(fp : FloorPlan) {
+    this.rooms = fp.getRooms();
+  }
 
   findHouseMemberByName(name: string) : number{
 
@@ -165,6 +178,65 @@ export class ManagerService {
     this.houseMembersSubject.next(this.houseMembers);
     this.roomSubject.next(this.rooms);
   }
+
+  clearChores() {
+    for (let c of this.listOfChores) {
+      c.reset();
+    }
+  }
+
+  resetRoomStatues() {
+    for (let r of this.rooms) {
+      r.resetStatus();
+    }
+  }
+
+  assignChores() {
+
+    this.clearChores();
+    this.resetRoomStatues();
+
+    let numberOfChores = this.listOfChores.length;
+    let numberOfHouseMembers = this.houseMembers.length;
+
+    let maxInit = numberOfChores/numberOfHouseMembers|0;
+    let max = maxInit - 1;
+    let start = 0;
+
+    for (let hm of this.houseMembers) {
+      for (let i = start; i <= max; i++) {
+        
+        if (!this.listOfChores[i].isAssigned()) {
+          hm.addChore(this.listOfChores[i]);
+          this.listOfChores[i].assignToHouseMember(hm);
+        }
+
+        if (i == max && max < numberOfChores - 1) {
+          start = max + 1;
+          max += maxInit;
+          break;
+        }
+
+      }
+    }
+
+    let leftover = numberOfChores%numberOfHouseMembers;
+    let incrementer = 0;
+
+    if (leftover != 0) {
+      for (let i = numberOfChores - leftover; i < numberOfChores - 1; i++) {
+        this.houseMembers[incrementer].addChore(this.listOfChores[i]);
+        this.listOfChores[i].assignToHouseMember(this.houseMembers[incrementer]);
+        incrementer++;
+      }
+    }
+
+    this.houseMembersSubject.next(this.houseMembers.slice());
+    this.roomSubject.next(this.rooms.slice());
+    
+  }
+
+
   //services for chores list and floor plan component -- end
 
 
@@ -191,7 +263,6 @@ export class ManagerService {
 
 
   //services for calendar component -- start
-
   addEvent(event) {
 
     this.events.push(event);

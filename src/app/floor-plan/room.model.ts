@@ -17,15 +17,14 @@ export class Room {
         yI: number, 
         w: number, 
         h: number,
+        s: number,
         finChores: number,
         chores: Chore[]) {
         this._chores = chores;
         this._name = name;
         this._finishedChores = finChores;
 
-        let r = { xInit: xI, yInit: yI, width: w, height: h, status: 0 };
-
-        r.status = this._finishedChores / this._chores.length
+        let r = { xInit: xI, yInit: yI, width: w, height: h, status: s };
 
         this._room = r;
 
@@ -53,7 +52,7 @@ export class Room {
     }
 
     getChores(){    
-        return this._chores;
+        return this._chores.slice();
     }
 
     setChores(chores: Chore[]) {

@@ -4,6 +4,7 @@ import { Room } from './room.model';
 import { ManagerService } from '../shared/manager.service';
 import { DatabaseManagerService } from "../shared/database-manager.service";
 import { HouseMember } from '../chore-list/house-member.model';
+import { timeInterval } from 'rxjs/operators';
 
 @Component({
   selector: 'app-floor-plan',
@@ -45,22 +46,25 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       'orange': '#fcca03'
   }
 
-  constructor(private dataBaseManager: DatabaseManagerService, private changeDetectorRef : ChangeDetectorRef) {
+  constructor(private dataBaseManager: DatabaseManagerService, private manager: ManagerService, private changeDetectorRef : ChangeDetectorRef) {
 
   }
 
   ngAfterViewChecked() {
-
+    if (this._canvas && this._context) {
+      this.colorArea();
+    }
   }
 
   ngOnInit(): void {
-    this.selectedRoom = new Room("no-room",0,0,0,0,0,[]);
+    this.selectedRoom = new Room("no-room",0,0,0,0,0,0,[]);
 
     this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
       this.floorPlan = new FloorPlan(loaded);
       this.changeDetectorRef.detectChanges();
       this._image.src = this.floorPlan.getImagePath();
-
+      this.manager.setChoresFromFloorPlan(this.floorPlan);
+      this.manager.setRoomsFromFloorPlan(this.floorPlan);
       setTimeout(this.initCanvasAndContext.bind(this), 1000);
 
     })
@@ -108,6 +112,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     let rect = this._canvas.getBoundingClientRect();
     let xLoc = (mouseclick.clientX - rect.left)|0;
     let yLoc = (mouseclick.clientY - rect.top)|0;
+    console.log(xLoc + " " + yLoc);
     let room: Room = this.checkClickInsideRoom(xLoc, yLoc);
 
     if (room !== null) {
@@ -123,15 +128,13 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this._canvas.height = this._height;
     this._context = this.fpCanvasRef.nativeElement.getContext('2d');
 
-    // this._image.onload = () => {
-    //   this._context.drawImage(this._image, 0, 0, this._width, this._height);
-    // }
 
     this._canvas.onmousemove = (movement) => {
 
       let rect = this._canvas.getBoundingClientRect();
       let xLoc = (movement.clientX - rect.left)|0;
       let yLoc = (movement.clientY - rect.top)|0;
+      //console.log(xLoc + " " + yLoc);
       let roomName = this.checkHoverInsideRoom(xLoc, yLoc);
       if (roomName !==  null) {
         this.over = true;
@@ -142,6 +145,8 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     }
 
     this._context.drawImage(this._image, 0, 0, this._width, this._height);
+
+    this.colorArea();
 
   }
 
@@ -215,6 +220,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   selectedFloorPlan(selectedFpImage) {
     this.selectedFloorPlanIndex = selectedFpImage.explicitOriginalTarget.name;
+    //this.dataBaseManager.fetchChores(+this.selectedFloorPlanIndex);
     //this.onToggleChooseFloorPlanDialog()
   }
 

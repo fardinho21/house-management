@@ -55,18 +55,10 @@ export class DatabaseManagerService {
     })
   }
 
-  fetchChores() {
-    this.httpClient.get<ChoresObject[]>(this.TEST_DB_URL + 'chores.json')
-      .pipe(map((data)=> {
-        let choreArray = []
-        for (const key in data){
-          choreArray.push({...data[key], id:key})
-        }
-        return choreArray;
-      }))
-      .subscribe(chores => {
-        this.loadedChores = chores.slice();
-        this.loadedChoresSubject.next(this.loadedChores);
+  fetchChores(index: number) {
+    this.httpClient.get<FloorPlanObject[]>(this.TEST_DB_URL + 'floorplans.json/')
+      .subscribe(fp => {
+        console.log(fp[index])
       });     
 
       
@@ -151,5 +143,6 @@ export class DatabaseManagerService {
       this.loadedFloorPlanSubject.next(floorPlans[+floorPlanIndex]);
     })
   }
+
 
 }

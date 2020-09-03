@@ -25,6 +25,7 @@ export class FloorPlan {
                 room.roomGeo.yInit,
                 room.roomGeo.width,
                 room.roomGeo.height,
+                room.roomGeo.status,
                 room.finishedChores,
                 []);
 
@@ -48,5 +49,13 @@ export class FloorPlan {
 
     getRooms() {
         return this._rooms.slice();
+    }
+
+    getChores() {
+        let chores : Chore[] = [];
+        this._rooms.map( room => {
+            chores = chores.concat(room.getChores());
+        }) 
+        return chores;
     }
 }

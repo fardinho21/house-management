@@ -14,7 +14,8 @@
     <div class="row">
         <div class="col">
             <button type="button" class="btn btn-secondary" style="border: 1px solid rgb(119, 115, 115)" (click)="toggleHouseMemberDialog()">Add House Member</button> |
-            <button type="button" class="btn btn-success" (click)="onSaveHouseMembersToDataBase()">Save House Members</button> 
+            <button type="button" class="btn btn-success" (click)="onSaveHouseMembersToDataBase()" [disabled]="houseMembers.length == 0">Save House Members</button> |
+            <button type="button" class="btn btn-success" (click)="onAssignChores()" [disabled]="houseMembers.length == 0">Assign Chores</button>
         </div>
     </div>    
 </div>
