@@ -5,8 +5,9 @@ import { map, take, exhaustMap } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
 import { AuthService, ResponseObject, UserObject } from './auth.service';
-import { User } from '../auth-page/user.model';
+import { User } from './user.model';
 import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject } from './interfaces';
+import { FloorPlan } from '../floor-plan/floor-plan.model';
 
 
 
@@ -15,19 +16,9 @@ import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject } from './
 })
 export class DatabaseManagerService {
 
-  private testRooms : RoomObject[] = 
-  [
-    {
-      name: "room0", 
-      finishedChores: 0,
-      roomGeo: {xInit: 0, yInit: 0, width: 0, height: 0, status: 0},
-      chores: [
-        {
-          choreName: "chore0", done: false, assignedTo: "", parentRoom: "room0"
-        }
-      ]
-    }
-  ]
+  private testRooms = {
+    dummyData: "dummy"
+  };
 
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
@@ -49,9 +40,10 @@ export class DatabaseManagerService {
       this.user = user;
       let reg = this.user.registered ? true : false;
       if (!reg){
-        this.createUser(user.username);
+        this.createUser(user.username, user.id);
+      } else {
+        this.fetchUserData();
       }
-
     })
   }
 
@@ -127,10 +119,10 @@ export class DatabaseManagerService {
     })
   }
 
-  createUser(username: string) {
+  createUser(username: string, id: string) {
     this.httpClient.put<ResponseObject>(
       this.TEST_DB_URL + username + ".json",
-      this.testRooms
+      {id: id}
     ).subscribe(response => {
       console.log(response);
     })
@@ -141,6 +133,30 @@ export class DatabaseManagerService {
       this.TEST_DB_URL + "floorplans.json"
     ).subscribe(floorPlans => {
       this.loadedFloorPlanSubject.next(floorPlans[+floorPlanIndex]);
+    })
+  }
+
+  fetchUserData() {
+    this.httpClient.get<{id: string; floorPlan: FloorPlanObject; houseMembers: HouseMemberObject[]}>(
+      this.TEST_DB_URL + this.user.username + ".json"
+    ).subscribe(response => {
+      console.log(response);
+      if (response.hasOwnProperty('floorPlan')) {
+        this.loadedFloorPlanSubject.next(response.floorPlan);    
+      }
+      if (response.hasOwnProperty('houseMembers')) {
+        this.loadedHouseMembersSubject.next(response.houseMembers);  
+      }
+    })
+  }
+
+  saveUserData(fp : FloorPlanObject, hmList: HouseMemberObject[]){
+    
+    this.httpClient.put<FloorPlanObject>(
+      this.TEST_DB_URL + this.user.username + ".json",
+      {floorPlan: fp, id: this.user.id, houseMembers: hmList}
+    ).subscribe(response => {
+      console.log(response)
     })
   }
 

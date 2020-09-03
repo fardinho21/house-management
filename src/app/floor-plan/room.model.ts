@@ -77,7 +77,7 @@ export class Room {
         let chores : ChoresObject[] = [];
 
         for (let chore of this._chores){
-            chores.push(chore.getInfo());
+            chores.push(chore.getJSONObject());
         }
 
         let jO : RoomObject = {

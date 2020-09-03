@@ -5,7 +5,7 @@ import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
 import { AuthService } from './auth.service';
-import { User } from '../auth-page/user.model';
+import { User } from './user.model';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 
 @Injectable({
@@ -14,6 +14,7 @@ import { FloorPlan } from '../floor-plan/floor-plan.model';
 export class ManagerService {
 
   //data
+  floorPlan: FloorPlan = null;
   rooms: Room[] = [];
   houseMembers: HouseMember[] = []
   listOfChores : Chore[] = [];
@@ -36,11 +37,12 @@ export class ManagerService {
   shoppingItemsSubject = new Subject<{name:string,amount:number,requestedBy:string}[]>();
   selectedHouseMemberSubject = new Subject<HouseMember>();
   eventsSubject = new Subject<{title:string,start:string}[]>();
+  floorPlanSubject = new Subject<FloorPlan>();
 
   constructor(private dataBaseManager : DatabaseManagerService) { 
 
-    console.log(this.houseMembers);
-    console.log(this.rooms);
+    //console.log(this.houseMembers);
+    //console.log(this.rooms);
 
     this.dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
       let runningListOfRooms = []
@@ -63,7 +65,7 @@ export class ManagerService {
 
           }
 
-          c.assignToHouseMember(this.houseMembers[indexOfhm]);
+          c.assignToHouseMember(this.houseMembers[indexOfhm].getName());
 
           if (!c.isDone()) {
             this.houseMembers[indexOfhm].addChore(c);
@@ -99,11 +101,29 @@ export class ManagerService {
     })
 
     this.dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
-      let runningList = []
 
-      for (const key in loaded) {
 
-      }
+
+      let runningList : HouseMember[] = loaded.map(hm => {
+
+        let houseMem = new HouseMember(hm.name, [])
+
+        for (let chore of this.listOfChores) {
+          let assignedTo = chore.getAssignedTo()
+          let done = chore.isDone();
+
+          if ( assignedTo == "name" || done ) {
+            continue;
+          }
+          
+          if (assignedTo == hm.name) {
+              houseMem.addChore(chore);
+          }
+        }
+
+        return houseMem;
+
+      })
 
       this.houseMembers = runningList.slice();
       this.houseMembersSubject.next(this.houseMembers.slice())
@@ -111,6 +131,10 @@ export class ManagerService {
       console.log(this.houseMembers);
     })
 
+    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
+      this.setFloorPlan( new FloorPlan(loaded) );
+      this.floorPlanSubject.next(this.floorPlan);
+    })
 
     this.user = this.dataBaseManager.user;
 
@@ -123,6 +147,12 @@ export class ManagerService {
     this.selectedHouseMemberSubject.next(this.selectedHouseMember);
     this.houseMembersSubject.next(this.houseMembers);
     return this.houseMembers.length - 1;
+  }
+
+  setFloorPlan(fp : FloorPlan) {
+    this.floorPlan = fp;
+    this.setRoomsFromFloorPlan(this.floorPlan);
+    this.setChoresFromFloorPlan(this.floorPlan);
   }
 
   setChoresFromFloorPlan(fp : FloorPlan) {
@@ -148,7 +178,7 @@ export class ManagerService {
     return -1;
   }
     
-  getHouseMemebers() {
+  getHouseMembers() {
     return this.houseMembers.slice();
   }
 
@@ -174,12 +204,19 @@ export class ManagerService {
   onDone(chore: Chore) {
     
     chore.setDone();
-    chore.getAssignedTo().removeChore(chore);
+    //chore.getAssignedTo().removeChore(chore);
+    let houseMember = this.houseMembers[this.findHouseMemberByName(chore.getAssignedTo())];
+    houseMember.removeChore(chore);
     this.houseMembersSubject.next(this.houseMembers);
     this.roomSubject.next(this.rooms);
   }
 
   clearChores() {
+
+    for (let hm of this.houseMembers) {
+      hm.clearChores();
+    }
+
     for (let c of this.listOfChores) {
       c.reset();
     }
@@ -190,6 +227,7 @@ export class ManagerService {
       r.resetStatus();
     }
   }
+
 
   assignChores() {
 
@@ -208,7 +246,7 @@ export class ManagerService {
         
         if (!this.listOfChores[i].isAssigned()) {
           hm.addChore(this.listOfChores[i]);
-          this.listOfChores[i].assignToHouseMember(hm);
+          this.listOfChores[i].assignToHouseMember(hm.getName());
         }
 
         if (i == max && max < numberOfChores - 1) {
@@ -226,7 +264,7 @@ export class ManagerService {
     if (leftover != 0) {
       for (let i = numberOfChores - leftover; i < numberOfChores - 1; i++) {
         this.houseMembers[incrementer].addChore(this.listOfChores[i]);
-        this.listOfChores[i].assignToHouseMember(this.houseMembers[incrementer]);
+        this.listOfChores[i].assignToHouseMember(this.houseMembers[incrementer].getName());
         incrementer++;
       }
     }
@@ -235,8 +273,6 @@ export class ManagerService {
     this.roomSubject.next(this.rooms.slice());
     
   }
-
-
   //services for chores list and floor plan component -- end
 
 
@@ -266,7 +302,7 @@ export class ManagerService {
   addEvent(event) {
 
     this.events.push(event);
-    console.log(this.events);
+    //console.log(this.events);
     this.eventsSubject.next(this.events);
   }
 

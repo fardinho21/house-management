@@ -77,12 +77,21 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.dataBaseManager.saveRooms(rooms);
   }
 
+  onSaveData() {
+    let fp = this.manager.floorPlan.getJSONObject();
+    let hmList = this.manager.getHouseMembers().map(hm => {
+      return hm.getJSONObject();
+    });
+
+    this.dataBaseManager.saveUserData(fp, hmList);
+  }
+
   onFetchRoomsFromDataBase() {
     this.dataBaseManager.fetchRooms();
   }
 
   onSaveHouseMembersToDataBase() {
-    let hm = this.manager.getHouseMemebers().map((houseMem) => {
+    let hm = this.manager.getHouseMembers().map((houseMem) => {
       return houseMem.getJSONObject();
     });
     this.dataBaseManager.saveHouseMembers(hm);

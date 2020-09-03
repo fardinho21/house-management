@@ -9,7 +9,7 @@ export class HouseMember {
     constructor(name:string, chores: Chore[]) {
         this.name = name;
         chores.map(chore => {
-           return chore.assignToHouseMember(this)
+           return chore.assignToHouseMember(name)
         })
         this.choresList = chores;
     }
@@ -27,7 +27,7 @@ export class HouseMember {
 
         for (let i = 0; i <= this.choresList.length - 1; i++) {
             let chore = this.choresList[i];
-            let info = chore.getInfo();
+            let info = chore.getJSONObject();
             if (info.choreName == choreName && info.parentRoom == roomName ) {
                 return i;
             }
@@ -45,7 +45,7 @@ export class HouseMember {
     }
 
     public removeChore(chore: Chore) {
-        let info = chore.getInfo();
+        let info = chore.getJSONObject();
         let index = this.findChore(info.parentRoom, info.choreName);
         if (index >= 0){
             this.choresList.splice(index,1);
@@ -59,7 +59,7 @@ export class HouseMember {
     getJSONObject() : HouseMemberObject {
 
         let cList : ChoresObject[] = this.choresList.map(chore => {
-            return chore.getInfo();
+            return chore.getJSONObject();
         })
 
         let jO : HouseMemberObject = {
@@ -68,5 +68,13 @@ export class HouseMember {
         }
         
         return jO;
+    }
+
+    clearChores() {
+        for (let c of this.choresList) {
+            c.reset();
+        }
+
+        this.choresList = [];
     }
 }

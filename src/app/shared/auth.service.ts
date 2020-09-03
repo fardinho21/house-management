@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError, BehaviorSubject } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
-import { User } from "../auth-page/user.model";
+import { User } from "./user.model";
 import { DatabaseManagerService } from './database-manager.service';
 
 export interface UserObject{
@@ -49,6 +49,7 @@ export class AuthService {
       this.LOG_IN_URL + this.API_KEY,
       user
     ).pipe(catchError(this.handleError), tap(response => {
+      console.log(response)
       this.handleAuthentication(response);
     }));
   }

@@ -17,7 +17,7 @@ export class ShoppingListComponent implements OnInit {
 
   constructor(private manager : ManagerService) { 
     this.shoppingItems = manager.getShoppingItems();
-    this.houseMembers = manager.getHouseMemebers();
+    this.houseMembers = manager.getHouseMembers();
 
   }
 
@@ -42,7 +42,7 @@ export class ShoppingListComponent implements OnInit {
 
   onAddItem(form: NgForm) {
     this.onToggleAddItemDialog();
-    console.log(form.controls);
+    //console.log(form.controls);
 
     let item = {
       name:form.controls["name"].value,
@@ -50,7 +50,7 @@ export class ShoppingListComponent implements OnInit {
       requestedBy: form.controls["requestedby"].value
       }
 
-      console.log(form.controls["requestedby"].value);
+      //console.log(form.controls["requestedby"].value);
       this.manager.addShoppingItem(item);
   }
 

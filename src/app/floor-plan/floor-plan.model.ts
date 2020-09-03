@@ -6,15 +6,14 @@ import { FloorPlanObject } from '../shared/interfaces';
 export class FloorPlan {
 
     private _imagePath: string = "";
-
     private _testImagePath : string = "";
-
     private _rooms: Room[] = [];
+    private _name : string;
 
     constructor (floorPlanObject?: FloorPlanObject) {
 
         this._imagePath = floorPlanObject.imagePath;
-
+        this._name = floorPlanObject.name;
         this._rooms = floorPlanObject.rooms.map(room => {
             
             let chores = [];
@@ -32,6 +31,7 @@ export class FloorPlan {
             for (let c of room.chores) {
                 let chore = new Chore(c)
                 chore.setParentRoom(r);
+                chore.assignToHouseMember(c.assignedTo)
                 chores.push(chore);
             }
             
@@ -57,5 +57,24 @@ export class FloorPlan {
             chores = chores.concat(room.getChores());
         }) 
         return chores;
+    }
+
+    getJSONObject() : FloorPlanObject {
+
+        let fpOb : FloorPlanObject = 
+        {
+            name: this._name,
+            imagePath: this._imagePath,
+            rooms: []
+        }
+
+        let rooms = this._rooms.map( room => {
+            return room.getJSONObject();
+        })
+
+        fpOb.rooms = rooms;
+
+        return fpOb;
+
     }
 }

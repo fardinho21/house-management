@@ -36,7 +36,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   floorPlanChooseDialogShow :boolean=false;
   selectedFloorPlanIndex: string = "";
   selectedRoom : Room;
-  membersWithUnfinishedChores : HouseMember[] = [];
+  membersWithUnfinishedChores : string[] = [];
   over = false;
 
   private _fillStyles: { [name: string]: string } =
@@ -59,14 +59,11 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ngOnInit(): void {
     this.selectedRoom = new Room("no-room",0,0,0,0,0,0,[]);
 
-    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
-      this.floorPlan = new FloorPlan(loaded);
+    this.manager.floorPlanSubject.subscribe(loaded => {
+      this.floorPlan = loaded;
       this.changeDetectorRef.detectChanges();
       this._image.src = this.floorPlan.getImagePath();
-      this.manager.setChoresFromFloorPlan(this.floorPlan);
-      this.manager.setRoomsFromFloorPlan(this.floorPlan);
       setTimeout(this.initCanvasAndContext.bind(this), 1000);
-
     })
   }
 

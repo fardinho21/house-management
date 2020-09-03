@@ -7,26 +7,25 @@ export class Chore {
     private parentRoom: Room;
     private choreName: string;
     private done: boolean;
-    private assignedTo: HouseMember = null;
+    private assignedTo: string = "";
 
     constructor(chore : ChoresObject){
         this.choreName = chore.choreName;
         this.done = chore.done;
 
-
     }
 
-    getInfo() : ChoresObject {
+    getJSONObject() : ChoresObject {
         return {
             choreName: this.choreName, 
             done: this.done, 
-            assignedTo: this.assignedTo ? this.assignedTo.getName() : "", 
+            assignedTo: this.assignedTo, 
             parentRoom: this.parentRoom.getName()
         };
     }
 
-    assignToHouseMember(member: HouseMember){
-        this.assignedTo = member;
+    assignToHouseMember(memberName: string){
+        this.assignedTo = memberName;
     }
 
     setDone() {
@@ -37,7 +36,7 @@ export class Chore {
 
     reset(){
         this.done = false;
-        this.assignedTo = null;
+        this.assignedTo = "name";
     }
 
     isDone(){
@@ -45,14 +44,14 @@ export class Chore {
     }
 
     isAssigned() {
-        return this.assignedTo === null ? false : true;
+        return this.assignedTo === "name" ? false : true;
     }
 
     setParentRoom (room: Room) {
         this.parentRoom = room;
     }
 
-    getAssignedTo () : HouseMember{
+    getAssignedTo () : string {
         return this.assignedTo;
     }
 }
