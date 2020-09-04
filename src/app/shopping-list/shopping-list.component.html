@@ -5,12 +5,10 @@
         </h4>
     </div>
     <div class="row">
-        <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
-            <button type="button" (click)="onToggleAddItemDialog()">Add Item</button>
-        </div>
-        <div class="col-lg-4 col-md-2 col-sm-6 col-xs-6">
-            <button type="button" (click)="onClearList()">Clear List</button>
-        </div>
+            <button class="btn btn-primary" type="button" (click)="onToggleAddItemDialog()">Add Item</button> | 
+            <button class="btn btn-success" type="button" (click)="onSaveShoppingItems()"> Save Items </button> |     
+            <button class="btn btn-warning" type="button" (click)="onToggleClearListDialog()">Clear List</button>
+            
     </div>
 </div>
 
@@ -36,13 +34,14 @@
 </div>
 
 
+
 <ul style="list-style: none; ">
     
     <div class="row" *ngFor="let item of shoppingItems; let i = index;">
         <li>
-            <div class="row">
+            <div class="row" style="padding: 0.5rem;">
                 <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                    {{item.name}}
+                    {{item.itemName}}
                 </div>
                 <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
                     {{item.amount}}
@@ -123,3 +122,30 @@
     </div>
 </div>
 <!-- modal dialog end -->
+
+<!-- are you sure modal dialog start -->
+<div #confirmClear class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: confirmClearListDisplay ? 'block' : 'none'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Confirm 
+                </h5>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Are you sure you want to clear the shopping list?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button btn" class="btn btn-warning" data-dismiss="modal" (click)="onClearList()">
+                    Yes
+                </button> |
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="onToggleClearListDialog()">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- are you sure modal dialog end -->

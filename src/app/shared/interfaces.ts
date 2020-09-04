@@ -30,3 +30,14 @@ export interface FloorPlanObject {
     imagePath: string;
     rooms: RoomObject[];
 }
+
+export interface ShoppingItemsObject {
+    itemName: string;
+    amount: number;
+    requestedBy: string;
+}
+
+export interface EventObject {
+    title: string;
+    start: string;
+}

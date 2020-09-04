@@ -7,6 +7,7 @@ import { DatabaseManagerService } from './database-manager.service';
 import { AuthService } from './auth.service';
 import { User } from './user.model';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
+import { ShoppingItemsObject, EventObject } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,12 @@ export class ManagerService {
   selectedHouseMember: HouseMember = new HouseMember("",[]);
   user : User = null;
 
-  shoppingItems: {name: string, amount:number, requestedBy: string}[] = [
-    {name:"Bread",amount:3,requestedBy: 'dummy'},
-    {name:"Apple",amount:5,requestedBy: 'dummy'},
-    {name:"Paper Towel",amount:1,requestedBy: 'dummy'},
+  shoppingItems: ShoppingItemsObject[] = [
+    {itemName:"Bread",amount:3,requestedBy: 'dummy'},
+    {itemName:"Apple",amount:5,requestedBy: 'dummy'},
+    {itemName:"Paper Towel",amount:1,requestedBy: 'dummy'},
   ]
-  events: {title:string,start:string}[] = [
+  events: EventObject[] = [
     {title:"event1",start:"2020-08-04"},
     {title:"event2",start:"2020-08-03"}
   ];
@@ -34,9 +35,9 @@ export class ManagerService {
   //subjects
   roomSubject = new Subject<Room[]>();
   houseMembersSubject = new Subject<HouseMember[]>();
-  shoppingItemsSubject = new Subject<{name:string,amount:number,requestedBy:string}[]>();
+  shoppingItemsSubject = new Subject<ShoppingItemsObject[]>();
   selectedHouseMemberSubject = new Subject<HouseMember>();
-  eventsSubject = new Subject<{title:string,start:string}[]>();
+  eventsSubject = new Subject<EventObject[]>();
   floorPlanSubject = new Subject<FloorPlan>();
 
   constructor(private dataBaseManager : DatabaseManagerService) { 
@@ -281,7 +282,7 @@ export class ManagerService {
     return this.shoppingItems.slice();
   }
 
-  addShoppingItem(item : {name:string,amount:number,requestedBy:string}) {
+  addShoppingItem(item : ShoppingItemsObject) {
     this.shoppingItems.push(item);
     this.shoppingItemsSubject.next(this.shoppingItems.slice());
   }

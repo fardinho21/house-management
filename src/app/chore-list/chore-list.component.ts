@@ -1,10 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
 import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { DatabaseManagerService } from 'src/app/shared/database-manager.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -16,11 +17,16 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   addHouseMemberShowDialog: boolean = false;
 
-  houseMembers : HouseMember[] = [];  
+  houseMembers : HouseMember[] = [];
   selectedHouseMember: HouseMember = new HouseMember("",[]);
 
-  constructor(private manager: ManagerService, private dataBaseManager : DatabaseManagerService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(
+    private manager: ManagerService, 
+    private dataBaseManager : DatabaseManagerService, 
+    private changeDetectorRef: ChangeDetectorRef,
+    private activatedRoute: ActivatedRoute) {
 
+      console.log(this.activatedRoute.url);
   }
 
   //subscribes to the managers hoseMembersSubject
@@ -39,10 +45,12 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (!this.houseMembers && !this.selectedHouseMember) {
+    if (this.houseMembers.length == 0 && this.selectedHouseMember.getName() == "") {
       this.houseMembers = this.manager.houseMembers;
-      this.selectedHouseMember = this.manager.selectedHouseMember;
+      this.selectedHouseMember = this.houseMembers[0] ? this.houseMembers[0] : this.selectedHouseMember ; 
+      this.changeDetectorRef.detectChanges();
     }
+
   }
 
   onClickHouseMember(index: number) {

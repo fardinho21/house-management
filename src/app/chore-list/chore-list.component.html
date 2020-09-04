@@ -35,7 +35,7 @@
 
 
 
-<div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
+<div class="row" *ngIf="selectedHouseMember && selectedHouseMember.getChores().length > 0">
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
         <h4>Chore</h4>
     </div>
@@ -48,7 +48,7 @@
 
 
 
-<div class="row" *ngIf="selectedHouseMember.getChores().length > 0">
+<div class="row">
     <ul style="list-style: none;">
         <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
 

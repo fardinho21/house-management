@@ -6,7 +6,7 @@ import { Subject } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
 import { AuthService, ResponseObject, UserObject } from './auth.service';
 import { User } from './user.model';
-import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject } from './interfaces';
+import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject, ShoppingItemsObject } from './interfaces';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 
 
@@ -152,12 +152,18 @@ export class DatabaseManagerService {
 
   saveUserData(fp : FloorPlanObject, hmList: HouseMemberObject[]){
     
-    this.httpClient.put<FloorPlanObject>(
+    this.httpClient.patch<FloorPlanObject>(
       this.TEST_DB_URL + this.user.username + ".json",
       {floorPlan: fp, id: this.user.id, houseMembers: hmList}
     ).subscribe(response => {
       console.log(response)
     })
+  }
+
+  saveShoppingItems(shoppingList : ShoppingItemsObject[]) {
+
+
+
   }
 
 

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HouseMember } from "../chore-list/house-member.model";
 import { NgForm } from '@angular/forms';
 import { ManagerService } from 'src/app/shared/manager.service';
+import { DatabaseManagerService } from '../shared/database-manager.service';
+import { ShoppingItemsObject } from '../shared/interfaces';
 
 @Component({
   selector: 'app-shopping-list',
@@ -11,11 +13,12 @@ import { ManagerService } from 'src/app/shared/manager.service';
 export class ShoppingListComponent implements OnInit {
 
   addItemDisplay : boolean = false;
+  confirmClearListDisplay : boolean = false;
   houseMembers : HouseMember[];
-  shoppingItems: {name:string,amount:number,requestedBy:string}[] = []
+  shoppingItems: ShoppingItemsObject[] = []
 
 
-  constructor(private manager : ManagerService) { 
+  constructor(private manager : ManagerService, private dataBaseManager : DatabaseManagerService) { 
     this.shoppingItems = manager.getShoppingItems();
     this.houseMembers = manager.getHouseMembers();
 
@@ -36,8 +39,15 @@ export class ShoppingListComponent implements OnInit {
     this.addItemDisplay = !this.addItemDisplay;
   }
 
+  onToggleClearListDialog() {
+    this.confirmClearListDisplay = !this.confirmClearListDisplay;
+  }
+
   onClearList() {
     this.manager.clearShoppingList();
+    if (this.confirmClearListDisplay) {
+      this.confirmClearListDisplay = false;
+    }
   }
 
   onAddItem(form: NgForm) {
@@ -45,7 +55,7 @@ export class ShoppingListComponent implements OnInit {
     //console.log(form.controls);
 
     let item = {
-      name:form.controls["name"].value,
+      itemName:form.controls["name"].value,
       amount: form.controls["amount"].value,
       requestedBy: form.controls["requestedby"].value
       }
@@ -57,5 +67,11 @@ export class ShoppingListComponent implements OnInit {
   deleteItem(index : number){
     this.manager.deleteItem(index);
   } 
+
+  onSaveShoppingItems() {
+    this.dataBaseManager.saveShoppingItems(this.shoppingItems);
+  }
+
+
 
 }

@@ -62,7 +62,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     this.manager.floorPlanSubject.subscribe(loaded => {
       this.floorPlan = loaded;
       this.changeDetectorRef.detectChanges();
-      this._image.src = this.floorPlan.getImagePath();
+      this._image.src = this.floorPlan ? this.floorPlan.getImagePath() : "" ;
       setTimeout(this.initCanvasAndContext.bind(this), 1000);
     })
   }
@@ -72,7 +72,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     if (!this.floorPlan) {
       this.floorPlan = this.manager.floorPlan;
       this.changeDetectorRef.detectChanges();
-      this._image.src = this.floorPlan.getImagePath();
+      this._image.src = this.floorPlan ? this.floorPlan.getImagePath() : "" ;
       this.initCanvasAndContext();
     }
   }
@@ -124,6 +124,10 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   }
 
   private initCanvasAndContext() {
+
+    if (!this.fpCanvasRef) {
+      return
+    }
 
     this._canvas = this.fpCanvasRef.nativeElement;
     this._canvas.width = this._width;
