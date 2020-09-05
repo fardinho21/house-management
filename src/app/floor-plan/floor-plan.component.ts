@@ -46,7 +46,10 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       'orange': '#fcca03'
   }
 
-  constructor(private dataBaseManager: DatabaseManagerService, private manager: ManagerService, private changeDetectorRef : ChangeDetectorRef) {
+  constructor(
+    private dataBaseManager: DatabaseManagerService, 
+    private manager: ManagerService, 
+    private changeDetectorRef : ChangeDetectorRef) {
 
   }
 

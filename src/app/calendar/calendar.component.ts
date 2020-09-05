@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { CalendarOptions, FullCalendarComponent, Calendar, CalendarApi } from "@fullcalendar/angular";
 import { NgForm } from '@angular/forms';
 import { ManagerService } from '../shared/manager.service';
-import { EventInput, EventSourceInput } from "@fullcalendar/core";
+import { EventInput, EventSourceInput, EventInstance } from "@fullcalendar/core";
+import { EventObject } from "../shared/interfaces";
 
 @Component({
   selector: 'app-calendar',
@@ -14,6 +15,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     dateClick: this.onClickDate.bind(this),
+    eventClick: this.onClickEvent.bind(this),
+    eventMouseEnter: this.onMouseOver.bind(this),
+    eventMouseLeave: this.onMouseOver.bind(this),
     events: [
       {
         
@@ -24,6 +28,9 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   @ViewChild('calendar', { static: false }) calendar: FullCalendarComponent;
   calendarApi: CalendarApi;
   addEventDialogShow: boolean = false;
+  eventInfoDialogShow : boolean = false;
+  overDate : boolean = false;
+  selectedEvent : EventObject = {title: "", start: ""};
 
   clickedDate: Date = new Date();
 
@@ -32,6 +39,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       initialView: 'dayGridMonth',
       dateClick: this.onClickDate.bind(this),
       eventClick: this.onClickEvent.bind(this),
+      eventMouseEnter: this.onMouseOver.bind(this),
+      eventMouseLeave: this.onMouseLeave.bind(this),
       events: this.manager.getEvents()
       
     }
@@ -49,6 +58,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
         initialView: 'dayGridMonth',
         dateClick: this.onClickDate.bind(this),
         eventClick: this.onClickEvent.bind(this),
+        eventMouseEnter: this.onMouseOver.bind(this),
+        eventMouseLeave: this.onMouseOver.bind(this),
         events: eventsList
       };
     });
@@ -70,9 +81,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
     let eventName: string = form.controls["name"].value;
     let eventColor = form.controls["color"].value;
+    let time = form.controls['time'].value;
+    
     let date = this.clickedDate.toLocaleDateString().split('/');
     let copy = date.slice();
-    let parsedDate = this.parseDate(copy);
+    let parsedDate = new Date(this.parseDate(copy) + " " + time);
+    console.log(parsedDate);
     let event = {
       title: eventName,
       start: parsedDate,
@@ -87,8 +101,34 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     
   }
 
+  onMouseOver(overData) {
+    this.overDate = !this.overDate
+    console.log(overData);
+  }
+
+  onMouseLeave(leaveData) {
+    this.overDate = !this.overDate
+    console.log(leaveData)
+  }
+
+  onToggleEventInfoDialog() {
+    this.eventInfoDialogShow = !this.eventInfoDialogShow;
+  }
+
   onClickEvent(event) {
-    console.log(event.event);
+
+    this.onToggleEventInfoDialog();
+
+
+
+    this.selectedEvent = 
+    {
+      title: event.event.title,
+      start: event.event._instance.range.start
+    }
+
+
+    console.log(event);
   }
 
   private parseDate(date: string[]): string {

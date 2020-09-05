@@ -19,9 +19,9 @@ export class ShoppingListComponent implements OnInit {
 
 
   constructor(private manager : ManagerService, private dataBaseManager : DatabaseManagerService) { 
-    this.shoppingItems = manager.getShoppingItems();
-    this.houseMembers = manager.getHouseMembers();
-
+      // this.shoppingItems = manager.getShoppingItems();
+      this.houseMembers = manager.getHouseMembers();
+      this.dataBaseManager.fetchShoppingItems();
   }
 
   ngOnInit(): void {

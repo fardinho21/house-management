@@ -19,14 +19,11 @@ export class ManagerService {
   rooms: Room[] = [];
   houseMembers: HouseMember[] = []
   listOfChores : Chore[] = [];
+  shoppingItems : ShoppingItemsObject[] = [];
   selectedHouseMember: HouseMember = new HouseMember("",[]);
   user : User = null;
 
-  shoppingItems: ShoppingItemsObject[] = [
-    {itemName:"Bread",amount:3,requestedBy: 'dummy'},
-    {itemName:"Apple",amount:5,requestedBy: 'dummy'},
-    {itemName:"Paper Towel",amount:1,requestedBy: 'dummy'},
-  ]
+
   events: EventObject[] = [
     {title:"event1",start:"2020-08-04"},
     {title:"event2",start:"2020-08-03"}
@@ -136,6 +133,11 @@ export class ManagerService {
       this.setFloorPlan( new FloorPlan(loaded) );
       this.floorPlanSubject.next(this.floorPlan);
     })
+
+    this.dataBaseManager.loadedShoppingItemsSubject.subscribe(loaded => {
+      this.shoppingItems = loaded;
+      this.shoppingItemsSubject.next(this.shoppingItems);
+    }) 
 
     this.user = this.dataBaseManager.user;
 

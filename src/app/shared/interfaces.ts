@@ -41,3 +41,10 @@ export interface EventObject {
     title: string;
     start: string;
 }
+
+export interface DataObject {
+    floorPlan : FloorPlanObject;
+    houseMembers : HouseMemberObject[];
+    shoppingItems? : ShoppingItemsObject[];
+    id: string;
+}

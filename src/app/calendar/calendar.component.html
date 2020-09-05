@@ -1,12 +1,21 @@
+
+<div class="row" style="text-align: right; padding: 0.3rem;">
+    <div class="col">
+        <button class="btn btn-success" type="button"> Save Events </button> |
+        <button class="btn btn-warning" type="button">Clear Events </button>
+    </div>
+    
+</div>
 <full-calendar 
     #calendar  
     [options]="calendarOptions"
     deepChangeDetection="true"
+    [ngClass]="{over : overDate}"
 >
 
 </full-calendar>
 
-
+<!-- dialogs start -->
 <div class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addEventDialogShow ? 'block':'none'}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -27,14 +36,16 @@
                         class="form-control"
                         id="name"
                         ngModel
-                        name="name">
+                        name="name"
+                        required>
                     <label for="time">Time</label>
                     <input 
                         type="time"
                         class="form-control"
                         id="time"
                         ngModel
-                        name="time">
+                        name="time"
+                        required>
                     <label for="color">Color</label>
                     <input
                         type="color"
@@ -42,11 +53,11 @@
                         id="color"
                         ngModel
                         name="color"
-                    >
+                        required>
                 </div>
     
                 <div class="modal-footer">
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary" type="submit" [disabled]="f.invalid">
                         Add Event
                     </button>
                 </div>
@@ -59,3 +70,42 @@
     </div>
 
 </div>
+
+
+<div class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: eventInfoDialogShow ? 'block' : 'none'}">
+
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4>
+                    {{selectedEvent.title}}
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                {{selectedEvent.start}}
+            </div>
+
+            <div class="modal-footer">
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-primary" (click)="onToggleEventInfoDialog()">
+                            Close
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-warning">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- dialogs end -->

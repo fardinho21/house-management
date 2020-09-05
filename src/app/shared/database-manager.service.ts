@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Chore } from "./chore.model";
-import { map, take, exhaustMap } from "rxjs/operators";
-import { Subject } from 'rxjs';
+import { map, take, exhaustMap, subscribeOn, repeat } from "rxjs/operators";
+import { Subject, concat } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
 import { AuthService, ResponseObject, UserObject } from './auth.service';
 import { User } from './user.model';
-import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject, ShoppingItemsObject } from './interfaces';
+import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject, ShoppingItemsObject, DataObject } from './interfaces';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 
 
@@ -32,6 +32,7 @@ export class DatabaseManagerService {
   loadedChoresSubject = new Subject<ChoresObject[]>();
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
   loadedFloorPlanSubject = new Subject<FloorPlanObject>();
+  loadedShoppingItemsSubject = new Subject<ShoppingItemsObject[]>();
 
   user : User;
 
@@ -162,9 +163,44 @@ export class DatabaseManagerService {
 
   saveShoppingItems(shoppingList : ShoppingItemsObject[]) {
 
+    this.httpClient.get<DataObject>(
+      this.TEST_DB_URL + this.user.username + ".json"
+    ).subscribe(response => {
+
+      response.shoppingItems = shoppingList;
+
+      if(response.hasOwnProperty('shoppingItems')) {
+        this.httpClient.patch<ShoppingItemsObject[]>(
+          this.TEST_DB_URL + this.user.username + ".json",
+          response
+        ).subscribe(r => {
+          console.log(r)
+        })
+      } else {
+
+
+        this.httpClient.put(
+          this.TEST_DB_URL + this.user.username + ".json",
+          response
+        ).subscribe(r => {
+          console.log(r);
+        })
+      }
+
+    })
 
 
   }
 
+  fetchShoppingItems() {
+    this.httpClient.get<DataObject>(
+      this.TEST_DB_URL + this.user.username + ".json"
+    ).subscribe(response => {
+      console.log(response)
+      if (response.hasOwnProperty('shoppingItems')) {
+        this.loadedShoppingItemsSubject.next(response.shoppingItems);
+      }
+    })
+  }
 
 }
