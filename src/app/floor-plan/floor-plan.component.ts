@@ -229,17 +229,8 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
 
   selectedFloorPlan(selectedFpImage) {
     this.selectedFloorPlanIndex = selectedFpImage.explicitOriginalTarget.name;
-    //this.dataBaseManager.fetchChores(+this.selectedFloorPlanIndex);
     //this.onToggleChooseFloorPlanDialog()
   }
 
-  private parseSrcTag(src : string) : string {
-
-    let words = src.split('/');
-    let idx = words.indexOf['assets'];
-    let newary = words.slice(idx,words.length);
-    let parsedpath =  newary.join('/');
-    return parsedpath;
-  }
 
 }

@@ -25,8 +25,7 @@ export class ManagerService {
 
 
   events: EventObject[] = [
-    {title:"event1",start:"2020-08-04"},
-    {title:"event2",start:"2020-08-03"}
+
   ];
 
   //subjects
@@ -302,21 +301,52 @@ export class ManagerService {
 
 
   //services for calendar component -- start
-  addEvent(event) {
+  addEvent(event:EventObject) {
 
     this.events.push(event);
-    //console.log(this.events);
     this.eventsSubject.next(this.events);
   }
+
 
   getEvents() {
     return this.events.slice();
   }
 
-  deleteEvent(){
+  deleteEvent(event:EventObject){
 
+    let eIdx = this.findEvent(event);
+
+    this.events.splice(eIdx,1);
+
+    this.eventsSubject.next(this.events);
   }
 
+  findEvent(event:EventObject) {
+    //return this.events.findIndex( (e:EventObject) => e.title === event.title && e.start === event.start && e.backgroundColor === event.backgroundColor)
+    for (let i = 0; i < this.events.length; i++) {
+      let e = this.events[i];
+
+      let start = new Date(e.start)
+      let str = start.toUTCString();
+      let compTime = str == event.start;
+      let compTitle = e.title === event.title
+      let compColor = e.backgroundColor === event.backgroundColor
+
+      if (compTitle &&  compColor && compTime) {
+        return i;
+      }
+    }
+  }
+
+  clearEvents() {
+    this.events = [];
+    this.eventsSubject.next(this.events);
+  }
+
+  saveEvents() {
+
+  }
+  
   //services for calendar component -- end
 }
 

@@ -40,6 +40,7 @@ export interface ShoppingItemsObject {
 export interface EventObject {
     title: string;
     start: string;
+    backgroundColor: string;
 }
 
 export interface DataObject {

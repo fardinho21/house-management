@@ -18,6 +18,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     eventClick: this.onClickEvent.bind(this),
     eventMouseEnter: this.onMouseOver.bind(this),
     eventMouseLeave: this.onMouseOver.bind(this),
+    eventRemove: this.deleteEvent.bind(this),
     events: [
       {
         
@@ -25,16 +26,22 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     ]
   }
 
+
   @ViewChild('calendar', { static: false }) calendar: FullCalendarComponent;
   calendarApi: CalendarApi;
   addEventDialogShow: boolean = false;
   eventInfoDialogShow : boolean = false;
+  clearEventsConfirmDialogShow : boolean = false;
   overDate : boolean = false;
-  selectedEvent : EventObject = {title: "", start: ""};
+  selectedEvent : EventObject = {title: "", start: "", backgroundColor: ""};
+  selectedEventId : string = "";
+  numberOfEvents : number = 0;
 
   clickedDate: Date = new Date();
 
   constructor(private manager: ManagerService) {
+
+    this.numberOfEvents = manager.getEvents().length;
     this.calendarOptions = {
       initialView: 'dayGridMonth',
       dateClick: this.onClickDate.bind(this),
@@ -42,8 +49,8 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       eventMouseEnter: this.onMouseOver.bind(this),
       eventMouseLeave: this.onMouseLeave.bind(this),
       events: this.manager.getEvents()
-      
     }
+    
   }
 
   ngOnInit(): void {
@@ -54,13 +61,26 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     this.calendarApi = this.calendar.getApi();
 
     this.manager.eventsSubject.subscribe((eventsList) => {
+
+      this.numberOfEvents = eventsList.length;
+      let newlist = eventsList.map( e => {
+
+        let date = new Date(e.start); date.setHours(date.getHours() + 4);
+
+        return {
+          title: e.title,
+          start: date,
+          backgroundColor: e.backgroundColor
+        }
+      })
+
       this.calendarOptions = {
         initialView: 'dayGridMonth',
         dateClick: this.onClickDate.bind(this),
         eventClick: this.onClickEvent.bind(this),
         eventMouseEnter: this.onMouseOver.bind(this),
         eventMouseLeave: this.onMouseOver.bind(this),
-        events: eventsList
+        events: newlist
       };
     });
 
@@ -81,15 +101,18 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
     let eventName: string = form.controls["name"].value;
     let eventColor = form.controls["color"].value;
-    let time = form.controls['time'].value;
+    let time = form.controls['time'].value + ":00";
+    let timeSplit = time.split(':')
+    this.clickedDate.setHours(+timeSplit[0],+timeSplit[1],+timeSplit[2]);
+    let parsedDate = new Date(this.clickedDate)
     
-    let date = this.clickedDate.toLocaleDateString().split('/');
-    let copy = date.slice();
-    let parsedDate = new Date(this.parseDate(copy) + " " + time);
-    console.log(parsedDate);
+    parsedDate.setHours((parsedDate.getHours() - 4))
+
+
+
     let event = {
       title: eventName,
-      start: parsedDate,
+      start: parsedDate.toUTCString(),
       backgroundColor: eventColor
     };
 
@@ -103,32 +126,50 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   onMouseOver(overData) {
     this.overDate = !this.overDate
-    console.log(overData);
+    
   }
 
   onMouseLeave(leaveData) {
     this.overDate = !this.overDate
-    console.log(leaveData)
+    
   }
 
   onToggleEventInfoDialog() {
     this.eventInfoDialogShow = !this.eventInfoDialogShow;
   }
 
+  onToggleClearEventsDialog() {
+    this.clearEventsConfirmDialogShow = !this.clearEventsConfirmDialogShow;
+  }
+
+  clearEvents(){
+    this.manager.clearEvents();
+    this.onToggleClearEventsDialog();
+  }
+
   onClickEvent(event) {
 
     this.onToggleEventInfoDialog();
 
-
+    let dateString = new Date(event.event._instance.range.start);
+    let dateStr = dateString.toUTCString();
 
     this.selectedEvent = 
     {
       title: event.event.title,
-      start: event.event._instance.range.start
+      start: dateStr,
+      backgroundColor: event.event._def.ui.backgroundColor
     }
 
+  }
 
-    console.log(event);
+  deleteEvent() {
+    this.manager.deleteEvent(this.selectedEvent);
+    this.eventInfoDialogShow = !this.eventInfoDialogShow;
+  }
+
+  saveEvents() {
+    this.manager.saveEvents();
   }
 
   private parseDate(date: string[]): string {
