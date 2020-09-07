@@ -6,8 +6,16 @@ import { Subject, concat } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
 import { AuthService, ResponseObject, UserObject } from './auth.service';
 import { User } from './user.model';
-import { RoomObject, ChoresObject, HouseMemberObject, FloorPlanObject, ShoppingItemsObject, DataObject } from './interfaces';
+import { 
+  RoomObject,
+  ChoresObject,
+  HouseMemberObject,
+  FloorPlanObject,
+  ShoppingItemsObject,
+  DataObject,
+  EventObject } from './interfaces';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
+import { Data } from '@angular/router';
 
 
 
@@ -26,13 +34,17 @@ export class DatabaseManagerService {
 
   loadedChores: ChoresObject[] = [];
   loadedRooms: RoomObject[] = [];
-  
+  loadedEvents : EventObject[] = [];
+  loadedFloorPlan : FloorPlanObject;
   loadedHouseMembers: HouseMemberObject[] = [];
+  loadedId : string = "";
+  
   loadedRoomsSubject = new Subject<RoomObject[]>();
   loadedChoresSubject = new Subject<ChoresObject[]>();
   loadedHouseMembersSubject = new Subject<HouseMemberObject[]>();
   loadedFloorPlanSubject = new Subject<FloorPlanObject>();
   loadedShoppingItemsSubject = new Subject<ShoppingItemsObject[]>();
+  loadedEventsSubject = new Subject<EventObject[]>();
 
   user : User;
 
@@ -67,15 +79,22 @@ export class DatabaseManagerService {
   }
 
   fetchUserData() {
-    this.httpClient.get<{id: string; floorPlan: FloorPlanObject; houseMembers: HouseMemberObject[]}>(
+    this.httpClient.get<DataObject>(
       this.TEST_DB_URL + this.user.username + ".json"
     ).subscribe(response => {
       console.log(response);
+      this.loadedId = response.id;
       if (response.hasOwnProperty('floorPlan')) {
+        
+        this.loadedFloorPlan = response.floorPlan;
         this.loadedFloorPlanSubject.next(response.floorPlan);    
       }
       if (response.hasOwnProperty('houseMembers')) {
+        this.loadedHouseMembers = response.houseMembers;
         this.loadedHouseMembersSubject.next(response.houseMembers);  
+      } if (response.hasOwnProperty('events'))  {
+        this.loadedEvents = response.events;
+        this.loadedEventsSubject.next(response.events);
       }
     })
   }
@@ -129,6 +148,49 @@ export class DatabaseManagerService {
       if (response.hasOwnProperty('shoppingItems')) {
         this.loadedShoppingItemsSubject.next(response.shoppingItems);
       }
+    })
+  }
+
+  saveEvents(events: EventObject[]) {
+
+
+    console.log(events)
+    
+
+    this.httpClient.get<DataObject>(
+      this.TEST_DB_URL + this.user.username + ".json"
+    ).subscribe(response => {
+      
+      if (response.hasOwnProperty('events')) {
+        response.events = events;
+        this.httpClient.patch<EventObject[]>(
+          this.TEST_DB_URL + this.user.username + ".json",
+          response
+        ).subscribe(res => {
+          console.log(res)
+        })
+      } else {
+        response.events = events;
+        this.httpClient.put<EventObject[]>(
+          this.TEST_DB_URL + this.user.username + ".json",
+          response
+        ).subscribe(res => {
+          console.log(res)
+        })
+      }
+    })
+  }
+
+  fetchEvents() {
+    
+
+    this.httpClient.get<DataObject>(
+      this.TEST_DB_URL + this.user.username + ".json"
+    ).subscribe(response => {
+      if (response.hasOwnProperty('events')) {
+        this.loadedEvents = response.events;
+        this.loadedEventsSubject.next(this.loadedEvents);
+      } 
     })
   }
 

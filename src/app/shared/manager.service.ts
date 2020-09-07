@@ -138,6 +138,11 @@ export class ManagerService {
       this.shoppingItemsSubject.next(this.shoppingItems);
     }) 
 
+    this.dataBaseManager.loadedEventsSubject.subscribe(loaded => {
+      this.events = loaded;
+      this.eventsSubject.next(this.events);
+    })
+    
     this.user = this.dataBaseManager.user;
 
   }
@@ -344,9 +349,9 @@ export class ManagerService {
   }
 
   saveEvents() {
-
+    this.dataBaseManager.saveEvents(this.events)
   }
-  
+
   //services for calendar component -- end
 }
 

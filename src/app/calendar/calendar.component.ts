@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CalendarOptions, FullCalendarComponent, Calendar, CalendarApi } from "@fullcalendar/angular";
 import { NgForm } from '@angular/forms';
 import { ManagerService } from '../shared/manager.service';
@@ -39,26 +39,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   clickedDate: Date = new Date();
 
-  constructor(private manager: ManagerService) {
-
-    this.numberOfEvents = manager.getEvents().length;
-    this.calendarOptions = {
-      initialView: 'dayGridMonth',
-      dateClick: this.onClickDate.bind(this),
-      eventClick: this.onClickEvent.bind(this),
-      eventMouseEnter: this.onMouseOver.bind(this),
-      eventMouseLeave: this.onMouseLeave.bind(this),
-      events: this.manager.getEvents()
-    }
-    
-  }
-
-  ngOnInit(): void {
-
-  }
-
-  ngAfterViewInit() {
-    this.calendarApi = this.calendar.getApi();
+  constructor(private manager: ManagerService, private changeDetectorRef: ChangeDetectorRef) { 
 
     this.manager.eventsSubject.subscribe((eventsList) => {
 
@@ -84,6 +65,37 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       };
     });
 
+
+
+  }
+
+  ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit() {
+    this.calendarApi = this.calendar.getApi();
+    this.numberOfEvents = this.manager.getEvents().length;
+    this.calendarOptions = {
+      initialView: 'dayGridMonth',
+      dateClick: this.onClickDate.bind(this),
+      eventClick: this.onClickEvent.bind(this),
+      eventMouseEnter: this.onMouseOver.bind(this),
+      eventMouseLeave: this.onMouseLeave.bind(this),
+      events: this.manager.getEvents().map(e => {
+        let date = new Date(e.start); date.setHours(date.getHours() + 4);
+
+        return {
+          title: e.title,
+          start: date,
+          backgroundColor: e.backgroundColor
+        }
+      })
+    }
+
+    this.calendarApi.refetchEvents()
+    
+    this.changeDetectorRef.detectChanges();
   }
 
   onToggleAddEventDialog() {

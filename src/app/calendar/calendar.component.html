@@ -1,7 +1,7 @@
 
 <div class="row" style="text-align: right; padding: 0.3rem;">
     <div class="col">
-        <button class="btn btn-success" type="button"> Save Events </button> |
+        <button class="btn btn-success" type="button" (click)="saveEvents()"> Save Events </button> |
         <button class="btn btn-warning" type="button" [disabled]="numberOfEvents == 0" (click)="onToggleClearEventsDialog()">Clear Events </button>
     </div>
     

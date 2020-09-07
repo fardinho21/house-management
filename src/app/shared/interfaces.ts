@@ -47,5 +47,6 @@ export interface DataObject {
     floorPlan : FloorPlanObject;
     houseMembers : HouseMemberObject[];
     shoppingItems? : ShoppingItemsObject[];
+    events? : EventObject[];
     id: string;
 }
