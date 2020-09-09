@@ -4,21 +4,8 @@ import { throwError, BehaviorSubject } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./user.model";
 import { DatabaseManagerService } from './database-manager.service';
+import { UserObject, ResponseObject } from "../shared/interfaces";
 
-export interface UserObject{
-  email: string;
-  password: string;
-  returnSecureToken: true;
-}
-
-export interface ResponseObject {
-  idToken: string;
-  email: string;
-  refreshToken: string;
-  expiresIn: string;
-  localId: string;
-  registered?: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +18,7 @@ export class AuthService {
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private SIGN_UP_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
   private LOG_IN_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key="
+  private LOOK_UP_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key="
 
   constructor(private httpClient : HttpClient) { }
 
@@ -49,9 +37,16 @@ export class AuthService {
       this.LOG_IN_URL + this.API_KEY,
       user
     ).pipe(catchError(this.handleError), tap(response => {
-      console.log(response)
+      //console.log(response)
       this.handleAuthentication(response);
     }));
+  }
+
+  getAccountInfo(idToken : string) {
+    // this.httpClient.post(
+    //   this.LOOK_UP_URL + this.API_KEY,
+
+    // )
   }
 
   private handleError(errorRes: HttpErrorResponse) {

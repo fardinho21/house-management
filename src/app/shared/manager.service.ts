@@ -4,7 +4,6 @@ import { HouseMember } from '../chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
 import { Subject } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
-import { AuthService } from './auth.service';
 import { User } from './user.model';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 import { ShoppingItemsObject, EventObject } from './interfaces';
@@ -125,7 +124,7 @@ export class ManagerService {
       this.houseMembers = runningList.slice();
       this.houseMembersSubject.next(this.houseMembers.slice())
       this.selectedHouseMemberSubject.next(this.houseMembers[0]);
-      console.log(this.houseMembers);
+      //console.log(this.houseMembers);
     })
 
     this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {

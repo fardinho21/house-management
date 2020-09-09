@@ -16,7 +16,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class ChoreListComponent implements OnInit, AfterViewInit {
 
   addHouseMemberShowDialog: boolean = false;
-
+  shareLinkShowDialog: boolean = false;
+  baseLink : string = "http://localhost:4200/";
+  shareLink : string = this.baseLink;
   houseMembers : HouseMember[] = [];
   selectedHouseMember: HouseMember = new HouseMember("",[]);
 
@@ -24,15 +26,17 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     private manager: ManagerService, 
     private dataBaseManager : DatabaseManagerService, 
     private changeDetectorRef: ChangeDetectorRef,
-    private activatedRoute: ActivatedRoute) {
+    private activatedRoute : ActivatedRoute) {
 
-      console.log(this.activatedRoute.url);
+      this.baseLink = "http://localhost:4200/" + this.activatedRoute.snapshot.url.toString().split(',').join('/');
+      
   }
 
   //subscribes to the managers hoseMembersSubject
   ngOnInit(): void {
     if (this.houseMembers.length) {
       this.selectedHouseMember = this.houseMembers[0];
+      
     }
 
     this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
@@ -41,6 +45,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.manager.selectedHouseMemberSubject.subscribe(selected => {
       this.selectedHouseMember = selected;
+      this.shareLink = this.baseLink + "/0";
     });
   }
 
@@ -55,6 +60,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   onClickHouseMember(index: number) {
     this.selectedHouseMember = this.houseMembers[index];
+    this.shareLink = this.baseLink + "/" + index;
   }
 
   onDone(chore: Chore) {
@@ -65,6 +71,10 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   toggleHouseMemberDialog() {
     this.addHouseMemberShowDialog = !this.addHouseMemberShowDialog;
+  }
+
+  toggleShareLinkDialog() {
+    this.shareLinkShowDialog = !this.shareLinkShowDialog;
   }
 
   onAssignChores() {
@@ -90,7 +100,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.dataBaseManager.saveUserData(fp, hmList);
   }
-
 
   //database methods end
 }

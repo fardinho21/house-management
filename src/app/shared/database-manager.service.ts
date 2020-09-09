@@ -82,7 +82,7 @@ export class DatabaseManagerService {
     this.httpClient.get<DataObject>(
       this.TEST_DB_URL + this.user.username + ".json"
     ).subscribe(response => {
-      console.log(response);
+      //console.log(response);
       this.loadedId = response.id;
       if (response.hasOwnProperty('floorPlan')) {
         
@@ -105,7 +105,7 @@ export class DatabaseManagerService {
       this.TEST_DB_URL + this.user.username + ".json",
       {floorPlan: fp, id: this.user.id, houseMembers: hmList}
     ).subscribe(response => {
-      console.log(response)
+      //console.log(response)
     })
   }
 
@@ -122,7 +122,7 @@ export class DatabaseManagerService {
           this.TEST_DB_URL + this.user.username + ".json",
           response
         ).subscribe(r => {
-          console.log(r)
+          //console.log(r)
         })
       } else {
 
@@ -131,7 +131,7 @@ export class DatabaseManagerService {
           this.TEST_DB_URL + this.user.username + ".json",
           response
         ).subscribe(r => {
-          console.log(r);
+          //console.log(r);
         })
       }
 
@@ -144,7 +144,7 @@ export class DatabaseManagerService {
     this.httpClient.get<DataObject>(
       this.TEST_DB_URL + this.user.username + ".json"
     ).subscribe(response => {
-      console.log(response)
+      //console.log(response)
       if (response.hasOwnProperty('shoppingItems')) {
         this.loadedShoppingItemsSubject.next(response.shoppingItems);
       }
@@ -154,7 +154,7 @@ export class DatabaseManagerService {
   saveEvents(events: EventObject[]) {
 
 
-    console.log(events)
+    //console.log(events)
     
 
     this.httpClient.get<DataObject>(
@@ -167,7 +167,7 @@ export class DatabaseManagerService {
           this.TEST_DB_URL + this.user.username + ".json",
           response
         ).subscribe(res => {
-          console.log(res)
+          //console.log(res)
         })
       } else {
         response.events = events;
@@ -175,7 +175,7 @@ export class DatabaseManagerService {
           this.TEST_DB_URL + this.user.username + ".json",
           response
         ).subscribe(res => {
-          console.log(res)
+          //console.log(res)
         })
       }
     })

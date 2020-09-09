@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from './shared/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,14 @@ export class AppComponent {
 
   loggedIn: boolean = true;
 
-  constructor(router: Router) {
+  constructor(router: Router, activatedRoute : ActivatedRoute, authService : AuthService) {
+
+    let tokens = activatedRoute.snapshot.url.toString().split(',')
+
+    if (tokens.length == 3) {
+      //authService.logIn();
+    }
+
     router.navigate(["/authPage"])
   }
 }

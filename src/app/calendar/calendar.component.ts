@@ -104,7 +104,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   onClickDate(event) {
     this.clickedDate = event.date;
-    console.log(this.clickedDate.toLocaleDateString());
+    //console.log(this.clickedDate.toLocaleDateString());
     this.onToggleAddEventDialog();
   }
 

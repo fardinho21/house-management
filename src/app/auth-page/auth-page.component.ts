@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { AuthService, UserObject, ResponseObject } from '../shared/auth.service'
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth-page',
@@ -16,9 +16,12 @@ export class AuthPageComponent implements OnInit {
   isLoading : boolean = false;
   errorMessage : string;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private activatedRoute : ActivatedRoute) { }
 
   ngOnInit(): void {
+
+    this.activatedRoute.snapshot.params['mike']
+
   }
 
   switchMode() {
@@ -50,7 +53,8 @@ export class AuthPageComponent implements OnInit {
 
     authObservable.subscribe(response => {
       console.log(response);
-      this.router.navigate(['/choresAndFloorPlan'])
+      
+      this.router.navigate(['/choresAndFloorPlan/' + response.email.split('@')[0] ])
       this.isLoading = false;
     }, errorMsg => {
       this.errorMessage = errorMsg;

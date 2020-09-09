@@ -9,20 +9,18 @@
     </div>
 </div>
 
-
 <div class="container">
     <div class="row">
         <div class="col">
             <button type="button" class="btn btn-secondary" style="border: 1px solid rgb(119, 115, 115)" (click)="toggleHouseMemberDialog()">Add House Member</button> |
             <button type="button" class="btn btn-success" (click)="onSaveData()" [disabled]="houseMembers.length == 0">Save Data</button> |
-            <button type="button" class="btn btn-success" (click)="onAssignChores()" [disabled]="houseMembers.length == 0">Assign Chores</button>
+            <button type="button" class="btn btn-success" (click)="onAssignChores()" [disabled]="houseMembers.length == 0">Assign Chores</button> |
+            <button class="btn btn-primary" (click)="toggleShareLinkDialog()" [disabled]="houseMembers.length == 0">Share Link</button>
         </div>
     </div>    
 </div>
 
-
 <hr>
-
 
 <ul class="nav nav-tabs">
     <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}">
@@ -32,9 +30,6 @@
     </li>
 </ul>
 
-
-
-
 <div class="row" *ngIf="selectedHouseMember && selectedHouseMember.getChores().length > 0">
     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
         <h4>Chore</h4>
@@ -43,10 +38,6 @@
         <h4>Room</h4>
     </div>
 </div>
-
-
-
-
 
 <div class="row">
     <ul style="list-style: none;">
@@ -88,10 +79,8 @@
     </div>
 </div>
 
-
-
 <hr>
-
+<!-- add housemem dialog start -->
 <div #addHouseMem class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: addHouseMemberShowDialog ? 'block' : 'none'}">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -128,3 +117,27 @@
         </div>
     </div>
 </div>
+<!-- add housemem dialog end -->
+
+
+<!-- share link dialog start -->
+<div class="modal modal-backdrop" tabindex="-1" role="dialog" [ngStyle]="{display: shareLinkShowDialog ? 'block' : 'none'}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Share Link to {{selectedHouseMember.getName()}}
+                </h5>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>{{shareLink}}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" (click)="toggleShareLinkDialog()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- share link dialog end -->

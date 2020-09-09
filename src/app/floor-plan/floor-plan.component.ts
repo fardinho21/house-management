@@ -21,7 +21,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   @ViewChild('fpCanvas', { static: false }) set fpCanvas(canvas: ElementRef) {
 
     if (canvas){
-      console.log(canvas)
+      //console.log(canvas)
       this.fpCanvasRef = canvas;
     }
     
@@ -117,7 +117,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
     let rect = this._canvas.getBoundingClientRect();
     let xLoc = (mouseclick.clientX - rect.left)|0;
     let yLoc = (mouseclick.clientY - rect.top)|0;
-    console.log(xLoc + " " + yLoc);
+    //console.log(xLoc + " " + yLoc);
     let room: Room = this.checkClickInsideRoom(xLoc, yLoc);
 
     if (room !== null) {

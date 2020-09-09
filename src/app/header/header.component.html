@@ -1,7 +1,8 @@
 
 <nav class="navbar navbar-default">
         <div class="navbar-header">
-            <a routerLink="" class="navbar-brand">House Management</a>
+            <a routerLink="" *ngIf="!isHouseMem" class="navbar-brand">House Management</a>
+            <a *ngIf="isHouseMem" class="navbar-brand">House Management</a>
         </div>
 
         <ul class="nav nav-pills" >

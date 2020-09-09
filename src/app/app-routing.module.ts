@@ -7,8 +7,10 @@ import { AuthPageComponent } from './auth-page/auth-page.component';
 
 const routes: Routes = [
   {path: "", redirectTo: "authPage", pathMatch: "full"},
-  {path: "choresAndFloorPlan", component: ChoresAndFplanComponent} ,
-  {path: "shoppingListAndCalendar", component: ShoplistAndCalComponent} ,
+  {path: "choresAndFloorPlan/:token", component: ChoresAndFplanComponent},
+  {path: "choresAndFloorPlan/:token/:id", component: ChoresAndFplanComponent},
+  {path: "shoppingListAndCalendar/:token", component: ShoplistAndCalComponent},
+  {path: "shoppingListAndCalendar/:token/:id", component: ShoplistAndCalComponent},
   {path: "authPage", component: AuthPageComponent}
 
 ];

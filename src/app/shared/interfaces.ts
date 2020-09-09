@@ -50,3 +50,19 @@ export interface DataObject {
     events? : EventObject[];
     id: string;
 }
+
+
+export interface UserObject{
+    email: string;
+    password: string;
+    returnSecureToken: true;
+  }
+  
+  export interface ResponseObject {
+    idToken: string;
+    email: string;
+    refreshToken: string;
+    expiresIn: string;
+    localId: string;
+    registered?: boolean;
+  }
