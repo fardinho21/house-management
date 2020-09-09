@@ -56,7 +56,7 @@ export interface UserObject{
     email: string;
     password: string;
     returnSecureToken: true;
-  }
+}
   
   export interface ResponseObject {
     idToken: string;
@@ -65,4 +65,12 @@ export interface UserObject{
     expiresIn: string;
     localId: string;
     registered?: boolean;
-  }
+}
+
+export interface AccountDataObject {
+    email: string;
+    localId: string;
+    tokenId: string;
+    expiresIn: number;
+    houseMemberIndex: number;
+}

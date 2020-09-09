@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService, UserObject, ResponseObject } from '../shared/auth.service'
+import { AuthService } from '../shared/auth.service'
 import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UserObject, ResponseObject } from "../shared/interfaces";
 
 @Component({
   selector: 'app-auth-page',
@@ -54,7 +55,7 @@ export class AuthPageComponent implements OnInit {
     authObservable.subscribe(response => {
       console.log(response);
       
-      this.router.navigate(['/choresAndFloorPlan/' + response.email.split('@')[0] ])
+      this.router.navigate(['/choresAndFloorPlan/' + response.idToken ])
       this.isLoading = false;
     }, errorMsg => {
       this.errorMessage = errorMsg;

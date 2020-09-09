@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError, BehaviorSubject } from "rxjs";
+import { throwError, BehaviorSubject, Subject } from "rxjs";
 import { catchError, tap } from "rxjs/operators";
 import { User } from "./user.model";
 import { DatabaseManagerService } from './database-manager.service';
-import { UserObject, ResponseObject } from "../shared/interfaces";
+import { UserObject, ResponseObject, AccountDataObject } from "../shared/interfaces";
 
 
 @Injectable({
@@ -12,8 +12,10 @@ import { UserObject, ResponseObject } from "../shared/interfaces";
 })
 export class AuthService {
 
-  userSubject = new BehaviorSubject<User>(null);
+  userSubject = new Subject<User>();
+  getInfoSubject = new Subject<string>();
   token : string = null;
+  isHouseMember : boolean = false;
 
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private SIGN_UP_URL : string = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key="
@@ -42,11 +44,38 @@ export class AuthService {
     }));
   }
 
-  getAccountInfo(idToken : string) {
-    // this.httpClient.post(
-    //   this.LOOK_UP_URL + this.API_KEY,
+  getAccountInfo(idToken : string, hMidx : number) {
+    this.httpClient.post<any>(
+      this.LOOK_UP_URL + this.API_KEY,
+      {idToken: idToken}
+    ).subscribe(response => {
 
-    // )
+      const userData = response.users[0]
+
+      let accData : AccountDataObject = {
+        email: userData.email,
+        localId: userData.localId,
+        tokenId: idToken,
+        expiresIn: 6000000,
+        houseMemberIndex: hMidx
+      }
+
+      this.logInAsHouseMember(accData);
+    })
+  }
+
+  private logInAsHouseMember(accountData : AccountDataObject) {
+    const expirationDate = new Date(new Date().getTime() + +accountData.expiresIn);
+    let user = new User (
+      accountData.email,
+      accountData.localId,
+      accountData.tokenId,
+      expirationDate);
+
+    user.registered = true;
+    user.houseMemberIndex = accountData.houseMemberIndex;
+    this.isHouseMember = true;
+    this.userSubject.next(user);
   }
 
   private handleError(errorRes: HttpErrorResponse) {

@@ -14,12 +14,18 @@ export class AppComponent {
 
   constructor(router: Router, activatedRoute : ActivatedRoute, authService : AuthService) {
 
-    let tokens = activatedRoute.snapshot.url.toString().split(',')
+    authService.getInfoSubject.subscribe(accountInfo => {
+      //if (  ) 
+    })
 
-    if (tokens.length == 3) {
-      //authService.logIn();
+    let tokens = window.location.href.split('/');
+
+    if (tokens.length == 6){
+      authService.getAccountInfo(tokens[4], +tokens[5]);
+    } else {
+      router.navigate(["/authPage"])
     }
 
-    router.navigate(["/authPage"])
+    
   }
 }

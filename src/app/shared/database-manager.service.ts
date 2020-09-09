@@ -4,7 +4,7 @@ import { Chore } from "./chore.model";
 import { map, take, exhaustMap, subscribeOn, repeat } from "rxjs/operators";
 import { Subject, concat } from 'rxjs';
 import { HouseMember } from '../chore-list/house-member.model';
-import { AuthService, ResponseObject, UserObject } from './auth.service';
+import { AuthService } from './auth.service';
 import { User } from './user.model';
 import { 
   RoomObject,
@@ -13,7 +13,9 @@ import {
   FloorPlanObject,
   ShoppingItemsObject,
   DataObject,
-  EventObject } from './interfaces';
+  EventObject,
+  UserObject,
+  ResponseObject } from './interfaces';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 import { Data } from '@angular/router';
 
