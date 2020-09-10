@@ -7,10 +7,10 @@
 
         <ul class="nav nav-pills" >
             <li *ngIf="isAuthed">
-                <a routerLink="/choresAndFloorPlan"><h5>Chores</h5></a>
+                <a [routerLink]="choresLinkAsHm"><h5>Chores</h5></a>
             </li>
             <li *ngIf="isAuthed">
-                <a routerLink="/shoppingListAndCalendar"><h5>Shopping and Calendar</h5></a>
+                <a [routerLink]="shopCalLinkAsHm"><h5>Shopping and Calendar</h5></a>
             </li>
 
             <li class="nav navbar-right" *ngIf="isAuthed">

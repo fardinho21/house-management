@@ -58,7 +58,7 @@ export interface UserObject{
     returnSecureToken: true;
 }
   
-  export interface ResponseObject {
+export interface ResponseObject {
     idToken: string;
     email: string;
     refreshToken: string;

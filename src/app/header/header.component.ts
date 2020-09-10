@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../shared/auth.service';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AccountDataObject } from '../shared/interfaces';
+import { TagPlaceholder } from '@angular/compiler/src/i18n/i18n_ast';
 
 @Component({
   selector: 'app-header',
@@ -11,19 +13,33 @@ import { ActivatedRoute } from '@angular/router';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   private userSub : Subscription;
+  choresLinkAsHm : string = "/choresAndFloorPlan/";
+  shopCalLinkAsHm : string = "/shoppingListAndCalendar/";
 
   isAuthed : boolean = false;
   isHouseMem : boolean = false;
+  
 
-  constructor(private authService: AuthService, private activatedRoute : ActivatedRoute) { }
+  constructor(private authService: AuthService, private activatedRoute : ActivatedRoute, private router : Router) { 
+
+  }
 
   ngOnInit(): void {
 
     this.userSub = this.authService.userSubject.subscribe(user => {
       this.isAuthed = !!user;
+      this.choresLinkAsHm = this.choresLinkAsHm + user.token;
+      this.shopCalLinkAsHm = this.shopCalLinkAsHm + user.token;
     });
 
-    this.isHouseMem = this.activatedRoute.snapshot.params['id'] ? true : false;
+    this.authService.tokenSubject.subscribe((data : {token:string;hmIdx:number} )=> {
+      this.isAuthed = true;
+      this.isHouseMem = true;
+      let tag = data.token + "/" + data.hmIdx;
+      this.choresLinkAsHm = this.choresLinkAsHm + tag;
+      this.shopCalLinkAsHm = this.shopCalLinkAsHm + tag;
+    })
+
 
   }
 

@@ -14,7 +14,7 @@ export class AppComponent {
 
   constructor(router: Router, activatedRoute : ActivatedRoute, authService : AuthService) {
 
-    authService.getInfoSubject.subscribe(accountInfo => {
+    authService.tokenSubject.subscribe(accountInfo => {
       //if (  ) 
     })
 

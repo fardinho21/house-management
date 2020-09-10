@@ -12,8 +12,9 @@ import { UserObject, ResponseObject, AccountDataObject } from "../shared/interfa
 })
 export class AuthService {
 
+  userBehaviorSubject = new BehaviorSubject<User>(null);
   userSubject = new Subject<User>();
-  getInfoSubject = new Subject<string>();
+  tokenSubject = new Subject<{token:string;hmIdx?:number}>();
   token : string = null;
   isHouseMember : boolean = false;
 
@@ -76,6 +77,8 @@ export class AuthService {
     user.houseMemberIndex = accountData.houseMemberIndex;
     this.isHouseMember = true;
     this.userSubject.next(user);
+    this.userBehaviorSubject.next(user);
+    this.tokenSubject.next({token: accountData.tokenId, hmIdx: accountData.houseMemberIndex });
   }
 
   private handleError(errorRes: HttpErrorResponse) {
@@ -113,6 +116,7 @@ export class AuthService {
 
     user.registered = regi ? true : false;
     this.userSubject.next(user);
+    this.userBehaviorSubject.next(user)
   }
 
 }

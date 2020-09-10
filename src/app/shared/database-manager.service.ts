@@ -26,10 +26,6 @@ import { Data } from '@angular/router';
 })
 export class DatabaseManagerService {
 
-  private testRooms = {
-    dummyData: "dummy"
-  };
-
   private API_KEY : string = "AIzaSyAyrcG6wvwGAaGp0GE1BcrxPnDsipuTWF0";
   private DATA_BASE_URL : string = "https://house-management-ffa58.firebaseio.com/";
   private TEST_DB_URL : string = "https://test1-cf6d9.firebaseio.com/";
@@ -51,14 +47,19 @@ export class DatabaseManagerService {
   user : User;
 
   constructor(private httpClient : HttpClient, private authService : AuthService) {
-    this.authService.userSubject.subscribe(user => {
-      this.user = user;
-      let reg = this.user.registered ? true : false;
-      if (!reg){
-        this.createUser(user.username, user.id);
-      } else {
-        this.fetchUserData();
+    this.authService.userBehaviorSubject.subscribe(user => {
+
+      if (user ) {
+        this.user = user;
+        let reg = this.user.registered ? true : false;
+        if (!reg){
+          this.createUser(user.username, user.id);
+        } else {
+          this.fetchUserData();
+        }
       }
+
+
     })
   }
 
