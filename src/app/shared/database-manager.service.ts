@@ -43,12 +43,11 @@ export class DatabaseManagerService {
   loadedFloorPlanSubject = new Subject<FloorPlanObject>();
   loadedShoppingItemsSubject = new Subject<ShoppingItemsObject[]>();
   loadedEventsSubject = new Subject<EventObject[]>();
-
-  user : User;
+  loadedUserSubject = new Subject<User>();
+  user : User = null;
 
   constructor(private httpClient : HttpClient, private authService : AuthService) {
     this.authService.userBehaviorSubject.subscribe(user => {
-
       if (user ) {
         this.user = user;
         let reg = this.user.registered ? true : false;
@@ -59,7 +58,7 @@ export class DatabaseManagerService {
         }
       }
 
-
+      this.loadedUserSubject.next(user);
     })
   }
 

@@ -1,6 +1,6 @@
 export class User {
 
-    private _houseMemberIndex = null;
+    private _houseMemberIndex = -1;
 
     constructor(
         public username: string, 

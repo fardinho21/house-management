@@ -23,7 +23,7 @@
 <hr>
 
 <ul class="nav nav-tabs">
-    <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}">
+    <li *ngFor="let houseMember of houseMembers; let i = index" [ngClass]="{active : selectedHouseMember.getName() === houseMember.getName()}" >
         <a (click)="onClickHouseMember(i)" >
             {{houseMember.getName()}}
         </a>
@@ -41,7 +41,7 @@
 
 <div class="row">
     <ul style="list-style: none;">
-        <li *ngFor="let chores of selectedHouseMember.getChores(); let i = index">
+        <li *ngFor="let chores of selectedHouseMember.getChores();">
 
             <div class="row" style="width: 600px;">
                 <div class=" col-lg-4 col-md-6 col-sm-4 col-xs-4">
@@ -51,7 +51,7 @@
                     {{chores.getJSONObject().parentRoom | camelToSpace | lowercase}}
                 </div>
                 <div class=" col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
-                    <button type="button" (click)="onDone(chores)">
+                    <button class="btn btn-primary" type="button" [disabled]="myIndex != selectedIndex" (click)="onDone(chores)">
                         Done
                     </button>
                 </div>

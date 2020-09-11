@@ -7,6 +7,7 @@ import { DatabaseManagerService } from './database-manager.service';
 import { User } from './user.model';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
 import { ShoppingItemsObject, EventObject } from './interfaces';
+import { RouteConfigLoadEnd } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -142,8 +143,9 @@ export class ManagerService {
       this.eventsSubject.next(this.events);
     })
     
-    this.user = this.dataBaseManager.user;
-
+    this.dataBaseManager.loadedUserSubject.subscribe(loaded => {
+      this.user = loaded;
+    })
   }
 
 

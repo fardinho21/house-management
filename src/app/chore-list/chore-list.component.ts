@@ -21,9 +21,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   shareLink : string = this.baseLink;
   houseMembers : HouseMember[] = [];
   selectedHouseMember: HouseMember = new HouseMember("",[]);
+  myIndex : number = -1;
+  selectedIndex : number = -1;
 
   constructor(
-    private manager: ManagerService, 
+    public manager: ManagerService, 
     private dataBaseManager : DatabaseManagerService, 
     private changeDetectorRef: ChangeDetectorRef,
     private activatedRoute : ActivatedRoute) {
@@ -36,7 +38,6 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     if (this.houseMembers.length) {
       this.selectedHouseMember = this.houseMembers[0];
-      
     }
 
     this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
@@ -47,6 +48,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
       this.selectedHouseMember = selected;
       this.shareLink = this.baseLink + "/0";
     });
+
+    this.dataBaseManager.loadedUserSubject.subscribe(loaded => {
+      this.myIndex = loaded.houseMemberIndex;
+    })
+
   }
 
   ngAfterViewInit() {
@@ -55,10 +61,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
       this.selectedHouseMember = this.houseMembers[0] ? this.houseMembers[0] : this.selectedHouseMember ; 
       this.changeDetectorRef.detectChanges();
     }
-
+    
   }
 
   onClickHouseMember(index: number) {
+    this.selectedIndex = index;
     this.selectedHouseMember = this.houseMembers[index];
     this.shareLink = this.baseLink + "/" + index;
   }
