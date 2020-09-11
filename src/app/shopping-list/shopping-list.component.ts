@@ -18,7 +18,7 @@ export class ShoppingListComponent implements OnInit {
   shoppingItems: ShoppingItemsObject[] = []
 
 
-  constructor(private manager : ManagerService, private dataBaseManager : DatabaseManagerService) { 
+  constructor(public manager : ManagerService, private dataBaseManager : DatabaseManagerService) { 
       // this.shoppingItems = manager.getShoppingItems();
       this.houseMembers = manager.getHouseMembers();
       this.dataBaseManager.fetchShoppingItems();
