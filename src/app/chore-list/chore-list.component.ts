@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { DatabaseManagerService } from 'src/app/shared/database-manager.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     public manager: ManagerService, 
     private dataBaseManager : DatabaseManagerService, 
     private changeDetectorRef: ChangeDetectorRef,
-    private activatedRoute : ActivatedRoute) {
+    private activatedRoute : ActivatedRoute,
+    private clipboard : Clipboard) {
 
       this.baseLink = "http://localhost:4200/" + this.activatedRoute.snapshot.url.toString().split(',').join('/');
       
@@ -36,6 +38,8 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
   //subscribes to the managers hoseMembersSubject
   ngOnInit(): void {
+
+
     if (this.houseMembers.length) {
       this.selectedHouseMember = this.houseMembers[0];
     }
@@ -68,6 +72,11 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
     this.selectedIndex = index;
     this.selectedHouseMember = this.houseMembers[index];
     this.shareLink = this.baseLink + "/" + index;
+  }
+
+  copyToClipboard(){
+    this.clipboard.copy(this.shareLink)
+    alert("copied link!")
   }
 
   onDone(chore: Chore) {
@@ -107,6 +116,7 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
 
     this.dataBaseManager.saveUserData(fp, hmList);
   }
+
 
   //database methods end
 }

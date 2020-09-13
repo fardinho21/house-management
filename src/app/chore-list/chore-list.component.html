@@ -1,24 +1,14 @@
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <h4>
-                Chores
-            </h4>
-        </div>
-    </div>
-</div>
 
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <button type="button" class="btn btn-secondary" style="border: 1px solid rgb(119, 115, 115)" (click)="toggleHouseMemberDialog()">Add House Member</button> |
-            <button type="button" class="btn btn-success" (click)="onSaveData()" [disabled]="houseMembers.length == 0">Save Data</button> |
-            <button type="button" class="btn btn-success" (click)="onAssignChores()" [disabled]="houseMembers.length == 0">Assign Chores</button> |
-            <button class="btn btn-primary" (click)="toggleShareLinkDialog()" [disabled]="houseMembers.length == 0">Share Link</button>
-        </div>
-    </div>    
-</div>
+<h4>
+    Chores
+</h4>
+
+
+<button type="button" class="btn btn-secondary" style="margin: 0.5rem ;border: 1px solid rgb(119, 115, 115)" (click)="toggleHouseMemberDialog()">Add House Member</button> |
+<button type="button" class="btn btn-success" style="margin: 0.5rem;" (click)="onSaveData()" [disabled]="houseMembers.length == 0">Save Data</button> |
+<button type="button" class="btn btn-success" style="margin: 0.5rem;" (click)="onAssignChores()" [disabled]="houseMembers.length == 0">Assign Chores</button> |
+<button class="btn btn-primary" style="margin: 0.5rem;" (click)="toggleShareLinkDialog()" [disabled]="houseMembers.length == 0">Share Link</button>
 
 <hr>
 
@@ -30,38 +20,36 @@
     </li>
 </ul>
 
-<div class="row" *ngIf="selectedHouseMember && selectedHouseMember.getChores().length > 0">
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
-        <h4>Chore</h4>
+<div class="row" style="display: flex; flex-direction: row; justify-items: flex-start;" 
+*ngIf="selectedHouseMember && selectedHouseMember.getChores().length > 0">
+    <div class="col" style="width: 40%; ">
+        <h4 style="padding-left: 0.25rem;">Chore</h4>
     </div>
-    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-4 col-xs-4">
+    <div class="col" style="width: 60%">
         <h4>Room</h4>
     </div>
 </div>
 
-<div class="row">
-    <ul style="list-style: none;">
-        <li *ngFor="let chores of selectedHouseMember.getChores();">
 
-            <div class="row" style="width: 600px;">
-                <div class=" col-lg-4 col-md-6 col-sm-4 col-xs-4">
-                    {{chores.getJSONObject().choreName}}
-                </div>
-                <div class=" col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                    {{chores.getJSONObject().parentRoom | camelToSpace | lowercase}}
-                </div>
-                <div class=" col-lg-4 col-md-2 col-sm-4 col-xs-2" style="text-align: left;">
-                    <button class="btn btn-primary" type="button" [disabled]="myIndex != selectedIndex" (click)="onDone(chores)">
-                        Done
-                    </button>
-                </div>
+<ul style="list-style: none;">
+    <li *ngFor="let chores of selectedHouseMember.getChores();">
+        <div class="row" style="display: flex; flex-direction: row; padding: 0.5rem;">
+            <div class=" col" style="width: 50%; min-width: 33%;">
+                {{chores.getJSONObject().choreName}}
             </div>
+            <div class=" col" style="width: 25%; min-width: 33%;">
+                {{chores.getJSONObject().parentRoom | camelToSpace | lowercase}}
+            </div>
+            <div class=" col" style="text-align: right; width: 25%; min-width: 33%;">
+                <button class="btn btn-primary" type="button" [disabled]="myIndex != selectedIndex" (click)="onDone(chores)">
+                    Done
+                </button>
+            </div>
+        </div>
+    </li>       
+</ul>
 
-        </li>       
-    </ul>
 
-    <hr>
-</div>
 
 <div class="row" *ngIf="houseMembers.length > 0 && selectedHouseMember.getChores().length == 0">
     <div class="col" style="text-align: center;">
@@ -129,11 +117,14 @@
                     Share Link to {{selectedHouseMember.getName()}}
                 </h5>
             </div>
-            <div class="modal-body" style="text-align: center;">
-                <p>{{shareLink}}</p>
+            <div class="modal-body" style="text-align: center; word-wrap: break-word;">
+                <p>
+                    {{shareLink}}
+                </p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-warning" (click)="toggleShareLinkDialog()">
+                <button class="btn btn-primary" type="button" (click)="copyToClipboard()">Copy to Clipboard</button>
+                <button class="btn btn-warning" type="button" (click)="toggleShareLinkDialog()">
                     Close
                 </button>
             </div>

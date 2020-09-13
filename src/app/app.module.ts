@@ -20,6 +20,8 @@ import { DatabaseManagerService } from './shared/database-manager.service';
 import { HttpClientModule } from "@angular/common/http";
 import { AuthPageComponent } from './auth-page/auth-page.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+import { ClipboardDirective } from './shared/clipboard.directive';
+import { ClipboardModule } from "@angular/cdk/clipboard";
 
 FullCalendarModule.registerPlugins([
   dayGridPlugin,
@@ -38,7 +40,8 @@ FullCalendarModule.registerPlugins([
     ChoresAndFplanComponent,
     ShoplistAndCalComponent,
     AuthPageComponent,
-    LoadingSpinnerComponent    
+    LoadingSpinnerComponent,
+    ClipboardDirective    
   ],
   imports: [
     BrowserModule,
@@ -46,7 +49,8 @@ FullCalendarModule.registerPlugins([
     BrowserAnimationsModule,
     FormsModule,
     FullCalendarModule,
-    HttpClientModule
+    HttpClientModule,
+    ClipboardModule
   ],
   providers: [ManagerService],
   bootstrap: [AppComponent]
