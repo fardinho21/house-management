@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Room } from '../floor-plan/room.model';
 import { HouseMember } from '../chore-list/house-member.model';
 import { Chore } from "../shared/chore.model";
-import { Subject } from "rxjs";
+import { Subject, Subscription } from "rxjs";
 import { DatabaseManagerService } from './database-manager.service';
 import { User } from './user.model';
 import { FloorPlan } from '../floor-plan/floor-plan.model';
@@ -13,6 +13,13 @@ import { RouteConfigLoadEnd } from '@angular/router';
   providedIn: 'root'
 })
 export class ManagerService {
+
+  loadedRoomsSubscription : Subscription;
+  loadedHouseMembersSubscription : Subscription;
+  loadedFloorPlanSubscription : Subscription;
+  loadedShoppingItemsSubscription : Subscription;
+  loadedEventsSubscription : Subscription;
+  loadedUserSubscription : Subscription;
 
   //data
   floorPlan: FloorPlan = null;
@@ -41,7 +48,7 @@ export class ManagerService {
     //console.log(this.houseMembers);
     //console.log(this.rooms);
 
-    this.dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
+    this.loadedRoomsSubscription = this.dataBaseManager.loadedRoomsSubject.subscribe(loaded => {
       let runningListOfRooms = []
 
       for (let key in loaded){
@@ -97,7 +104,7 @@ export class ManagerService {
       //console.log(this.rooms);
     })
 
-    this.dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
+    this.loadedHouseMembersSubscription = this.dataBaseManager.loadedHouseMembersSubject.subscribe(loaded => {
 
 
 
@@ -128,22 +135,23 @@ export class ManagerService {
       //console.log(this.houseMembers);
     })
 
-    this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
+    this.loadedFloorPlanSubscription = this.dataBaseManager.loadedFloorPlanSubject.subscribe(loaded => {
       this.setFloorPlan( new FloorPlan(loaded) );
       this.floorPlanSubject.next(this.floorPlan);
     })
 
-    this.dataBaseManager.loadedShoppingItemsSubject.subscribe(loaded => {
+    this.loadedShoppingItemsSubscription = this.dataBaseManager.loadedShoppingItemsSubject.subscribe(loaded => {
       this.shoppingItems = loaded;
       this.shoppingItemsSubject.next(this.shoppingItems);
     }) 
 
-    this.dataBaseManager.loadedEventsSubject.subscribe(loaded => {
+    this.loadedEventsSubscription = this.dataBaseManager.loadedEventsSubject.subscribe(loaded => {
       this.events = loaded;
       this.eventsSubject.next(this.events);
     })
     
-    this.dataBaseManager.loadedUserSubject.subscribe(loaded => {
+    this.loadedUserSubscription = this.dataBaseManager.loadedUserSubject.subscribe(loaded => {    
+ 
       this.user = loaded;
     })
   }

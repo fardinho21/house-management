@@ -1,9 +1,9 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, ChangeDetectorRef, Input, OnDestroy } from '@angular/core';
 import { HouseMember } from "./house-member.model";
 import { ManagerService } from "../shared/manager.service";
 import { Chore } from 'src/app/shared/chore.model';
 import { NgForm } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { DatabaseManagerService } from 'src/app/shared/database-manager.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -14,7 +14,11 @@ import { Clipboard } from '@angular/cdk/clipboard';
   templateUrl: './chore-list.component.html',
   styleUrls: ['./chore-list.component.css']
 })
-export class ChoreListComponent implements OnInit, AfterViewInit {
+export class ChoreListComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  selectedHouseMemberSubscription : Subscription;
+  houseMembersSubscription : Subscription;
+  loadedUserSubscription : Subscription;
 
   addHouseMemberShowDialog: boolean = false;
   shareLinkShowDialog: boolean = false;
@@ -44,19 +48,36 @@ export class ChoreListComponent implements OnInit, AfterViewInit {
       this.selectedHouseMember = this.houseMembers[0];
     }
 
-    this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
+    this.selectedHouseMemberSubscription = this.manager.houseMembersSubject.subscribe((newHouseMembers: HouseMember[]) => {
       this.houseMembers = newHouseMembers;
     });
 
-    this.manager.selectedHouseMemberSubject.subscribe(selected => {
+    this.houseMembersSubscription = this.manager.selectedHouseMemberSubject.subscribe(selected => {
       this.selectedHouseMember = selected;
       this.shareLink = this.baseLink + "/0";
     });
 
-    this.dataBaseManager.loadedUserSubject.subscribe(loaded => {
-      this.myIndex = loaded.houseMemberIndex;
+    this.loadedUserSubscription = this.dataBaseManager.loadedUserSubject.subscribe(loaded => {
+
+      if (loaded){
+        this.myIndex = loaded.houseMemberIndex;
+      }
+        
+
     })
 
+  }
+
+  ngOnDestroy() {
+    this.loadedUserSubscription.unsubscribe();
+    this.houseMembersSubscription.unsubscribe();
+    this.selectedHouseMemberSubscription.unsubscribe();
+
+    this.selectedHouseMember = new HouseMember("",[]);
+    this.myIndex = -1;
+    this.selectedIndex = -1;
+    this.houseMembers = [];
+    
   }
 
   ngAfterViewInit() {

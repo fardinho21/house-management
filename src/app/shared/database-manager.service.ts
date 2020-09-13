@@ -58,6 +58,10 @@ export class DatabaseManagerService {
         }
       }
 
+      else {
+        this.user = null;
+      }
+
       this.loadedUserSubject.next(user);
     })
   }

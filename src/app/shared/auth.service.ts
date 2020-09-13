@@ -45,6 +45,14 @@ export class AuthService {
     }));
   }
 
+  logOut() {
+    this.token = null;
+    this.isHouseMember = false;
+    this.userBehaviorSubject.next(null);
+    this.userSubject.next(null);
+    this.tokenSubject.next(null)
+  }
+
   getAccountInfo(idToken : string, hMidx : number) {
     this.httpClient.post<any>(
       this.LOOK_UP_URL + this.API_KEY,

@@ -1,7 +1,7 @@
 
 
-<div class="row" style="" [hidden]='floorPlan == null'>
-    <div class="col-lg-6 col-xl-6 col-md-12 col-sm-12" style="text-align: center;">
+<div class="row"  [hidden]='floorPlan == null'>
+    <div style="text-align: center;">
         <canvas (click)="onCanvasClick($event)" style="border: 1px solid lightgray;" *ngIf='floorPlan' #fpCanvas [ngClass]="{over: over}">
 
         </canvas> 

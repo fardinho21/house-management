@@ -12,7 +12,8 @@ import { TagPlaceholder } from '@angular/compiler/src/i18n/i18n_ast';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  private userSub : Subscription;
+  userSub : Subscription;
+  tokenSub : Subscription;
   choresLinkAsHm : string = "/choresAndFloorPlan/";
   shopCalLinkAsHm : string = "/shoppingListAndCalendar/";
 
@@ -28,16 +29,29 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.userSub = this.authService.userSubject.subscribe(user => {
       this.isAuthed = !!user;
-      this.choresLinkAsHm = this.choresLinkAsHm + user.token;
-      this.shopCalLinkAsHm = this.shopCalLinkAsHm + user.token;
+      if (user) {
+        this.choresLinkAsHm = this.choresLinkAsHm + user.token;
+        this.shopCalLinkAsHm = this.shopCalLinkAsHm + user.token;
+      }
+
     });
 
-    this.authService.tokenSubject.subscribe((data : {token:string;hmIdx:number} )=> {
-      this.isAuthed = true;
-      this.isHouseMem = true;
-      let tag = data.token + "/" + data.hmIdx;
-      this.choresLinkAsHm = this.choresLinkAsHm + tag;
-      this.shopCalLinkAsHm = this.shopCalLinkAsHm + tag;
+    this.tokenSub = this.authService.tokenSubject.subscribe((data : {token:string;hmIdx:number} )=> {
+
+      if (data) {
+        this.isAuthed = true;
+        this.isHouseMem = true;
+        let tag = data.token + "/" + data.hmIdx;
+        this.choresLinkAsHm = this.choresLinkAsHm + tag;
+        this.shopCalLinkAsHm = this.shopCalLinkAsHm + tag;
+      } else {
+        this.isAuthed = false;
+        this.isHouseMem = false;
+        this.shopCalLinkAsHm = "/shoppingListAndCalendar/";
+        this.choresLinkAsHm = "/choresAndFloorPlan/";
+
+      }
+
     })
 
 
@@ -45,6 +59,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.userSub.unsubscribe();
+    this.tokenSub.unsubscribe();
+  }
+
+  logOut() {
+    this.isAuthed = false;
+    this.isHouseMem = false;
+    this.authService.logOut();
   }
 
 }

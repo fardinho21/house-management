@@ -1,16 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HouseMember } from "../chore-list/house-member.model";
 import { NgForm } from '@angular/forms';
 import { ManagerService } from 'src/app/shared/manager.service';
 import { DatabaseManagerService } from '../shared/database-manager.service';
 import { ShoppingItemsObject } from '../shared/interfaces';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.css']
 })
-export class ShoppingListComponent implements OnInit {
+export class ShoppingListComponent implements OnInit, OnDestroy {
+
+  shoppingItemsSubscription : Subscription;
+  houseMembersSubscription : Subscription;
 
   addItemDisplay : boolean = false;
   confirmClearListDisplay : boolean = false;
@@ -26,13 +30,18 @@ export class ShoppingListComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.manager.shoppingItemsSubject.subscribe((shoppingItems) => {
+    this.shoppingItemsSubscription = this.manager.shoppingItemsSubject.subscribe((shoppingItems) => {
       this.shoppingItems = shoppingItems;
     })
 
-    this.manager.houseMembersSubject.subscribe((houseMembers: HouseMember[])=>{
+    this.houseMembersSubscription =this.manager.houseMembersSubject.subscribe((houseMembers: HouseMember[])=>{
       this.houseMembers = houseMembers;
     })
+  }
+
+  ngOnDestroy(){
+    this.houseMembersSubscription.unsubscribe();
+    this.shoppingItemsSubscription.unsubscribe();
   }
 
   onToggleAddItemDialog() {

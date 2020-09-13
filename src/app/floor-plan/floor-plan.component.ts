@@ -1,17 +1,20 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, AfterViewChecked, DoCheck, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FloorPlan } from './floor-plan.model';
 import { Room } from './room.model';
 import { ManagerService } from '../shared/manager.service';
 import { DatabaseManagerService } from "../shared/database-manager.service";
 import { HouseMember } from '../chore-list/house-member.model';
 import { timeInterval } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-floor-plan',
   templateUrl: './floor-plan.component.html',
   styleUrls: ['./floor-plan.component.css']
 })
-export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy{
+
+  floorPlanSubscription : Subscription;
 
   floorPlan: FloorPlan = null;
   imagePath : string = "";
@@ -62,7 +65,7 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
   ngOnInit(): void {
     this.selectedRoom = new Room("no-room",0,0,0,0,0,0,[]);
 
-    this.manager.floorPlanSubject.subscribe(loaded => {
+    this.floorPlanSubscription = this.manager.floorPlanSubject.subscribe(loaded => {
       this.floorPlan = loaded;
       this.changeDetectorRef.detectChanges();
       this._image.src = this.floorPlan ? this.floorPlan.getImagePath() : "" ;
@@ -78,6 +81,16 @@ export class FloorPlanComponent implements OnInit, AfterViewInit, AfterViewCheck
       this._image.src = this.floorPlan ? this.floorPlan.getImagePath() : "" ;
       this.initCanvasAndContext();
     }
+  }
+
+  ngOnDestroy() {
+    this.floorPlanSubscription.unsubscribe();
+    this.floorPlanSubscription = null;
+    this.floorPlanChooseDialogShow = false;
+    this.floorPlanChoresDialogShow = false;
+    this.selectedFloorPlanIndex = "";
+    this.membersWithUnfinishedChores = [];
+    this.over = false;
   }
 
   colorArea() {

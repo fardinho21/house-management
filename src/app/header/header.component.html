@@ -5,16 +5,16 @@
             <a *ngIf="isHouseMem" class="navbar-brand">House Management</a>
         </div>
 
-        <ul class="nav nav-pills" >
-            <li *ngIf="isAuthed">
+        <ul class="nav nav-pills" *ngIf="isAuthed">
+            <li>
                 <a [routerLink]="choresLinkAsHm"><h5>Chores</h5></a>
             </li>
-            <li *ngIf="isAuthed">
+            <li>
                 <a [routerLink]="shopCalLinkAsHm"><h5>Shopping and Calendar</h5></a>
             </li>
 
-            <li class="nav navbar-nav navbar-right" style="margin-right: 4rem" *ngIf="isAuthed">
-                <a>
+            <li class="nav pull-right" >
+                <a routerLink="" (click)="logOut()">
                     <h5>Logout</h5>
                 </a>
             </li>
