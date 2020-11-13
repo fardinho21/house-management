@@ -1,6 +1,14 @@
 # HouseManagement
+This was my first Angular, Bootstrap3, and Firebase app.
+This app features house management tools such as a shopping list, a chores list, and a scheduler.
+House managers can sign up, choose the floor plan from a list of predefined floor plans that matches their house, and add house
+members to which they can assign chores.
+House members can add items to a shopping list, complete their chores,  and add events to the calendar.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
+The chores are inidcated by the contents of a chores list and a floor plan image that shows highlighted rooms where
+chores are finished/unfinished. 
+
+An authorization feature is also implemented where, users can only complete their own chores.
 
 ## Development server
 
